@@ -1,6 +1,85 @@
 {
   "Metadata": {
-    "title": "HyeonJun Choi | Full Stack Developer",
+    "title": "Full Stack Developer | Architecting Systems & Experiences",
     "description": "Building scalable backend systems and immersive frontend experiences."
+  },
+  "Nav": {
+    "techStack": "Tech Stack",
+    "playground": "Playground",
+    "projects": "Projects",
+    "troubleShooting": "Trouble Shooting",
+    "contact": "Contact"
+  },
+  "Hero": {
+    "greeting": "Hello",
+    "role": "Full Stack Developer",
+    "mainCopy": "Users buy experiences, and I build the systems that support them.",
+    "subCopy": "Architecting scalable backend systems and designing seamless frontend experiences.",
+    "cta": "View Projects",
+    "contact": "Contact Me"
+  },
+  "TechStack": {
+    "title": "Tech Stack",
+    "subtitle": "Balanced Full Stack Capabilities",
+    "frontend": {
+      "title": "Frontend",
+      "description": "App-level state management, image optimization, animation design"
+    },
+    "backend": {
+      "title": "Backend",
+      "description": "Domain design, transactions, Redis Cache Layer, RAG architecture"
+    },
+    "database": {
+      "title": "Database",
+      "description": "ERD design & normalization / Performance indexing / Cache policy"
+    },
+    "devops": {
+      "title": "DevOps",
+      "description": "Zero-downtime deployment, SSL certification, CDN setup"
+    }
+  },
+  "Playground": {
+    "title": "Playground",
+    "subtitle": "This is not a static portfolio",
+    "description": "This section runs on Next.js Server Actions + Supabase, with real data persistence.",
+    "guestbook": {
+      "title": "Guestbook",
+      "placeholder": "Leave a message...",
+      "submit": "Submit",
+      "empty": "Be the first to leave a message!"
+    },
+    "status": {
+      "apiLatency": "API Latency",
+      "dbStatus": "DB Status",
+      "cacheStatus": "Redis Cache",
+      "healthy": "Healthy",
+      "active": "Active"
+    },
+    "badges": {
+      "rsc": "RSC + Server Actions based stateless API",
+      "edge": "Edge-friendly"
+    }
+  },
+  "Projects": {
+    "title": "Projects",
+    "subtitle": "Architecture-First Projects",
+    "liveDemo": "Live Demo",
+    "architecture": "Architecture",
+    "viewCode": "View Code"
+  },
+  "TroubleShooting": {
+    "title": "Trouble Shooting",
+    "subtitle": "Real-world Problem Solving",
+    "problem": "Problem",
+    "cause": "Cause",
+    "solution": "Solution",
+    "result": "Result"
+  },
+  "Contact": {
+    "title": "Let's Build Something",
+    "subtitle": "Let's create together",
+    "email": "Email",
+    "resume": "Download Resume",
+    "github": "GitHub"
   }
 }

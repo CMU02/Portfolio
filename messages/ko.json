@@ -1,6 +1,85 @@
 {
   "Metadata": {
-    "title": "풀스택 개발자 OOO | 아키텍처와 경험을 설계하다",
-    "description": "안정적인 백엔드 시스템부터 몰입감 있는 프론트엔드까지. 비즈니스 가치를 만드는 풀스택 개발자 OOO입니다."
+    "title": "풀스택 개발자 | 아키텍처와 경험을 설계하다",
+    "description": "안정적인 백엔드 시스템부터 몰입감 있는 프론트엔드까지."
+  },
+  "Nav": {
+    "techStack": "기술 스택",
+    "playground": "플레이그라운드",
+    "projects": "프로젝트",
+    "troubleShooting": "문제 해결",
+    "contact": "연락하기"
+  },
+  "Hero": {
+    "greeting": "안녕하세요",
+    "role": "Full Stack Developer",
+    "mainCopy": "사용자는 경험을 사고, 저는 그 경험을 지탱하는 시스템을 만듭니다.",
+    "subCopy": "Architecting scalable backend systems and designing seamless frontend experiences.",
+    "cta": "프로젝트 보기",
+    "contact": "연락하기"
+  },
+  "TechStack": {
+    "title": "Tech Stack",
+    "subtitle": "균형 잡힌 풀스택 역량",
+    "frontend": {
+      "title": "Frontend",
+      "description": "앱 수준의 상태관리, 이미지 최적화, 애니메이션 설계"
+    },
+    "backend": {
+      "title": "Backend",
+      "description": "도메인 설계, 트랜잭션, Redis Cache Layer, RAG 구조 설계"
+    },
+    "database": {
+      "title": "Database",
+      "description": "ERD 설계 및 정규화 / 성능 인덱싱 / 캐시 정책 설계"
+    },
+    "devops": {
+      "title": "DevOps",
+      "description": "무중단 배포, SSL 인증, CDN 세팅 경험"
+    }
+  },
+  "Playground": {
+    "title": "Playground",
+    "subtitle": "정적인 포트폴리오가 아닙니다",
+    "description": "이 섹션은 Next.js Server Actions + Supabase로 동작하며, 실제로 데이터가 저장됩니다.",
+    "guestbook": {
+      "title": "방명록",
+      "placeholder": "메시지를 남겨주세요...",
+      "submit": "등록",
+      "empty": "첫 번째 방명록을 남겨보세요!"
+    },
+    "status": {
+      "apiLatency": "API Latency",
+      "dbStatus": "DB Status",
+      "cacheStatus": "Redis Cache",
+      "healthy": "Healthy",
+      "active": "Active"
+    },
+    "badges": {
+      "rsc": "RSC + Server Actions 기반 무상태 API 구조",
+      "edge": "Edge-friendly"
+    }
+  },
+  "Projects": {
+    "title": "Projects",
+    "subtitle": "아키텍처 중심 프로젝트",
+    "liveDemo": "Live Demo",
+    "architecture": "Architecture",
+    "viewCode": "View Code"
+  },
+  "TroubleShooting": {
+    "title": "Trouble Shooting",
+    "subtitle": "실전 문제 해결 기록",
+    "problem": "Problem",
+    "cause": "Cause",
+    "solution": "Solution",
+    "result": "Result"
+  },
+  "Contact": {
+    "title": "Let's Build Something",
+    "subtitle": "함께 만들어가요",
+    "email": "이메일",
+    "resume": "이력서 다운로드",
+    "github": "GitHub"
   }
 }
