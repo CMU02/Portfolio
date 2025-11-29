@@ -18,7 +18,14 @@ import {
   Lightbulb,
   Wrench,
   CheckCircle,
+  TrendingUp,
+  Database,
+  ImageIcon,
+  Search,
+  AlertTriangle,
+  MapPin,
 } from "lucide-react";
+import { S3Image } from "@/components/s3-image";
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -293,6 +300,322 @@ export default function ProjectDetailPage() {
                         </li>
                       ))}
                     </ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* 기대 효과 */}
+            {project.expectedEffects && project.expectedEffects.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <TrendingUp className="w-5 h-5 text-orange-400" />
+                      {t("expectedEffects")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {project.expectedEffects.map((effect, i) => (
+                        <li key={i} className="flex gap-2">
+                          <span className="text-orange-400">▸</span>
+                          <span className="text-muted-foreground">
+                            {effect}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* ERD 이미지 */}
+            {project.images?.erd && project.images.erd.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Database className="w-5 h-5 text-purple-400" />
+                      {t("erdDiagram")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {project.images.erd.map((erdKey, index) => (
+                      <div key={index} className="space-y-2">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          {erdKey.includes("legacy")
+                            ? t("erdLegacy")
+                            : t("erdLatest")}
+                        </p>
+                        <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
+                          <S3Image
+                            s3Key={erdKey}
+                            alt={`ERD ${index + 1}`}
+                            priority={index === 0}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* 스크린샷 */}
+            {project.images?.screenshots &&
+              project.images.screenshots.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <ImageIcon className="w-5 h-5 text-cyan-400" />
+                        {t("screenshots")}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {project.images.screenshots.map(
+                        (screenshotKey, index) => (
+                          <div
+                            key={index}
+                            className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
+                          >
+                            <S3Image
+                              s3Key={screenshotKey}
+                              alt={`Screenshot ${index + 1}`}
+                            />
+                          </div>
+                        )
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
+            {/* 현장 조사 이미지 */}
+            {project.images?.fieldSurvey && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.65 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <MapPin className="w-5 h-5 text-green-400" />
+                      {t("fieldSurvey")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
+                      <S3Image
+                        s3Key={project.images.fieldSurvey}
+                        alt="Field Survey"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* 문제 해결 사례 */}
+            {project.troubleShooting && project.troubleShooting.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                <Card className="border-red-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <AlertTriangle className="w-5 h-5 text-red-400" />
+                      {t("troubleShooting")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {project.troubleShooting.map((item, index) => (
+                      <div key={index} className="space-y-4">
+                        <h4 className="font-semibold text-lg">{item.title}</h4>
+                        <div className="grid gap-3 text-sm">
+                          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                            <p className="font-medium text-red-400 mb-1">
+                              {t("tsProblem")}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {item.problem}
+                            </p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                            <p className="font-medium text-yellow-400 mb-1">
+                              {t("tsCause")}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {item.cause}
+                            </p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                            <p className="font-medium text-blue-400 mb-1">
+                              {t("tsSolution")}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {item.solution}
+                            </p>
+                          </div>
+                          <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                            <p className="font-medium text-green-400 mb-1">
+                              {t("tsResult")}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {item.result}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* SEO 성과 */}
+            {project.seoResult && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.75 }}
+              >
+                <Card className="border-green-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Search className="w-5 h-5 text-green-400" />
+                      {t("seoResult")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <p className="text-muted-foreground">
+                      {project.seoResult.description}
+                    </p>
+
+                    {/* 지표 비교 */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">{t("seoMetrics")}</h4>
+                      <div className="grid gap-3">
+                        {project.seoResult.metrics.map((metric, index) => (
+                          <div
+                            key={index}
+                            className="grid grid-cols-4 gap-2 p-3 rounded-lg bg-muted/30 text-sm"
+                          >
+                            <span className="font-medium">{metric.label}</span>
+                            <span className="text-muted-foreground">
+                              {t("seoBefore")}: {metric.before}
+                            </span>
+                            <span className="text-muted-foreground">
+                              {t("seoAfter")}: {metric.after}
+                            </span>
+                            <span
+                              className={
+                                metric.change.startsWith("+")
+                                  ? "text-green-400"
+                                  : "text-yellow-400"
+                              }
+                            >
+                              {metric.change}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 키워드 변화 */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">{t("seoKeywords")}</h4>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-3 rounded-lg bg-muted/30">
+                          <p className="text-sm font-medium text-muted-foreground mb-2">
+                            {t("seoBefore")}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {project.seoResult.keywords.before.map(
+                              (keyword, i) => (
+                                <Badge key={i} variant="outline">
+                                  {keyword}
+                                </Badge>
+                              )
+                            )}
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                          <p className="text-sm font-medium text-green-400 mb-2">
+                            {t("seoAfter")}
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {project.seoResult.keywords.after.map(
+                              (keyword, i) => (
+                                <Badge
+                                  key={i}
+                                  variant="outline"
+                                  className="border-green-500/50"
+                                >
+                                  {keyword}
+                                </Badge>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* SEO 이미지 비교 */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">{t("seoSearchConsole")}</h4>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {t("seoBefore")}
+                          </p>
+                          {project.seoResult.images.before.map((imgKey, i) => (
+                            <div
+                              key={i}
+                              className="rounded-lg overflow-hidden border border-border"
+                            >
+                              <S3Image
+                                s3Key={imgKey}
+                                alt={`SEO Before ${i + 1}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-green-400">
+                            {t("seoAfter")}
+                          </p>
+                          {project.seoResult.images.after.map((imgKey, i) => (
+                            <div
+                              key={i}
+                              className="rounded-lg overflow-hidden border border-green-500/30"
+                            >
+                              <S3Image
+                                s3Key={imgKey}
+                                alt={`SEO After ${i + 1}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>

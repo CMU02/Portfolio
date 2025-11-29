@@ -5,6 +5,34 @@ export interface TechReason {
   solved: string;
 }
 
+// 문제 해결 사례
+export interface TroubleShooting {
+  title: string;
+  problem: string;
+  cause: string;
+  solution: string;
+  result: string;
+}
+
+// SEO 성과
+export interface SeoResult {
+  description: string;
+  metrics: {
+    label: string;
+    before: string;
+    after: string;
+    change: string;
+  }[];
+  keywords: {
+    before: string[];
+    after: string[];
+  };
+  images: {
+    before: string[];
+    after: string[];
+  };
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -21,6 +49,15 @@ export interface Project {
   motivation?: string; // 동기 및 문제정의
   techReasons?: TechReason[]; // 기술 선택 이유
   myContributions?: string[]; // 내가 직접 만든 부분
+  images?: {
+    erd?: string[]; // ERD 이미지 경로들
+    architecture?: string[]; // 아키텍처 다이어그램
+    screenshots?: string[]; // 스크린샷
+    fieldSurvey?: string; // 현장 조사 이미지
+  };
+  expectedEffects?: string[]; // 기대 효과
+  troubleShooting?: TroubleShooting[]; // 문제 해결 사례
+  seoResult?: SeoResult; // SEO 성과
 }
 
 export const projectsData: Project[] = [
@@ -189,51 +226,156 @@ export const projectsData: Project[] = [
   {
     id: "cleanbreath",
     title: "CleanBreath",
-    subtitle: "금연 구역 안내 서비스",
+    subtitle: "안양시 금연·흡연구역 시각화 서비스",
     description:
-      "흡연자와 비흡연자 모두를 위한 금연 구역 안내 웹 애플리케이션. 프론트엔드와 백엔드를 모두 담당했습니다.",
+      "안양시 내의 명확하게 구분되어 있지 않은 금연구역 및 흡연구역을 시각화하여, 흡연자와 비흡연자 간의 갈등을 해결하는 웹 애플리케이션입니다. 복잡한 법령과 조례를 직관적인 지도 기반 UI로 제공합니다.",
     role: "Full Stack Developer",
     type: "team",
-    techStack: ["TypeScript", "React", "Java", "Spring Boot", "MySQL"],
+    techStack: [
+      "TypeScript",
+      "React",
+      "Java",
+      "Spring Boot",
+      "MySQL",
+      "Kakao Map API",
+    ],
     features: [
-      "지도 기반 금연 구역 표시 기능",
-      "사용자 위치 기반 주변 금연 구역 검색",
-      "관리자 페이지 구현",
-      "반응형 웹 디자인 적용",
+      "Kakao Map API 기반 금연·흡연구역 실시간 시각화",
+      "사용자 위치 기반 반경 200m 이내 구역 정보 제공",
+      "관리자 페이지를 통한 구역 데이터 실시간 업데이트",
+      "모바일 친화적 반응형 웹 디자인",
+      "공간 인덱스를 활용한 효율적인 위치 기반 검색",
+      "금연구역 검증 및 피드백 시스템",
     ],
     githubUrl: "https://github.com/CMU02/cleanbreath-frontend",
-    demoUrl: "https://cleanbreath-frontend.vercel.app",
+    demoUrl: "https://bluesky-cleanbreath.com",
     problem:
-      "흡연자는 흡연 가능 구역을, 비흡연자는 금연 구역을 찾기 어려워 서로 불편함을 겪고 있었습니다.",
+      "안양시의 금연구역과 흡연구역이 명확하게 구분되어 있지 않아 흡연자와 비흡연자 간의 갈등이 발생하고 있습니다. 국민건강증진법과 안양시 조례는 복잡하고 이해하기 어려운 형태로 정의되어 있으며, 지자체의 홍보에도 불구하고 시민들에게 제대로 전달되지 않고 있습니다.",
     motivation:
-      "지도 기반으로 금연/흡연 구역 정보를 제공하여 흡연자와 비흡연자 모두의 편의를 높이고자 했습니다.",
+      "법령과 조례는 시민들이 이해하기 어렵지만, 이를 직관적인 시각화로 쉽게 전달하는 서비스를 제공하고자 했습니다. 특히 안양시에 한정된 금연·흡연구역 정보를 지속적으로 업데이트하며, 시민들이 이해하기 쉽게 정보를 제공하는 것이 핵심입니다.",
     techReasons: [
       {
         tech: "React",
         reason:
-          "지도 API와의 원활한 연동과 반응형 UI 구현을 위해 선택했습니다.",
+          "Kakao Map API와의 원활한 연동과 실시간 인터랙티브 UI 구현을 위해 선택했습니다.",
         solved:
-          "Kakao Map API와 연동하여 인터랙티브한 지도 기반 UI를 구현했습니다.",
+          "컴포넌트 기반 아키텍처로 지도 UI, 검색 기능, 필터링 등을 모듈화하여 유지보수성을 높였습니다.",
+      },
+      {
+        tech: "Kakao Map API",
+        reason:
+          "한국 지역에 최적화된 지도 서비스와 정확한 위치 정보를 제공하기 위해 선택했습니다.",
+        solved:
+          "안양시 금연·흡연구역을 폴리곤과 마커로 시각화하여 사용자가 직관적으로 이해할 수 있게 했습니다.",
       },
       {
         tech: "Spring Boot",
         reason:
-          "안정적인 REST API 서버와 관리자 기능 구현을 위해 도입했습니다.",
+          "안정적인 REST API 서버와 관리자 기능, 데이터 관리 시스템 구현을 위해 도입했습니다.",
         solved:
-          "금연 구역 CRUD API와 관리자 인증 시스템을 안정적으로 구축했습니다.",
+          "금연·흡연구역 CRUD API, 관리자 인증 시스템, 실시간 데이터 업데이트 기능을 안정적으로 구축했습니다.",
       },
       {
         tech: "MySQL",
-        reason: "위치 기반 데이터 저장과 검색을 위해 관계형 DB를 선택했습니다.",
+        reason:
+          "위치 기반 데이터 저장과 공간 인덱스를 활용한 효율적인 검색을 위해 선택했습니다.",
         solved:
-          "공간 인덱스를 활용하여 사용자 위치 기반 주변 금연 구역 검색을 효율적으로 처리했습니다.",
+          "Spatial Index를 활용하여 사용자 위치 기반 반경 200m 이내 금연·흡연구역 검색을 빠르게 처리했습니다.",
+      },
+      {
+        tech: "TypeScript",
+        reason:
+          "타입 안정성을 확보하고 대규모 프로젝트의 유지보수성을 높이기 위해 도입했습니다.",
+        solved:
+          "컴파일 타임에 타입 오류를 잡아내어 런타임 에러를 줄이고, 코드 품질을 향상시켰습니다.",
       },
     ],
     myContributions: [
-      "React 기반 프론트엔드 전체 개발",
-      "Kakao Map API 연동 및 지도 UI 구현",
+      "React + TypeScript 기반 프론트엔드 전체 아키텍처 설계 및 구현",
+      "Kakao Map API 연동 및 금연·흡연구역 폴리곤 시각화 구현",
+      "사용자 위치 기반 반경 200m 검색 기능 개발",
       "Spring Boot REST API 설계 및 구현",
-      "관리자 페이지 개발 및 인증 시스템 구축",
+      "MySQL Spatial Index를 활용한 위치 기반 쿼리 최적화",
+      "관리자 페이지 개발 및 JWT 기반 인증 시스템 구축",
+      "모바일 반응형 UI/UX 설계 및 구현",
     ],
+    expectedEffects: [
+      "흡연자 편의 제공: 복잡한 법령 및 조례에 의한 혼란을 줄이고, 명확한 정보를 기반으로 행동할 수 있도록 지원",
+      "간접흡연 피해 감소: 흡연구역 정보를 명확하게 제공하여 지정된 구역에서만 흡연하도록 유도",
+      "공공장소 갈등 해소: 흡연자와 비흡연자 간의 갈등을 줄이고 쾌적한 환경 조성",
+      "실시간 정보 제공: 지자체의 조례 변경 사항을 신속하게 반영하여 최신 정보 제공",
+      "서울 서초구 사례 참고: QR 안내판 사업에서 금연구역 내 흡연이 약 25% 감소한 성과를 목표로 함",
+    ],
+    images: {
+      erd: ["clean-breath/erd_legacy.png", "clean-breath/erd_latest.png"],
+      screenshots: [
+        "clean-breath/clean_breath_01.png",
+        "clean-breath/clean_breath_02.png",
+        "clean-breath/clean_breath_03.png",
+      ],
+      fieldSurvey: "clean-breath/field_survey_area.png",
+    },
+    troubleShooting: [
+      {
+        title: "SSL 인증서 만료로 인한 서버 장애",
+        problem:
+          "10월 30일 강의 중 서버 장애가 발생하여 프론트엔드에서 API를 제대로 가져오지 못하는 상황이 발생했습니다.",
+        cause: "서버의 SSL 인증서가 만료되어 HTTPS 연결이 실패하고 있었습니다.",
+        solution:
+          "즉시 수동으로 SSL 인증서를 갱신하여 문제를 해결했습니다. 이후 매번 수동 갱신의 번거로움을 해결하기 위해 자동 갱신 스크립트를 작성하고, 크론탭에 매월 1일 새벽 3시에 자동 실행되도록 설정했습니다.",
+        result:
+          "테스트 결과 스크립트가 성공적으로 실행되는 것을 확인했으며, 이후 SSL 인증서 만료로 인한 장애가 재발하지 않았습니다.",
+      },
+    ],
+    seoResult: {
+      description:
+        "구글 검색에서 랜딩 페이지와 메인 페이지가 대부분 상위권에 노출되어 1페이지에 위치하게 되었습니다.",
+      metrics: [
+        {
+          label: "총 클릭 수",
+          before: "59",
+          after: "84",
+          change: "+42.4%",
+        },
+        {
+          label: "총 노출 수",
+          before: "111",
+          after: "250",
+          change: "+125.2%",
+        },
+        {
+          label: "평균 CTR",
+          before: "53.2%",
+          after: "33.6%",
+          change: "-19.6%p (새 키워드 추가로 인한 자연스러운 하락)",
+        },
+        {
+          label: "평균 게재 순위",
+          before: "1.0",
+          after: "2.8",
+          change: "다양한 키워드 노출로 인한 변동",
+        },
+      ],
+      keywords: {
+        before: ["cleanbreath"],
+        after: [
+          "안양시 흡연구역",
+          "안양시 금연구역",
+          "흡연구역 찾기",
+          "금연 팁",
+          "cleanbreath",
+        ],
+      },
+      images: {
+        before: [
+          "clean-breath/google_search_console_before.webp",
+          "clean-breath/google_search_console_keyword_before.webp",
+        ],
+        after: [
+          "clean-breath/google_search_console_after.webp",
+          "clean-breath/google_search_console_keyword_after.webp",
+        ],
+      },
+    },
   },
 ];
