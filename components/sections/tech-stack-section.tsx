@@ -13,14 +13,16 @@ import {
 import { techStackData } from "@/data/tech-stack";
 import { Code2, Server, Database, Cloud } from "lucide-react";
 
-const categoryIcons = {
+type CategoryKey = keyof typeof techStackData;
+
+const categoryIcons: Record<CategoryKey, typeof Code2> = {
   frontend: Code2,
   backend: Server,
   database: Database,
   devops: Cloud,
 };
 
-const categoryColors = {
+const categoryColors: Record<CategoryKey, string> = {
   frontend: "border-tech-cyan/50 hover:border-tech-cyan",
   backend: "border-tech-purple/50 hover:border-tech-purple",
   database: "border-tech-green/50 hover:border-tech-green",

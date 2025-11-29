@@ -4,7 +4,7 @@ import * as motion from "motion/react-client";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Github, FileText, BookOpen } from "lucide-react";
+import { Mail, Github } from "lucide-react";
 
 export function ContactSection() {
   const t = useTranslations("Contact");

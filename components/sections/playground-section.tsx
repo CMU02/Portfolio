@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, Activity, Database, Zap } from "lucide-react";
+import { MessageSquare, Activity, Zap } from "lucide-react";
 
 // 서버 상태 표시 컴포넌트
 function ServerStatus() {

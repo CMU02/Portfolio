@@ -8,7 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import { growthStoriesData } from "@/data/growth-stories";
 import { AlertCircle, Lightbulb, BookOpen } from "lucide-react";
 

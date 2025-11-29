@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import * as motion from "motion/react-client";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -44,9 +45,9 @@ export function Navigation() {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* 로고 */}
-          <a href="/" className="hover:opacity-80 transition-opacity">
+          <Link href="/" className="hover:opacity-80 transition-opacity">
             <Logo />
-          </a>
+          </Link>
 
           {/* 데스크톱 네비게이션 - projects 페이지에서는 숨김 */}
           {!isProjectsPage && (

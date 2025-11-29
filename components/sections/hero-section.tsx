@@ -3,7 +3,7 @@
 import * as motion from "motion/react-client";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Mail, Github } from "lucide-react";
+import { ArrowDown, Github } from "lucide-react";
 
 export function HeroSection() {
   const t = useTranslations("Hero");
