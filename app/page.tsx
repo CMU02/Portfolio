@@ -1,9 +1,8 @@
 import { Navigation } from "@/components/navigation";
 import { HeroSection } from "@/components/sections/hero-section";
-import { TechStackSection } from "@/components/sections/tech-stack-section";
-import { PlaygroundSection } from "@/components/sections/playground-section";
+import { ExpertiseSection } from "@/components/sections/expertise-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
-import { TroubleShootingSection } from "@/components/sections/troubleshooting-section";
+import { GrowthSection } from "@/components/sections/growth-section";
 import { ContactSection } from "@/components/sections/contact-section";
 
 export default function Home() {
@@ -11,10 +10,9 @@ export default function Home() {
     <main className="dark min-h-screen">
       <Navigation />
       <HeroSection />
-      <TechStackSection />
-      <PlaygroundSection />
+      <ExpertiseSection />
       <ProjectsSection />
-      <TroubleShootingSection />
+      <GrowthSection />
       <ContactSection />
     </main>
   );

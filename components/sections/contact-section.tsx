@@ -3,9 +3,8 @@
 import * as motion from "motion/react-client";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Github, FileText, Linkedin } from "lucide-react";
+import { Mail, Github, FileText, BookOpen } from "lucide-react";
 
 export function ContactSection() {
   const t = useTranslations("Contact");
@@ -15,25 +14,22 @@ export function ContactSection() {
       icon: Mail,
       label: t("email"),
       href: "mailto:your-email@example.com",
-      color: "hover:text-tech-cyan",
+      primary: true,
     },
     {
       icon: Github,
       label: t("github"),
-      href: "https://github.com/yourusername",
-      color: "hover:text-foreground",
+      href: "https://github.com/CMU02",
     },
     {
       icon: FileText,
       label: t("resume"),
       href: "/resume.pdf",
-      color: "hover:text-tech-green",
     },
     {
-      icon: Linkedin,
-      label: "LinkedIn",
-      href: "https://linkedin.com/in/yourusername",
-      color: "hover:text-tech-purple",
+      icon: BookOpen,
+      label: t("blog"),
+      href: "#",
     },
   ];
 
@@ -44,60 +40,56 @@ export function ContactSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-12 max-w-2xl mx-auto"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <p className="text-muted-foreground text-lg">{t("subtitle")}</p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-md mx-auto"
+          transition={{ delay: 0.2 }}
+          className="max-w-2xl mx-auto"
         >
-          <Card className="glow-blue">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-2 gap-4">
-                {contactLinks.map((link, index) => (
-                  <motion.div
-                    key={link.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Button
-                      variant="ghost"
-                      className={`w-full h-auto py-4 flex flex-col gap-2 ${link.color}`}
-                      asChild
-                    >
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <link.icon className="w-6 h-6" />
-                        <span className="text-sm">{link.label}</span>
-                      </a>
-                    </Button>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex flex-wrap justify-center gap-4">
+            {contactLinks.map((link, index) => (
+              <motion.div
+                key={link.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+              >
+                <Button
+                  size="lg"
+                  variant={link.primary ? "default" : "outline"}
+                  className={link.primary ? "glow-blue" : ""}
+                  asChild
+                >
+                  <a href={link.href} target="_blank" rel="noopener noreferrer">
+                    <link.icon className="w-5 h-5 mr-2" />
+                    {link.label}
+                  </a>
+                </Button>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* 푸터 */}
-        <Separator className="my-12" />
+        <Separator className="my-16" />
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center text-sm text-muted-foreground"
+          className="text-center text-sm text-muted-foreground space-y-2"
         >
-          <p>Built with Next.js, Tailwind CSS, and Motion</p>
-          <p className="mt-1">© 2024 All rights reserved.</p>
+          <p>© 2024 최현준. All rights reserved.</p>
+          <p className="text-xs">
+            Built with Next.js 16, Tailwind CSS v4, and Motion
+          </p>
         </motion.div>
       </div>
     </section>

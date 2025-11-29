@@ -1,85 +1,75 @@
 {
   "Metadata": {
-    "title": "풀스택 개발자 | 아키텍처와 경험을 설계하다",
-    "description": "안정적인 백엔드 시스템부터 몰입감 있는 프론트엔드까지."
+    "title": "최현준 | 주니어 풀스택 개발자",
+    "description": "문제를 해결하고 성장하는 것을 즐기는 주니어 개발자입니다."
   },
   "Nav": {
-    "techStack": "기술 스택",
-    "playground": "플레이그라운드",
-    "projects": "프로젝트",
-    "troubleShooting": "문제 해결",
-    "contact": "연락하기"
+    "work": "Projects",
+    "impact": "Growth",
+    "contact": "Contact"
   },
   "Hero": {
-    "greeting": "안녕하세요",
-    "role": "Full Stack Developer",
-    "mainCopy": "사용자는 경험을 사고, 저는 그 경험을 지탱하는 시스템을 만듭니다.",
-    "subCopy": "Architecting scalable backend systems and designing seamless frontend experiences.",
+    "greeting": "안녕하세요, 최현준입니다",
+    "role": "Junior Full Stack Developer",
+    "mainCopy": "Code with Purpose, Build with Passion.",
+    "subCopy": "목적이 있는 코드를 쓰고, 열정을 담아 만듭니다. 실제 서비스를 운영하며 배운 풀스택 개발 지식을 기록합니다.",
     "cta": "프로젝트 보기",
-    "contact": "연락하기"
+    "education": "대림대학교",
+    "projectsCompleted": "4+ Projects",
+    "techStack": "Full Stack"
   },
-  "TechStack": {
-    "title": "Tech Stack",
-    "subtitle": "균형 잡힌 풀스택 역량",
-    "frontend": {
-      "title": "Frontend",
-      "description": "앱 수준의 상태관리, 이미지 최적화, 애니메이션 설계"
+  "Expertise": {
+    "title": "What I Do",
+    "subtitle": "프론트엔드부터 백엔드까지 직접 만들어봤습니다",
+    "fullstack": {
+      "title": "Full Stack Development",
+      "description": "React, Next.js로 사용자 인터페이스를 만들고, Spring Boot, NestJS로 백엔드 API를 구현합니다."
     },
-    "backend": {
-      "title": "Backend",
-      "description": "도메인 설계, 트랜잭션, Redis Cache Layer, RAG 구조 설계"
+    "learning": {
+      "title": "Fast Learner",
+      "description": "새로운 기술을 빠르게 학습하고 프로젝트에 적용합니다. 문서를 읽고 직접 구현하며 배웁니다."
     },
-    "database": {
-      "title": "Database",
-      "description": "ERD 설계 및 정규화 / 성능 인덱싱 / 캐시 정책 설계"
-    },
-    "devops": {
-      "title": "DevOps",
-      "description": "무중단 배포, SSL 인증, CDN 세팅 경험"
-    }
-  },
-  "Playground": {
-    "title": "Playground",
-    "subtitle": "정적인 포트폴리오가 아닙니다",
-    "description": "이 섹션은 Next.js Server Actions + Supabase로 동작하며, 실제로 데이터가 저장됩니다.",
-    "guestbook": {
-      "title": "방명록",
-      "placeholder": "메시지를 남겨주세요...",
-      "submit": "등록",
-      "empty": "첫 번째 방명록을 남겨보세요!"
-    },
-    "status": {
-      "apiLatency": "API Latency",
-      "dbStatus": "DB Status",
-      "cacheStatus": "Redis Cache",
-      "healthy": "Healthy",
-      "active": "Active"
-    },
-    "badges": {
-      "rsc": "RSC + Server Actions 기반 무상태 API 구조",
-      "edge": "Edge-friendly"
+    "problem": {
+      "title": "Problem Solving",
+      "description": "에러를 만나면 포기하지 않고 해결책을 찾습니다. 디버깅과 문제 해결 과정을 즐깁니다."
     }
   },
   "Projects": {
     "title": "Projects",
-    "subtitle": "아키텍처 중심 프로젝트",
-    "liveDemo": "Live Demo",
-    "architecture": "Architecture",
-    "viewCode": "View Code"
+    "subtitle": "직접 만들어본 프로젝트들",
+    "pageTitle": "All Projects",
+    "pageSubtitle": "제가 참여한 모든 프로젝트들을 확인해보세요. 각 프로젝트의 상세 정보와 기술 선택 이유를 볼 수 있습니다.",
+    "viewGithub": "GitHub 보기",
+    "viewDetail": "상세보기",
+    "viewAll": "모든 프로젝트 보기",
+    "viewAllProjects": "프로젝트 전체보기",
+    "backToHome": "홈으로",
+    "backToProjects": "프로젝트 목록",
+    "techStack": "Tech Stack",
+    "role": "Role",
+    "team": "팀 프로젝트",
+    "personal": "개인 프로젝트",
+    "features": "주요 기능",
+    "problemTitle": "해결한 문제",
+    "motivationTitle": "동기 및 문제정의",
+    "techReasonsTitle": "기술 선택 이유",
+    "whyChose": "선택 이유",
+    "whatSolved": "해결한 것",
+    "myContributions": "내가 기여한 부분",
+    "notFound": "프로젝트를 찾을 수 없습니다",
+    "notFoundDesc": "요청하신 프로젝트가 존재하지 않습니다."
   },
-  "TroubleShooting": {
-    "title": "Trouble Shooting",
-    "subtitle": "실전 문제 해결 기록",
-    "problem": "Problem",
-    "cause": "Cause",
-    "solution": "Solution",
-    "result": "Result"
+  "Growth": {
+    "title": "Growth Stories",
+    "subtitle": "프로젝트를 하며 배운 것들",
+    "learned": "배운 점"
   },
   "Contact": {
-    "title": "Let's Build Something",
-    "subtitle": "함께 만들어가요",
+    "title": "Let's Connect",
+    "subtitle": "함께 성장하고 싶습니다",
     "email": "이메일",
-    "resume": "이력서 다운로드",
-    "github": "GitHub"
+    "resume": "이력서",
+    "github": "GitHub",
+    "blog": "Blog"
   }
 }
