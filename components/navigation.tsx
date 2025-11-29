@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/common/logo";
 
 const navItems = [
   { key: "work", href: "#work" },
@@ -43,8 +44,8 @@ export function Navigation() {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* 로고 */}
-          <a href="/" className="font-bold text-xl">
-            최현준
+          <a href="/" className="hover:opacity-80 transition-opacity">
+            <Logo />
           </a>
 
           {/* 데스크톱 네비게이션 - projects 페이지에서는 숨김 */}

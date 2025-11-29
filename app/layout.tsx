@@ -15,9 +15,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Full Stack Developer | Portfolio",
+  title: "CMU02 | Full Stack Developer Portfolio",
   description:
-    "Architecting scalable backend systems and designing seamless frontend experiences.",
+    "문제를 해결하고 성장하는 것을 즐기는 주니어 풀스택 개발자입니다. React, Next.js, Spring Boot, NestJS 기반의 프로젝트를 진행합니다.",
+  keywords: [
+    "풀스택 개발자",
+    "포트폴리오",
+    "React",
+    "Next.js",
+    "Spring Boot",
+    "NestJS",
+    "TypeScript",
+  ],
+  authors: [{ name: "CMU02" }],
+  icons: {
+    icon: "/icon.svg",
+  },
+  openGraph: {
+    title: "CMU02 | Full Stack Developer Portfolio",
+    description:
+      "문제를 해결하고 성장하는 것을 즐기는 주니어 풀스택 개발자입니다.",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({

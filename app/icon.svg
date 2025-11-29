@@ -1,0 +1,9 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#0a0a0a"/>
+  <!-- < 기호 -->
+  <path d="M12 8L4 16L12 24" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- / 기호 -->
+  <path d="M18 5L14 27" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- > 기호 -->
+  <path d="M20 8L28 16L20 24" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -21,16 +21,16 @@ export function ContactSection() {
       label: t("github"),
       href: "https://github.com/CMU02",
     },
-    {
-      icon: FileText,
-      label: t("resume"),
-      href: "/resume.pdf",
-    },
-    {
-      icon: BookOpen,
-      label: t("blog"),
-      href: "#",
-    },
+    // {
+    //   icon: FileText,
+    //   label: t("resume"),
+    //   href: "/resume.pdf",
+    // },
+    // {
+    //   icon: BookOpen,
+    //   label: t("blog"),
+    //   href: "#",
+    // },
   ];
 
   return (
