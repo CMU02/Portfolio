@@ -45,10 +45,12 @@ export const cleanBreathImages = {
     before: [
       "clean-breath/google_search_console_before.webp",
       "clean-breath/google_search_console_keyword_before.webp",
+      "cleanbreath_before.png",
     ],
     after: [
       "clean-breath/google_search_console_after.webp",
       "clean-breath/google_search_console_keyword_after.webp",
+      "cleanbreath_after.png",
     ],
     timeline: [
       "clean-breath/2024_10_31_seo.png",

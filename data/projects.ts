@@ -54,6 +54,10 @@ export interface Project {
     architecture?: string[]; // 아키텍처 다이어그램
     screenshots?: string[]; // 스크린샷
     fieldSurvey?: string; // 현장 조사 이미지
+    uiDesign?: {
+      before?: string; // 개선 전 UI
+      after?: string; // 개선 후 UI
+    };
   };
   expectedEffects?: string[]; // 기대 효과
   troubleShooting?: TroubleShooting[]; // 문제 해결 사례
@@ -248,7 +252,7 @@ export const projectsData: Project[] = [
       "금연구역 검증 및 피드백 시스템",
     ],
     githubUrl: "https://github.com/CMU02/cleanbreath-frontend",
-    demoUrl: "https://bluesky-cleanbreath.com",
+    demoUrl: "https://cleanbreath.cmu02-studio.com",
     problem:
       "안양시의 금연구역과 흡연구역이 명확하게 구분되어 있지 않아 흡연자와 비흡연자 간의 갈등이 발생하고 있습니다. 국민건강증진법과 안양시 조례는 복잡하고 이해하기 어려운 형태로 정의되어 있으며, 지자체의 홍보에도 불구하고 시민들에게 제대로 전달되지 않고 있습니다.",
     motivation:
@@ -314,6 +318,10 @@ export const projectsData: Project[] = [
         "clean-breath/clean_breath_03.png",
       ],
       fieldSurvey: "clean-breath/field_survey_area.png",
+      uiDesign: {
+        before: "clean-breath/cleanbreath_before.png",
+        after: "clean-breath/cleanbreath_after.png",
+      },
     },
     troubleShooting: [
       {

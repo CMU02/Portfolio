@@ -24,6 +24,7 @@ import {
   Search,
   AlertTriangle,
   MapPin,
+  Palette,
 } from "lucide-react";
 import { S3Image } from "@/components/s3-image";
 
@@ -126,7 +127,7 @@ export default function ProjectDetailPage() {
                     rel="noopener noreferrer"
                   >
                     <ExternalLink className="w-4 h-4 mr-1" />
-                    Demo
+                    {t("liveService")}
                   </a>
                 </Button>
               )}
@@ -430,6 +431,56 @@ export default function ProjectDetailPage() {
                 </Card>
               </motion.div>
             )}
+
+            {/* UI 디자인 개선 */}
+            {project.images?.uiDesign &&
+              (project.images.uiDesign.before ||
+                project.images.uiDesign.after) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.68 }}
+                >
+                  <Card className="border-pink-500/30">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Palette className="w-5 h-5 text-pink-400" />
+                        {t("uiDesignImprovement")}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        {project.images.uiDesign.before && (
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium text-muted-foreground">
+                              {t("designBefore")}
+                            </p>
+                            <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
+                              <S3Image
+                                s3Key={project.images.uiDesign.before}
+                                alt="UI Design Before"
+                              />
+                            </div>
+                          </div>
+                        )}
+                        {project.images.uiDesign.after && (
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium text-pink-400">
+                              {t("designAfter")}
+                            </p>
+                            <div className="relative w-full rounded-lg overflow-hidden border border-pink-500/30 bg-muted/30">
+                              <S3Image
+                                s3Key={project.images.uiDesign.after}
+                                alt="UI Design After"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
 
             {/* 문제 해결 사례 */}
             {project.troubleShooting && project.troubleShooting.length > 0 && (
