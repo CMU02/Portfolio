@@ -232,7 +232,7 @@ export default function SubHubPrivacyPage() {
                         <strong>개발자:</strong> CMU02
                       </li>
                       <li>
-                        <strong>이메일:</strong> cmu02.dev@gmail.com
+                        <strong>이메일:</strong> hyeonjun1968@naver.com
                       </li>
                     </ul>
                   </div>
