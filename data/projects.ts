@@ -184,20 +184,20 @@ export const projectsData: Project[] = [
     title: "SubHub",
     subtitle: "구독 서비스 통합 관리 앱",
     description:
-      "파편화된 구독 서비스를 한 곳에서 관리하고 시각화하는 모바일 애플리케이션. 구독 알림 기능을 제공합니다.",
+      "파편화된 구독 서비스를 한 곳에서 관리하고 시각화하는 모바일 애플리케이션. 로컬 저장소를 활용한 오프라인 우선 설계로 빠르고 안전한 데이터 관리를 제공합니다.",
     role: "Full Stack Developer",
     type: "personal",
-    techStack: ["React Native", "Expo", "Supabase", "TypeScript"],
+    techStack: ["React Native", "Expo", "AsyncStorage", "TypeScript"],
     features: [
       "여러 구독 서비스 통합 관리",
       "구독 비용 시각화 대시보드",
-      "갱신일 알림 푸시 기능",
-      "Supabase 실시간 데이터 동기화",
+      "오프라인 우선 데이터 저장",
+      "카메라를 활용한 구독 서비스 로고 등록",
     ],
     problem:
       "넷플릭스, 유튜브 프리미엄, 스포티파이 등 여러 구독 서비스를 사용하면서 총 지출 금액과 갱신일을 파악하기 어려웠습니다.",
     motivation:
-      "파편화된 구독 정보를 한 곳에서 관리하고, 갱신일 전에 알림을 받아 불필요한 지출을 줄이고 싶었습니다.",
+      "파편화된 구독 정보를 한 곳에서 관리하고, 개인정보 보호를 위해 모든 데이터를 기기 내에서만 저장하는 안전한 앱을 만들고 싶었습니다.",
     techReasons: [
       {
         tech: "React Native",
@@ -207,24 +207,24 @@ export const projectsData: Project[] = [
           "하나의 코드베이스로 두 플랫폼에서 동작하는 앱을 효율적으로 개발했습니다.",
       },
       {
-        tech: "Supabase",
+        tech: "AsyncStorage",
         reason:
-          "실시간 데이터 동기화와 인증 기능을 빠르게 구현하기 위해 BaaS를 도입했습니다.",
+          "개인정보 보호와 오프라인 우선 설계를 위해 로컬 저장소를 선택했습니다.",
         solved:
-          "복잡한 백엔드 구축 없이 실시간 구독 데이터 동기화와 사용자 인증을 구현했습니다.",
+          "사용자 데이터가 외부 서버로 전송되지 않아 개인정보를 안전하게 보호하고, 네트워크 없이도 앱을 사용할 수 있게 되었습니다.",
       },
       {
         tech: "Expo",
-        reason: "푸시 알림과 빠른 개발 환경 설정을 위해 Expo를 활용했습니다.",
+        reason: "카메라 기능과 빠른 개발 환경 설정을 위해 Expo를 활용했습니다.",
         solved:
-          "갱신일 알림 푸시 기능을 쉽게 구현하고, 빠른 프로토타이핑이 가능했습니다.",
+          "카메라를 통한 구독 서비스 로고 촬영 기능을 쉽게 구현하고, 빠른 프로토타이핑이 가능했습니다.",
       },
     ],
     myContributions: [
       "전체 앱 아키텍처 설계 및 구현",
       "구독 비용 시각화 대시보드 UI/UX 설계",
-      "Supabase 연동 및 실시간 데이터 동기화 구현",
-      "Expo 푸시 알림 시스템 구축",
+      "AsyncStorage 기반 로컬 데이터 관리 시스템 구현",
+      "카메라 기능을 활용한 구독 서비스 등록 기능 개발",
     ],
   },
   {
@@ -385,5 +385,65 @@ export const projectsData: Project[] = [
         ],
       },
     },
+  },
+  {
+    id: "react-kakao-sdk",
+    title: "React Kakao SDK",
+    subtitle: "Modern React wrapper for Kakao JavaScript SDK",
+    description:
+      "카카오 JavaScript SDK를 위한 현대적이고 타입 안전한 React 래퍼 라이브러리. React 생태계에 자연스럽게 어울리는 훅과 컴포넌트로 카카오 통합 React 애플리케이션을 구축할 수 있습니다.",
+    role: "Library Author",
+    type: "personal",
+    techStack: ["TypeScript", "React", "Kakao SDK", "Vite", "Vitest", "npm"],
+    features: [
+      "타입 안전한 카카오 로그인 훅 (useKakaoAuth)",
+      "카카오톡 채널 연동 훅 (useKakaoChannel)",
+      "카카오 지도 React 컴포넌트 및 훅",
+      "93% 테스트 커버리지로 안정성 보장",
+      "TypeScript 완전 지원",
+      "React 18+ 호환",
+    ],
+    githubUrl: "https://github.com/CMU02/react-kakao-sdk",
+    problem:
+      "기존 카카오 JavaScript SDK는 React 환경에서 사용하기 어렵고, 타입 안전성이 부족하며,CDN으로 로딩된 라이브러리를 개발자가 직접 window.kakao 라는 인터페이스를 지정해야하는 불편함이 있습니다.",
+    motivation:
+      "React 개발자들이 카카오 서비스를 쉽고 안전하게 통합할 수 있도록, React 생태계에 자연스럽게 어울리는 현대적인 라이브러리를 만들고 싶었습니다.",
+    techReasons: [
+      {
+        tech: "TypeScript",
+        reason:
+          "카카오 SDK의 복잡한 API를 타입 안전하게 래핑하고, 개발자 경험을 향상시키기 위해 선택했습니다.",
+        solved:
+          "컴파일 타임에 타입 오류를 잡아내고, IDE에서 자동완성과 타입 힌트를 제공하여 개발 생산성을 크게 향상시켰습니다.",
+      },
+      {
+        tech: "React Hooks",
+        reason:
+          "카카오 SDK의 명령형 API를 React의 선언적 패러다임에 맞게 변환하기 위해 커스텀 훅을 활용했습니다.",
+        solved:
+          "useKakaoAuth, useKakaoChannel 등의 훅으로 카카오 기능을 React 컴포넌트에서 자연스럽게 사용할 수 있게 되었습니다.",
+      },
+      {
+        tech: "Jest",
+        reason:
+          "포괄적인 테스트 환경 구축과 높은 테스트 커버리지를 달성하기 위해 도입했습니다.",
+        solved:
+          "기존 카카오 JavaScript SDK는 CDN으로 로딩된 라이브러리를 개발자가 직접 window.kakao 인터페이스를 지정해야 하는 불편함이 있었는데, 이를 React 훅으로 추상화하여 선언적이고 타입 안전한 API를 제공했습니다.",
+      },
+    ],
+    myContributions: [
+      "라이브러리 전체 아키텍처 설계 및 구현",
+      "카카오 로그인, 채널, 지도 API를 위한 React 훅 개발",
+      "TypeScript 타입 정의 및 타입 안전성 구현",
+      "93% 테스트 커버리지 달성을 위한 종합적인 테스트 작성",
+      "npm 패키지 배포 및 CI/CD 파이프라인 구축",
+      "개발자 친화적인 API 설계 및 문서화",
+    ],
+    expectedEffects: [
+      "React 개발자들의 카카오 서비스 통합 개발 시간 단축",
+      "타입 안전성 제공으로 런타임 에러 감소",
+      "React 생태계에 맞는 선언적 API로 코드 가독성 향상",
+      "오픈소스 기여를 통한 개발 커뮤니티 발전",
+    ],
   },
 ];

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 메인 페이지 -->
+  <url>
+    <loc>https://cmu02-studio.com</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- 프로젝트 목록 페이지 -->
+  <url>
+    <loc>https://cmu02-studio.com/projects</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- 개별 프로젝트 페이지들 -->
+  <url>
+    <loc>https://cmu02-studio.com/projects/study-swipe</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://cmu02-studio.com/projects/streamx</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://cmu02-studio.com/projects/subhub</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://cmu02-studio.com/projects/cleanbreath</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://cmu02-studio.com/projects/react-kakao-sdk</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- SubHub 개인정보처리방침 -->
+  <url>
+    <loc>https://cmu02-studio.com/projects/subhub/privacy</loc>
+    <lastmod>2024-12-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>
