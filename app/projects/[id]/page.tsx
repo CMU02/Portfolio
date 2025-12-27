@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { projectsData } from "@/data/projects";
+import { generateProjectStructuredData } from "@/lib/seo-utils";
 import {
   ArrowLeft,
   Github,
@@ -55,8 +56,19 @@ export default function ProjectDetailPage() {
     );
   }
 
+  // 구조화된 데이터 생성
+  const structuredData = generateProjectStructuredData(project);
+
   return (
     <main className="dark min-h-screen">
+      {/* 구조화된 데이터 추가 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
+
       <Navigation />
 
       <section className="py-24 pt-32">

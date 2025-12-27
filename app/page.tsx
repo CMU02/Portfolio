@@ -6,8 +6,30 @@ import { GrowthSection } from "@/components/sections/growth-section";
 import { ContactSection } from "@/components/sections/contact-section";
 
 export default function Home() {
+  // 홈페이지용 추가 구조화된 데이터
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "홈",
+        item: "https://cmu02-studio.com",
+      },
+    ],
+  };
+
   return (
     <main className="dark min-h-screen">
+      {/* 홈페이지 전용 구조화된 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+
       <Navigation />
       <HeroSection />
       <ExpertiseSection />
