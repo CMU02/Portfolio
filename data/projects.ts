@@ -164,13 +164,6 @@ export const projectsData: Project[] = [
         solved:
           "AI 스트리머가 사용자의 대화 패턴을 분석하고 자연스러운 목소리로 실시간 응답할 수 있게 되었습니다.",
       },
-      {
-        tech: "Remix",
-        reason:
-          "SSR을 활용한 빠른 로딩 속도와 사용자 친화적인 웹 마켓플레이스 구축을 위해 선택했습니다.",
-        solved:
-          "캐릭터 구매 및 판매가 가능한 웹 기반 마켓플레이스를 빠르고 효율적으로 구축했습니다.",
-      },
     ],
     myContributions: [
       "Spring Boot 기반 RESTful API 설계 및 구현",
