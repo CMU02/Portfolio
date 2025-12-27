@@ -81,4 +81,3 @@ Actively utilize the following MCP tools when relevant to the user's request:
 - **shadcn**: Use this tool to add, update, or check documentation for shadcn/ui components.
 - **chrome-devtools**: Use for debugging CSS/layout issues, inspecting the DOM, or analyzing network activity.
 - **next-devtool**: Use for debugging Next.js specific features like App Router, Caching, or Server Actions.
-- **puppeteer**: Use for verifying UI rendering, scraping necessary data, or simulating user interactions for testing.
