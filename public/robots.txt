@@ -1,0 +1,27 @@
+# CMU02 Portfolio - robots.txt
+User-agent: *
+Allow: /
+
+# 주요 페이지들
+Allow: /projects
+Allow: /projects/*
+
+# 개인정보처리방침 페이지
+Allow: /projects/subhub/privacy
+
+# 사이트맵 위치
+Sitemap: https://cmu02-studio.com/sitemap.xml
+
+# 크롤링 지연 (선택사항)
+Crawl-delay: 1
+
+# 특정 봇 설정
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# 네이버 검색봇
+User-agent: Yeti
+Allow: /

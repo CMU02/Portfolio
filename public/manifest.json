@@ -1,0 +1,21 @@
+{
+  "name": "CMU02 Portfolio - 풀스택 개발자 포트폴리오",
+  "short_name": "CMU02 Portfolio",
+  "description": "문제를 해결하고 성장하는 것을 즐기는 풀스택 개발자 CMU02의 포트폴리오",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["portfolio", "developer", "technology"],
+  "lang": "ko-KR",
+  "dir": "ltr"
+}
