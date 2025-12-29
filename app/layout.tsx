@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://cmu02-studio.com"),
   title: {
     default: "CMU02 | 풀스택 개발자 포트폴리오",
     template: "%s | CMU02 Portfolio",
