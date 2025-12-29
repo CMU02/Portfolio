@@ -4,14 +4,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      // CloudFront 도메인
       {
         protocol: "https",
-        hostname: "cmu02-portpolio.s3.ap-northeast-2.amazonaws.com",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "*.s3.ap-northeast-2.amazonaws.com",
+        hostname: process.env.CLOUD_FRONT_URL!,
         pathname: "/**",
       },
     ],

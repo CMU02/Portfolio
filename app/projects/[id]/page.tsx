@@ -27,7 +27,7 @@ import {
   MapPin,
   Palette,
 } from "lucide-react";
-import { S3Image } from "@/components/s3-image";
+import { CloudFrontImage } from "@/components/cloudfront-image";
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -371,7 +371,7 @@ export default function ProjectDetailPage() {
                             : t("erdLatest")}
                         </p>
                         <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
-                          <S3Image
+                          <CloudFrontImage
                             s3Key={erdKey}
                             alt={`ERD ${index + 1}`}
                             priority={index === 0}
@@ -406,7 +406,7 @@ export default function ProjectDetailPage() {
                             key={index}
                             className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
                           >
-                            <S3Image
+                            <CloudFrontImage
                               s3Key={screenshotKey}
                               alt={`Screenshot ${index + 1}`}
                             />
@@ -434,7 +434,7 @@ export default function ProjectDetailPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
-                      <S3Image
+                      <CloudFrontImage
                         s3Key={project.images.fieldSurvey}
                         alt="Field Survey"
                       />
@@ -468,7 +468,7 @@ export default function ProjectDetailPage() {
                               {t("designBefore")}
                             </p>
                             <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
-                              <S3Image
+                              <CloudFrontImage
                                 s3Key={project.images.uiDesign.before}
                                 alt="UI Design Before"
                               />
@@ -481,7 +481,7 @@ export default function ProjectDetailPage() {
                               {t("designAfter")}
                             </p>
                             <div className="relative w-full rounded-lg overflow-hidden border border-pink-500/30 bg-muted/30">
-                              <S3Image
+                              <CloudFrontImage
                                 s3Key={project.images.uiDesign.after}
                                 alt="UI Design After"
                               />
@@ -654,7 +654,7 @@ export default function ProjectDetailPage() {
                               key={i}
                               className="rounded-lg overflow-hidden border border-border"
                             >
-                              <S3Image
+                              <CloudFrontImage
                                 s3Key={imgKey}
                                 alt={`SEO Before ${i + 1}`}
                               />
@@ -670,7 +670,7 @@ export default function ProjectDetailPage() {
                               key={i}
                               className="rounded-lg overflow-hidden border border-green-500/30"
                             >
-                              <S3Image
+                              <CloudFrontImage
                                 s3Key={imgKey}
                                 alt={`SEO After ${i + 1}`}
                               />
