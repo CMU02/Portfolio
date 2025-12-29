@@ -1,13 +1,18 @@
 "use server";
 
-import { getS3ImageUrl, getS3ImageUrls } from "@/lib/s3";
+import {
+  getCloudFrontImageUrl,
+  getCloudFrontImageUrls,
+} from "@/lib/cloudfront";
 
-// 단일 이미지 URL 가져오기
-export async function fetchS3ImageUrl(key: string): Promise<string> {
-  return await getS3ImageUrl(key);
+// 단일 이미지 URL 가져오기 (Server Action이므로 async 필요)
+export async function fetchCloudFrontImageUrl(key: string): Promise<string> {
+  return getCloudFrontImageUrl(key);
 }
 
-// 여러 이미지 URL 가져오기
-export async function fetchS3ImageUrls(keys: string[]): Promise<string[]> {
-  return await getS3ImageUrls(keys);
+// 여러 이미지 URL 가져오기 (Server Action이므로 async 필요)
+export async function fetchCloudFrontImageUrls(
+  keys: string[]
+): Promise<string[]> {
+  return getCloudFrontImageUrls(keys);
 }

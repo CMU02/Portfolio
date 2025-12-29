@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { fetchS3ImageUrl } from "@/app/actions/s3";
+import { fetchCloudFrontImageUrl } from "@/app/actions/cloudfront";
 import { cn } from "@/lib/utils";
 
-interface S3ImageProps {
+interface CloudFrontImageProps {
   s3Key: string;
   alt: string;
   width?: number;
@@ -14,14 +14,14 @@ interface S3ImageProps {
   priority?: boolean;
 }
 
-export function S3Image({
+export function CloudFrontImage({
   s3Key,
   alt,
   width = 1200,
   height = 800,
   className,
   priority = false,
-}: S3ImageProps) {
+}: CloudFrontImageProps) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,11 +30,12 @@ export function S3Image({
     async function loadImage() {
       try {
         setIsLoading(true);
-        const url = await fetchS3ImageUrl(s3Key);
+        // CloudFront URL을 Server Action을 통해 가져오기
+        const url = await fetchCloudFrontImageUrl(s3Key);
         setImageUrl(url);
       } catch (err) {
         setError("이미지를 불러올 수 없습니다.");
-        console.error("S3 이미지 로드 실패:", err);
+        console.error("CloudFront 이미지 로드 실패:", err);
       } finally {
         setIsLoading(false);
       }

@@ -1,33 +1,15 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+// CloudFront를 통한 이미지 URL 생성
+const CLOUDFRONT_URL = process.env.CLOUD_FRONT_URL!;
 
-// S3 클라이언트 생성
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION || "ap-northeast-2",
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-  },
-});
-
-const BUCKET_NAME = process.env.AWS_S3_BUCKET || "cmu02-portpolio";
-
-// S3에서 이미지 URL 생성 (Presigned URL)
-export async function getS3ImageUrl(key: string): Promise<string> {
-  const command = new GetObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: key,
-  });
-
-  // 1시간 동안 유효한 presigned URL 생성
-  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
-  return url;
+// CloudFront에서 이미지 URL 생성 (더 이상 presigned URL 불필요)
+export function getCloudFrontImageUrl(key: string): string {
+  // CloudFront URL에 https 프로토콜 추가 및 키 조합
+  return `https://${CLOUDFRONT_URL}/${key}`;
 }
 
 // 여러 이미지 URL 한번에 가져오기
-export async function getS3ImageUrls(keys: string[]): Promise<string[]> {
-  const urls = await Promise.all(keys.map((key) => getS3ImageUrl(key)));
-  return urls;
+export function getCloudFrontImageUrls(keys: string[]): string[] {
+  return keys.map((key) => getCloudFrontImageUrl(key));
 }
 
 // CleanBreath 프로젝트 이미지 키 목록
