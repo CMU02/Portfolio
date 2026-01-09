@@ -44,7 +44,7 @@ export default function SubHubPrivacyPage() {
             </div>
             <p className="text-xl text-muted-foreground">SubHub 앱</p>
             <p className="text-sm text-muted-foreground mt-2">
-              시행일: 2025년 1월 10일 | 최종 수정일: 2025년 1월 10일
+              시행일: 2026년 1월 10일 | 최종 수정일: 2026년 1월 10일
             </p>
           </motion.div>
 
