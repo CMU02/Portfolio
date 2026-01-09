@@ -44,7 +44,7 @@ export default function SubHubPrivacyPage() {
             </div>
             <p className="text-xl text-muted-foreground">SubHub 앱</p>
             <p className="text-sm text-muted-foreground mt-2">
-              시행일: 2024년 12월 10일 | 최종 수정일: 2024년 12월 10일
+              시행일: 2025년 1월 10일 | 최종 수정일: 2025년 1월 10일
             </p>
           </motion.div>
 
@@ -105,43 +105,81 @@ export default function SubHubPrivacyPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground leading-relaxed">
-                    앱은 다음과 같은 목적으로 카메라
-                    권한(android.permission.CAMERA)을 사용합니다:
+                    앱은 다음과 같은 목적으로 카메라 권한을 사용합니다:
                   </p>
-                  <div className="p-4 rounded-lg bg-tech-purple/10 border border-tech-purple/20">
-                    <h4 className="font-semibold mb-2">카메라 사용 목적</h4>
-                    <ul className="space-y-2 text-muted-foreground text-sm">
-                      <li className="flex gap-2">
-                        <span className="text-tech-purple">✓</span>
-                        <span>구독 서비스 로고 촬영 및 등록</span>
-                      </li>
-                    </ul>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-muted-foreground">
+                        구독 서비스 로고 촬영 및 등록
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-muted-foreground">
+                        카메라로 촬영된 이미지는 기기 내에서만 저장됩니다
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-muted-foreground">
+                        촬영된 이미지는 서비스 제공을 위해 일시적으로 서버 및
+                        인공지능 분석 서비스(예: OpenAI API)로 전송될 수
+                        있습니다. 처리 과정에서 이미지는 서비스 제공에 필요한
+                        시간 동안 이용되며, 그 이후에는 당사 서버에 저장되지
+                        않습니다
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-muted-foreground">
+                        촬영된 이미지는 광고·마케팅 등 다른 목적으로 이용되지
+                        않으며, 관련 법령에서 허용하는 범위를 넘어 제3자에게
+                        제공되지 않습니다
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-muted-foreground">
+                        사용자가 명시적으로 허용한 경우에만 카메라에 접근합니다
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                    <h4 className="font-semibold text-green-400 mb-2">
-                      개인정보 보호 약속
+
+                  <div className="mt-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                    <h4 className="font-semibold text-blue-400 mb-3">
+                      개인정보의 제3자 제공
                     </h4>
-                    <ul className="space-y-2 text-muted-foreground text-sm">
-                      <li className="flex gap-2">
-                        <span className="text-green-400">✓</span>
-                        <span>
-                          카메라로 촬영된 이미지는 기기 내에서만 저장됩니다
-                        </span>
-                      </li>
-                      <li className="flex gap-2">
-                        <span className="text-green-400">✓</span>
-                        <span>
-                          촬영된 이미지는 외부 서버로 전송되지 않습니다
-                        </span>
-                      </li>
-                      <li className="flex gap-2">
-                        <span className="text-green-400">✓</span>
-                        <span>
-                          사용자가 명시적으로 허용한 경우에만 카메라에
-                          접근합니다
-                        </span>
-                      </li>
-                    </ul>
+                    <div className="space-y-2 text-sm text-muted-foreground">
+                      <div>
+                        • <strong>제공받는 자:</strong> OpenAI OpCo, LLC
+                      </div>
+                      <div>
+                        • <strong>제공 목적:</strong> 촬영 이미지에 대한
+                        인공지능 분석 서비스(텍스트 추출, 내용 인식 등) 서비스
+                        제공
+                      </div>
+                      <div>
+                        • <strong>제공 항목:</strong> 촬영된 이미지(및 해당
+                        이미지로부터 생성된 텍스트 등 서비스 제공에 필요한
+                        최소한의 정보)
+                      </div>
+                      <div>
+                        • <strong>보유 및 이용 기간:</strong> 분석 처리 완료 후
+                        즉시 삭제되며, 당사는 해당 이미지를 별도로 저장하지
+                        않습니다
+                      </div>
+                      <div>
+                        • <strong>비고:</strong> OpenAI는 제공 목적 범위
+                        내에서만 정보를 처리하며, 광고·프로파일링 등 다른
+                        목적으로 이용하지 않습니다
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
