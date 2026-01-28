@@ -26,6 +26,8 @@ import {
   AlertTriangle,
   MapPin,
   Palette,
+  Smartphone,
+  Store,
 } from "lucide-react";
 import { CloudFrontImage } from "@/components/cloudfront-image";
 
@@ -140,6 +142,30 @@ export default function ProjectDetailPage() {
                   >
                     <ExternalLink className="w-4 h-4 mr-1" />
                     {t("liveService")}
+                  </a>
+                </Button>
+              )}
+              {project.playStoreUrl && (
+                <Button size="sm" variant="outline" asChild>
+                  <a
+                    href={project.playStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Store className="w-4 h-4 mr-1" />
+                    {t("viewOnPlayStore")}
+                  </a>
+                </Button>
+              )}
+              {project.appStoreUrl && (
+                <Button size="sm" variant="outline" asChild>
+                  <a
+                    href={project.appStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Store className="w-4 h-4 mr-1" />
+                    {t("viewOnAppStore")}
                   </a>
                 </Button>
               )}
@@ -348,6 +374,187 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
+            {/* 앱 아이콘 & 로고 (모바일 앱 전용) */}
+            {(project.images?.appIcon || project.images?.logo) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.52 }}
+              >
+                <Card className="border-blue-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Smartphone className="w-5 h-5 text-blue-400" />
+                      {t("appAssets")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap items-center gap-6">
+                      {project.images?.appIcon && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {t("appIcon")}
+                          </p>
+                          <div className="w-24 h-24 rounded-2xl overflow-hidden border border-border bg-muted/30">
+                            <CloudFrontImage
+                              s3Key={project.images.appIcon}
+                              alt="App Icon"
+                            />
+                          </div>
+                        </div>
+                      )}
+                      {project.images?.logo &&
+                        project.images.logo.length > 0 && (
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium text-muted-foreground">
+                              {t("logo")}
+                            </p>
+                            <div className="flex flex-wrap gap-4">
+                              {project.images.logo.map((logoKey, index) => (
+                                <div
+                                  key={index}
+                                  className="h-24 rounded-lg border border-border bg-muted/30 px-6 py-3 flex items-center"
+                                >
+                                  <CloudFrontImage
+                                    s3Key={logoKey}
+                                    alt={`Logo ${index + 1}`}
+                                    width={300}
+                                    height={72}
+                                    className="!w-auto !h-full max-h-18 object-contain"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* 스토어 에셋 (모바일 앱 전용) */}
+            {project.images?.storeAssets && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.53 }}
+              >
+                <Card className="border-green-500/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Store className="w-5 h-5 text-green-400" />
+                      {t("storeAssets")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {project.images.storeAssets.featureGraphic && (
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-muted-foreground">
+                          {t("featureGraphic")}
+                        </p>
+                        <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
+                          <CloudFrontImage
+                            s3Key={project.images.storeAssets.featureGraphic}
+                            alt="Feature Graphic"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {project.images.storeAssets.introScreens &&
+                      project.images.storeAssets.introScreens.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {t("introScreens")}
+                          </p>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {project.images.storeAssets.introScreens.map(
+                              (introKey, index) => (
+                                <div
+                                  key={index}
+                                  className="relative rounded-lg overflow-hidden border border-border bg-muted/30"
+                                >
+                                  <CloudFrontImage
+                                    s3Key={introKey}
+                                    alt={`Intro Screen ${index + 1}`}
+                                  />
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* 모바일 스크린샷 (모바일 앱 전용) */}
+            {project.images?.mobileScreenshots && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.54 }}
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl">
+                      <Smartphone className="w-5 h-5 text-cyan-400" />
+                      {t("mobileScreenshots")}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {project.images.mobileScreenshots.android &&
+                      project.images.mobileScreenshots.android.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {t("androidScreenshots")}
+                          </p>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {project.images.mobileScreenshots.android.map(
+                              (ssKey, index) => (
+                                <div
+                                  key={index}
+                                  className="relative rounded-lg overflow-hidden border border-border bg-muted/30"
+                                >
+                                  <CloudFrontImage
+                                    s3Key={ssKey}
+                                    alt={`Android Screenshot ${index + 1}`}
+                                  />
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    {project.images.mobileScreenshots.ios &&
+                      project.images.mobileScreenshots.ios.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-green-400">
+                            {t("iosScreenshots")}
+                          </p>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {project.images.mobileScreenshots.ios.map(
+                              (ssKey, index) => (
+                                <div
+                                  key={index}
+                                  className="relative rounded-lg overflow-hidden border border-border bg-muted/30"
+                                >
+                                  <CloudFrontImage
+                                    s3Key={ssKey}
+                                    alt={`iOS Screenshot ${index + 1}`}
+                                  />
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
             {/* ERD 이미지 */}
             {project.images?.erd && project.images.erd.length > 0 && (
               <motion.div
@@ -365,11 +572,13 @@ export default function ProjectDetailPage() {
                   <CardContent className="space-y-6">
                     {project.images.erd.map((erdKey, index) => (
                       <div key={index} className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">
-                          {erdKey.includes("legacy")
-                            ? t("erdLegacy")
-                            : t("erdLatest")}
-                        </p>
+                        {project.images!.erd!.length > 1 && (
+                          <p className="text-sm font-medium text-muted-foreground">
+                            {erdKey.includes("legacy")
+                              ? t("erdLegacy")
+                              : t("erdLatest")}
+                          </p>
+                        )}
                         <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
                           <CloudFrontImage
                             s3Key={erdKey}
@@ -411,7 +620,7 @@ export default function ProjectDetailPage() {
                               alt={`Screenshot ${index + 1}`}
                             />
                           </div>
-                        )
+                        ),
                       )}
                     </CardContent>
                   </Card>
@@ -616,7 +825,7 @@ export default function ProjectDetailPage() {
                                 <Badge key={i} variant="outline">
                                   {keyword}
                                 </Badge>
-                              )
+                              ),
                             )}
                           </div>
                         </div>
@@ -634,7 +843,7 @@ export default function ProjectDetailPage() {
                                 >
                                   {keyword}
                                 </Badge>
-                              )
+                              ),
                             )}
                           </div>
                         </div>
