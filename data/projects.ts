@@ -44,6 +44,8 @@ export interface Project {
   features: string[];
   githubUrl?: string;
   demoUrl?: string;
+  playStoreUrl?: string; // Google Play Store URL
+  appStoreUrl?: string; // Apple App Store URL
   // 상세 정보
   problem?: string; // 무슨 문제를 해결한 프로젝트인가?
   motivation?: string; // 동기 및 문제정의
@@ -57,6 +59,22 @@ export interface Project {
     uiDesign?: {
       before?: string; // 개선 전 UI
       after?: string; // 개선 후 UI
+    };
+    // 모바일 앱 전용 이미지
+    appIcon?: string; // 앱 아이콘
+    logo?: string[]; // 로고 이미지들
+    storeAssets?: {
+      featureGraphic?: string; // 스토어 대표 이미지
+      introScreens?: string[]; // 소개 화면들
+    };
+    mobileScreenshots?: {
+      android?: string[]; // Android 스크린샷
+      ios?: string[]; // iOS 스크린샷
+    };
+    // 브랜드 컬러
+    brandColors?: {
+      primary?: string; // Primary 컬러 (hex)
+      secondary?: string; // Secondary 컬러 (hex)
     };
   };
   expectedEffects?: string[]; // 기대 효과
@@ -185,7 +203,8 @@ export const projectsData: Project[] = [
       "여러 구독 서비스 통합 관리",
       "구독 비용 시각화 대시보드",
       "오프라인 우선 데이터 저장",
-      "카메라를 활용한 구독 서비스 로고 등록",
+      "카메라를 통한 구독 서비스 로고 촬영",
+      "구독 갱신일 알림 기능",
     ],
     problem:
       "넷플릭스, 유튜브 프리미엄, 스포티파이 등 여러 구독 서비스를 사용하면서 총 지출 금액과 갱신일을 파악하기 어려웠습니다.",
@@ -212,13 +231,56 @@ export const projectsData: Project[] = [
         solved:
           "카메라를 통한 구독 서비스 로고 촬영 기능을 쉽게 구현하고, 빠른 프로토타이핑이 가능했습니다.",
       },
+      {
+        tech: "Design System",
+        reason:
+          "WCAG 접근성 기준(4.5:1 대비율)을 충족하고, 라이트/다크 모드를 일관되게 지원하기 위해 체계적인 컬러 시스템을 설계했습니다.",
+        solved:
+          "민트 그린(#1FD1A7)을 Primary 컬러로, 6가지 차트 컬러 팔레트를 구성하여 구독 카테고리별 시각화를 명확하게 구분하고, 다크 모드에서도 가독성을 유지했습니다.",
+      },
     ],
     myContributions: [
       "전체 앱 아키텍처 설계 및 구현",
       "구독 비용 시각화 대시보드 UI/UX 설계",
       "AsyncStorage 기반 로컬 데이터 관리 시스템 구현",
       "카메라 기능을 활용한 구독 서비스 등록 기능 개발",
+      "Google Play Store 배포",
     ],
+    expectedEffects: [
+      "구독 지출 파악: 흩어진 구독 서비스를 한눈에 확인하여 월별 총 지출 금액을 쉽게 파악",
+      "갱신일 관리: 구독 갱신일 알림으로 불필요한 자동 결제 방지",
+      "개인정보 보호: 모든 데이터가 기기 내에서만 저장되어 외부 유출 위험 없음",
+      "오프라인 사용: 네트워크 연결 없이도 언제든지 구독 정보 확인 가능",
+    ],
+    images: {
+      appIcon: "subhub/app_icon.png",
+      logo: ["subhub/logo_name.png", "subhub/logo_name_dark.png"],
+      storeAssets: {
+        featureGraphic: "subhub/graph_image.png",
+        introScreens: [
+          "subhub/intro_service_1.png",
+          "subhub/intro_service_2.png",
+          "subhub/intro_service_3.png",
+          "subhub/intro_service_4.png",
+          "subhub/intro_service_5.png",
+          "subhub/intro_service_6.png",
+        ],
+      },
+      mobileScreenshots: {
+        android: ["subhub/ss-android-1.jpg", "subhub/ss-android-2.jpg"],
+        ios: [
+          "subhub/ss-iphone16-pro-1.png",
+          "subhub/ss-iphone16-pro-2.png",
+          "subhub/ss-iphone16-pro-3.png",
+          "subhub/ss-iphone16-pro-4.png",
+          "subhub/ss-iphone16-pro-5.png",
+        ],
+      },
+      brandColors: {
+        primary: "#1FD1A7",
+        secondary: "#19376D",
+      },
+    },
   },
   {
     id: "cleanbreath",
@@ -304,7 +366,7 @@ export const projectsData: Project[] = [
       "서울 서초구 사례 참고: QR 안내판 사업에서 금연구역 내 흡연이 약 25% 감소한 성과를 목표로 함",
     ],
     images: {
-      erd: ["clean-breath/erd_legacy.png", "clean-breath/erd_latest.png"],
+      erd: ["clean-breath/erd_latest.png"],
       screenshots: [
         "clean-breath/clean_breath_01.png",
         "clean-breath/clean_breath_02.png",
