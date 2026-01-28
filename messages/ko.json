@@ -78,7 +78,20 @@
     "seoAfter": "적용 후",
     "seoSearchConsole": "Google Search Console",
     "notFound": "프로젝트를 찾을 수 없습니다",
-    "notFoundDesc": "요청하신 프로젝트가 존재하지 않습니다."
+    "notFoundDesc": "요청하신 프로젝트가 존재하지 않습니다.",
+    "appAssets": "앱 에셋",
+    "appIcon": "앱 아이콘",
+    "logo": "로고",
+    "storeAssets": "스토어 에셋",
+    "featureGraphic": "대표 이미지",
+    "introScreens": "소개 화면",
+    "mobileScreenshots": "모바일 스크린샷",
+    "androidScreenshots": "Android 스크린샷",
+    "iosScreenshots": "iOS 스크린샷",
+    "viewOnPlayStore": "Play Store에서 보기",
+    "viewOnAppStore": "App Store에서 보기",
+    "primaryColor": "Primary 컬러",
+    "secondaryColor": "Secondary 컬러"
   },
   "Growth": {
     "title": "Growth Stories",

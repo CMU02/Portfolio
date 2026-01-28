@@ -107,7 +107,20 @@
     "seoAfter": "After",
     "seoSearchConsole": "Google Search Console",
     "notFound": "Project Not Found",
-    "notFoundDesc": "The requested project does not exist."
+    "notFoundDesc": "The requested project does not exist.",
+    "appAssets": "App Assets",
+    "appIcon": "App Icon",
+    "logo": "Logo",
+    "storeAssets": "Store Assets",
+    "featureGraphic": "Feature Graphic",
+    "introScreens": "Introduction Screens",
+    "mobileScreenshots": "Mobile Screenshots",
+    "androidScreenshots": "Android Screenshots",
+    "iosScreenshots": "iOS Screenshots",
+    "viewOnPlayStore": "View on Play Store",
+    "viewOnAppStore": "View on App Store",
+    "primaryColor": "Primary Color",
+    "secondaryColor": "Secondary Color"
   },
   "TroubleShooting": {
     "title": "Trouble Shooting",
