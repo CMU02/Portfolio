@@ -62,14 +62,6 @@ export function HeroSection() {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">
-                {t("projectsCompleted")}
-              </div>
-              <div className="text-sm text-muted-foreground mt-1">
-                Completed
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-primary">
                 {t("techStack")}
               </div>
               <div className="text-sm text-muted-foreground mt-1">
