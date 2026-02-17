@@ -84,53 +84,80 @@ export interface Project {
 
 export const projectsData: Project[] = [
   {
-    id: "study-swipe",
-    title: "Study Swipe",
-    subtitle: "AI 기반 스터디 매칭 플랫폼",
+    id: "phantom-file",
+    title: "Phantom File",
+    subtitle: "안전하고 빠른 파일 공유 서비스",
     description:
-      "NestJS 기반 백엔드 API. AI 설문조사와 가중치 점수 시스템으로 최적의 스터디 파트너를 매칭해주는 서비스입니다.",
-    role: "Backend Developer",
-    type: "team",
-    techStack: ["NestJS", "TypeScript", "PostgreSQL", "OpenAI API", "Docker"],
-    features: [
-      "AI 기반 맞춤형 설문 생성 시스템",
-      "태그 중복 검출 및 정규화 로직",
-      "가중치 기반 점수 산출 알고리즘 (기초/경험/응용)",
-      "GitHub Actions CI/CD 파이프라인 구축",
+      "Pre-signed URL 기반의 안전한 임시 파일 공유 플랫폼. AWS 서버리스 아키텍처로 구축되어 확장 가능하고 비용 효율적인 파일 공유 경험을 제공합니다.",
+    role: "Full Stack Developer",
+    type: "personal",
+    techStack: [
+      "TypeScript",
+      "AWS Lambda",
+      "DynamoDB",
+      "S3",
+      "API Gateway",
+      "Terraform",
+      "React/Next.js",
+      "Supabase",
     ],
-    githubUrl: "https://github.com/CMU02/Study-Swipe-BE",
+    features: [
+      "Pre-signed URL 기반 보안 파일 공유 시스템",
+      "Lambda 함수 기반 자동화된 파일 생명주기 관리",
+      "DynamoDB를 활용한 메타데이터 및 접근 로그 관리",
+      "EventBridge + CloudWatch를 통한 자동 파일 정리 (3 AM 크론)",
+      "Supabase Auth 기반 사용자 인증 및 권한 관리",
+      "Terraform IaC로 인프라 코드화 및 버전 관리",
+      "React Native/Expo 기반 Android 모바일 앱",
+    ],
+    githubUrl: "https://github.com/CMU02/phantom-file",
+    demoUrl: "https://phantomfile.cmu02-studio.com",
     problem:
-      "기존 스터디 매칭 서비스는 단순 키워드 기반으로 매칭하여 실제 학습 스타일이나 목표가 맞지 않는 파트너와 연결되는 문제가 있었습니다.",
+      "기존 파일 공유 서비스는 보안이 취약하거나, 파일이 영구적으로 저장되어 개인정보 유출 위험이 있었습니다.",
     motivation:
-      "스터디 그룹을 찾을 때 단순히 '같은 주제'가 아닌, 학습 방식, 목표 수준, 가용 시간 등 다양한 요소를 고려한 정밀한 매칭이 필요하다고 느꼈습니다.",
+      "임시 파일 공유가 필요한 상황에서 보안과 편의성을 모두 갖춘 서비스를 만들고 싶었습니다. AWS 서버리스 아키텍처를 활용해 비용 효율적이면서도 확장 가능한 시스템을 구축하고자 했습니다.",
     techReasons: [
       {
-        tech: "NestJS",
+        tech: "AWS Lambda",
         reason:
-          "모듈 기반 아키텍처로 확장성 있는 백엔드 구조를 설계하기 위해 선택했습니다.",
+          "서버리스 아키텍처로 운영 비용을 최소화하고 자동 확장을 위해 선택했습니다.",
         solved:
-          "설문, 매칭, 사용자 관리 등 도메인별 모듈 분리로 유지보수성을 높였습니다.",
+          "파일 업로드/다운로드/삭제 기능을 Lambda 함수로 구현하여 사용량 기반 과금으로 비용을 절감했습니다.",
       },
       {
-        tech: "OpenAI API",
-        reason:
-          "사용자 응답을 분석하여 맞춤형 설문을 동적으로 생성하기 위해 도입했습니다.",
+        tech: "Terraform",
+        reason: "AWS 인프라를 코드로 관리하고 버전 관리를 위해 도입했습니다.",
         solved:
-          "AI가 사용자의 학습 목표와 스타일을 파악하여 더 정확한 매칭 데이터를 수집할 수 있게 되었습니다.",
+          "복잡한 AWS 리소스를 모듈화하여 재사용 가능하고 일관된 인프라 배포가 가능해졌습니다.",
       },
       {
-        tech: "PostgreSQL",
+        tech: "DynamoDB",
         reason:
-          "복잡한 매칭 쿼리와 가중치 계산을 위한 관계형 데이터베이스가 필요했습니다.",
+          "파일 메타데이터와 접근 로그를 빠르게 저장하고 조회하기 위해 선택했습니다.",
         solved:
-          "다중 조건 기반 점수 산출 쿼리를 효율적으로 처리할 수 있었습니다.",
+          "서버리스 환경에 최적화된 NoSQL 데이터베이스로 낮은 지연 시간과 자동 확장을 달성했습니다.",
+      },
+      {
+        tech: "Supabase",
+        reason: "빠른 사용자 인증 시스템 구축을 위해 도입했습니다.",
+        solved:
+          "Supabase Auth로 소셜 로그인과 이메일 인증을 쉽게 구현하고 권한 관리를 효율적으로 처리했습니다.",
       },
     ],
     myContributions: [
-      "AI 설문 생성 시스템 전체 설계 및 구현",
-      "가중치 기반 매칭 알고리즘 개발 (기초 30%, 경험 40%, 응용 30%)",
-      "태그 정규화 로직 구현으로 중복 태그 문제 해결",
-      "GitHub Actions CI/CD 파이프라인 구축",
+      "AWS 서버리스 아키텍처 전체 설계 및 구현",
+      "Terraform으로 전체 AWS 인프라 코드화",
+      "Lambda 함수 기반 파일 업로드/다운로드/삭제 API 개발",
+      "EventBridge 크론으로 새벽 3시 자동 파일 정리 구현",
+      "Next.js 기반 웹 프론트엔드 개발",
+      "React Native/Expo 기반 Android 앱 개발",
+      "CloudWatch를 통한 실시간 모니터링 및 로깅 설정",
+    ],
+    expectedEffects: [
+      "보안 강화: Pre-signed URL과 임시 파일로 데이터 유출 위험 최소화",
+      "비용 효율성: 서버리스 아키텍처로 사용량 기반 과금",
+      "자동화된 운영: EventBridge 크론으로 파일 정리 자동화",
+      "확장성: AWS 서버리스로 트래픽 증가에 자동 대응",
     ],
   },
   {
@@ -440,65 +467,5 @@ export const projectsData: Project[] = [
         ],
       },
     },
-  },
-  {
-    id: "react-kakao-sdk",
-    title: "React Kakao SDK",
-    subtitle: "Modern React wrapper for Kakao JavaScript SDK",
-    description:
-      "카카오 JavaScript SDK를 위한 현대적이고 타입 안전한 React 래퍼 라이브러리. React 생태계에 자연스럽게 어울리는 훅과 컴포넌트로 카카오 통합 React 애플리케이션을 구축할 수 있습니다.",
-    role: "Library Author",
-    type: "personal",
-    techStack: ["TypeScript", "React", "Kakao SDK", "Vite", "Vitest", "npm"],
-    features: [
-      "타입 안전한 카카오 로그인 훅 (useKakaoAuth)",
-      "카카오톡 채널 연동 훅 (useKakaoChannel)",
-      "카카오 지도 React 컴포넌트 및 훅",
-      "93% 테스트 커버리지로 안정성 보장",
-      "TypeScript 완전 지원",
-      "React 18+ 호환",
-    ],
-    githubUrl: "https://github.com/CMU02/react-kakao-sdk",
-    problem:
-      "기존 카카오 JavaScript SDK는 React 환경에서 사용하기 어렵고, 타입 안전성이 부족하며,CDN으로 로딩된 라이브러리를 개발자가 직접 window.kakao 라는 인터페이스를 지정해야하는 불편함이 있습니다.",
-    motivation:
-      "React 개발자들이 카카오 서비스를 쉽고 안전하게 통합할 수 있도록, React 생태계에 자연스럽게 어울리는 현대적인 라이브러리를 만들고 싶었습니다.",
-    techReasons: [
-      {
-        tech: "TypeScript",
-        reason:
-          "카카오 SDK의 복잡한 API를 타입 안전하게 래핑하고, 개발자 경험을 향상시키기 위해 선택했습니다.",
-        solved:
-          "컴파일 타임에 타입 오류를 잡아내고, IDE에서 자동완성과 타입 힌트를 제공하여 개발 생산성을 크게 향상시켰습니다.",
-      },
-      {
-        tech: "React Hooks",
-        reason:
-          "카카오 SDK의 명령형 API를 React의 선언적 패러다임에 맞게 변환하기 위해 커스텀 훅을 활용했습니다.",
-        solved:
-          "useKakaoAuth, useKakaoChannel 등의 훅으로 카카오 기능을 React 컴포넌트에서 자연스럽게 사용할 수 있게 되었습니다.",
-      },
-      {
-        tech: "Jest",
-        reason:
-          "포괄적인 테스트 환경 구축과 높은 테스트 커버리지를 달성하기 위해 도입했습니다.",
-        solved:
-          "기존 카카오 JavaScript SDK는 CDN으로 로딩된 라이브러리를 개발자가 직접 window.kakao 인터페이스를 지정해야 하는 불편함이 있었는데, 이를 React 훅으로 추상화하여 선언적이고 타입 안전한 API를 제공했습니다.",
-      },
-    ],
-    myContributions: [
-      "라이브러리 전체 아키텍처 설계 및 구현",
-      "카카오 로그인, 채널, 지도 API를 위한 React 훅 개발",
-      "TypeScript 타입 정의 및 타입 안전성 구현",
-      "93% 테스트 커버리지 달성을 위한 종합적인 테스트 작성",
-      "npm 패키지 배포 및 CI/CD 파이프라인 구축",
-      "개발자 친화적인 API 설계 및 문서화",
-    ],
-    expectedEffects: [
-      "React 개발자들의 카카오 서비스 통합 개발 시간 단축",
-      "타입 안전성 제공으로 런타임 에러 감소",
-      "React 생태계에 맞는 선언적 API로 코드 가독성 향상",
-      "오픈소스 기여를 통한 개발 커뮤니티 발전",
-    ],
   },
 ];

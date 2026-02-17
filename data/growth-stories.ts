@@ -10,22 +10,6 @@ export interface GrowthStory {
 
 export const growthStoriesData: GrowthStory[] = [
   {
-    id: "ai-integration",
-    title: "AI API 통합과 프롬프트 엔지니어링",
-    project: "Study Swipe 프로젝트",
-    challenge:
-      "OpenAI API를 활용해 사용자 맞춤형 설문을 생성해야 했지만, 일관성 있는 결과를 얻기 어려웠습니다.",
-    approach: [
-      "OpenAI API 문서를 읽고 프롬프트 작성 방법 학습",
-      "다양한 프롬프트 패턴 실험 및 결과 비교",
-      "JSON 스키마를 활용한 구조화된 응답 설계",
-      "에러 핸들링 및 재시도 로직 구현",
-    ],
-    learned:
-      "AI를 실제 서비스에 통합하는 방법을 배웠습니다. 프롬프트 엔지니어링의 중요성과 AI 응답의 불확실성을 다루는 법을 익혔습니다.",
-  },
-
-  {
     id: "mobile-development",
     title: "모바일 앱 개발 첫 경험",
     project: "SubHub 프로젝트",
@@ -43,7 +27,7 @@ export const growthStoriesData: GrowthStory[] = [
   {
     id: "docker-deployment",
     title: "Docker로 배포 환경 구축하기",
-    project: "StreamX & Study Swipe",
+    project: "StreamX",
     challenge:
       "로컬에서는 잘 동작하던 애플리케이션이 서버에서 실행되지 않는 문제가 발생했습니다.",
     approach: [
