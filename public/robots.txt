@@ -5,9 +5,9 @@ Allow: /
 # 사이트맵 위치
 Sitemap: https://cmu02-studio.com/sitemap.xml
 
-# 구글 광고 크롤러 (app-ads.txt 접근 허용)
-User-agent: AdsBot-Google
-Allow: /
+# app-ads.txt 크롤러 (애드몹 공식 문서 기준)
+User-agent: Google-adstxt
+Disallow:
 
 # 구글 검색봇
 User-agent: Googlebot
