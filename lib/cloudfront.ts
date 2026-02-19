@@ -12,6 +12,38 @@ export function getCloudFrontImageUrls(keys: string[]): string[] {
   return keys.map((key) => getCloudFrontImageUrl(key));
 }
 
+// SubHub 프로젝트 이미지 키 목록
+export const subHubImages = {
+  appIcon: "subhub/app_icon.png",
+  logo: ["subhub/logo_name.png", "subhub/logo_name_dark.png"],
+  storeAssets: {
+    featureGraphic: "subhub/graph_image.png",
+    introScreens: [
+      "subhub/intro_service_1.png",
+      "subhub/intro_service_2.png",
+      "subhub/intro_service_3.png",
+      "subhub/intro_service_4.png",
+      "subhub/intro_service_5.png",
+      "subhub/intro_service_6.png",
+    ],
+  },
+  mobileScreenshots: {
+    android: ["subhub/ss-android-1.jpg", "subhub/ss-android-2.jpg"],
+    ios: [
+      "subhub/ss-iphone16-pro-1.png",
+      "subhub/ss-iphone16-pro-2.png",
+      "subhub/ss-iphone16-pro-3.png",
+      "subhub/ss-iphone16-pro-4.png",
+      "subhub/ss-iphone16-pro-5.png",
+    ],
+  },
+};
+
+// PhantomFile 프로젝트 이미지 키 목록
+export const phantomFileImages = {
+  architecture: ["phantom-file/phantomfile-serverless-architecture.jpg"],
+};
+
 // CleanBreath 프로젝트 이미지 키 목록
 export const cleanBreathImages = {
   erd: {

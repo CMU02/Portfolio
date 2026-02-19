@@ -1,3 +1,5 @@
+import { subHubImages, phantomFileImages } from "@/lib/cloudfront";
+
 // 프로젝트 데이터
 export interface TechReason {
   tech: string;
@@ -86,15 +88,18 @@ export const projectsData: Project[] = [
   {
     id: "phantom-file",
     title: "Phantom File",
-    subtitle: "안전하고 빠른 파일 공유 서비스",
+    subtitle: "한 번 열리면 사라지는, 첩보 영화급 휘발성 보안 파일 공유 서비스",
     description:
-      "Pre-signed URL 기반의 안전한 임시 파일 공유 플랫폼. AWS 서버리스 아키텍처로 구축되어 확장 가능하고 비용 효율적인 파일 공유 경험을 제공합니다.",
+      "계약서, 신분증, 임시 비밀번호처럼 메신저·메일로 남기기 찝찝한 민감 파일을, 일정 시간·조건 이후 자동 소멸되는 링크로 공유하는 보안 파일 공유 플랫폼. AWS 서버리스 아키텍처 기반으로 파일이 열람된 이후 흔적을 최소화합니다.",
     role: "Full Stack Developer",
     type: "personal",
     techStack: [
       "TypeScript",
       "AWS Lambda",
       "DynamoDB",
+      "DynamoDB Streams",
+      "EventBridge Pipes",
+      "SQS",
       "S3",
       "API Gateway",
       "Terraform",
@@ -102,20 +107,19 @@ export const projectsData: Project[] = [
       "Supabase",
     ],
     features: [
-      "Pre-signed URL 기반 보안 파일 공유 시스템",
-      "Lambda 함수 기반 자동화된 파일 생명주기 관리",
-      "DynamoDB를 활용한 메타데이터 및 접근 로그 관리",
-      "EventBridge + CloudWatch를 통한 자동 파일 정리 (3 AM 크론)",
+      "Pre-signed URL 기반 보안 파일 공유 — 직접 파일을 노출하지 않고 임시 URL로만 접근 허용",
+      "열람 횟수·시간 조건 충족 시 파일 자동 소멸 (생명주기 관리)",
+      "DynamoDB TTL 만료 → Streams → EventBridge Pipes → SQS 파이프라인으로 이벤트 기반 자동 파일 정리",
+      "Main SQS Redrive Policy + DLQ로 실패 메시지 격리 및 관리자 수동 재처리 지원",
       "Supabase Auth 기반 사용자 인증 및 권한 관리",
-      "Terraform IaC로 인프라 코드화 및 버전 관리",
-      "React Native/Expo 기반 Android 모바일 앱",
+      "Terraform IaC로 전체 AWS 인프라 코드화 및 버전 관리",
     ],
     githubUrl: "https://github.com/CMU02/phantom-file",
     demoUrl: "https://phantomfile.cmu02-studio.com",
     problem:
-      "기존 파일 공유 서비스는 보안이 취약하거나, 파일이 영구적으로 저장되어 개인정보 유출 위험이 있었습니다.",
+      "카카오톡, 이메일, 슬랙 등으로 보낸 민감 파일은 영구히 기록으로 남습니다. 계약서나 신분증 사본을 공유한 뒤 '나중에 유출되면 어쩌지'라는 불안감, 잘못된 채팅방에 올렸을 때 상대 서버·백업·스크린샷은 통제 불가능한 상황이 반복됩니다. 일반 클라우드 드라이브는 만료 설정이 번거롭고, 접근 권한 제어가 복잡하며, '보안 특화' 관점의 신뢰감을 주지 못합니다.",
     motivation:
-      "임시 파일 공유가 필요한 상황에서 보안과 편의성을 모두 갖춘 서비스를 만들고 싶었습니다. AWS 서버리스 아키텍처를 활용해 비용 효율적이면서도 확장 가능한 시스템을 구축하고자 했습니다.",
+      "필요한 순간에만 잠깐 열렸다가 끝나면 증거를 최소화하고 싶다는 니즈에서 출발했습니다. 파일 자체는 남기지 않되, 상대가 열람한 사실은 기록으로 남기는 구조를 설계하고 싶었습니다. AWS 서버리스 아키텍처를 활용해 비용 효율적이면서도 확장 가능한 시스템으로 구현했습니다.",
     techReasons: [
       {
         tech: "AWS Lambda",
@@ -131,11 +135,25 @@ export const projectsData: Project[] = [
           "복잡한 AWS 리소스를 모듈화하여 재사용 가능하고 일관된 인프라 배포가 가능해졌습니다.",
       },
       {
-        tech: "DynamoDB",
+        tech: "DynamoDB + DynamoDB Streams",
         reason:
-          "파일 메타데이터와 접근 로그를 빠르게 저장하고 조회하기 위해 선택했습니다.",
+          "파일 메타데이터(링크, 만료 시각, 상태 등)를 저장하고, TTL 만료 삭제 이벤트를 스트림으로 흘려보내기 위해 선택했습니다.",
         solved:
-          "서버리스 환경에 최적화된 NoSQL 데이터베이스로 낮은 지연 시간과 자동 확장을 달성했습니다.",
+          "TTL이 만료되면 DynamoDB가 백그라운드에서 항목을 자동 삭제하고, 해당 REMOVE 이벤트가 Streams에 기록되어 별도 크론 없이 이벤트 기반 파일 정리 파이프라인의 시작점이 됩니다.",
+      },
+      {
+        tech: "EventBridge Pipes",
+        reason:
+          "DynamoDB Streams를 소스로 폴링하면서 TTL 만료 삭제 이벤트만 선별적으로 SQS로 전달하기 위해 도입했습니다.",
+        solved:
+          "eventName == REMOVE 조건 필터를 적용해 TTL 만료 삭제 이벤트만 통과시키고, 불필요한 Lambda 호출 없이 Main SQS로 라우팅합니다.",
+      },
+      {
+        tech: "SQS (Main + DLQ)",
+        reason:
+          "파일 삭제 작업을 비동기 대기열로 관리하고, 처리 실패 시 재시도 및 격리를 위해 도입했습니다.",
+        solved:
+          "Main SQS가 삭제 작업 대기열 역할을 하고, Redrive Policy로 반복 실패 메시지를 DLQ로 격리합니다. DLQ에는 Replay Lambda가 연결되어 관리자가 재처리 여부를 결정할 수 있습니다.",
       },
       {
         tech: "Supabase",
@@ -147,18 +165,21 @@ export const projectsData: Project[] = [
     myContributions: [
       "AWS 서버리스 아키텍처 전체 설계 및 구현",
       "Terraform으로 전체 AWS 인프라 코드화",
-      "Lambda 함수 기반 파일 업로드/다운로드/삭제 API 개발",
-      "EventBridge 크론으로 새벽 3시 자동 파일 정리 구현",
+      "Lambda 함수 기반 파일 업로드/다운로드 API 개발",
+      "DynamoDB TTL → Streams → EventBridge Pipes → Main SQS → Cleanup Lambda 이벤트 기반 파일 삭제 파이프라인 구현",
+      "Main SQS Redrive Policy 및 DLQ + Replay Lambda로 실패 메시지 재처리 흐름 설계",
       "Next.js 기반 웹 프론트엔드 개발",
-      "React Native/Expo 기반 Android 앱 개발",
       "CloudWatch를 통한 실시간 모니터링 및 로깅 설정",
     ],
     expectedEffects: [
-      "보안 강화: Pre-signed URL과 임시 파일로 데이터 유출 위험 최소화",
-      "비용 효율성: 서버리스 아키텍처로 사용량 기반 과금",
-      "자동화된 운영: EventBridge 크론으로 파일 정리 자동화",
-      "확장성: AWS 서버리스로 트래픽 증가에 자동 대응",
+      "심리적 불안 해소: 파일이 자동 소멸되어 '나중에 유출되면 어쩌지'라는 걱정을 구조적으로 제거",
+      "이벤트 기반 자동화: TTL 만료 → Streams → EventBridge Pipes → SQS → Lambda 파이프라인으로 크론 없이 정확한 시점에 파일 정리",
+      "안정적인 삭제 보장: SQS 재시도 + DLQ + Replay Lambda로 삭제 실패 시에도 메시지를 잃지 않고 재처리 가능",
+      "비용 효율성: 서버리스 아키텍처로 사용량 기반 과금, 유휴 비용 최소화",
     ],
+    images: {
+      architecture: phantomFileImages.architecture,
+    },
   },
   {
     id: "streamx",
@@ -275,29 +296,7 @@ export const projectsData: Project[] = [
       "오프라인 사용: 네트워크 연결 없이도 언제든지 구독 정보 확인 가능",
     ],
     images: {
-      appIcon: "subhub/app_icon.png",
-      logo: ["subhub/logo_name.png", "subhub/logo_name_dark.png"],
-      storeAssets: {
-        featureGraphic: "subhub/graph_image.png",
-        introScreens: [
-          "subhub/intro_service_1.png",
-          "subhub/intro_service_2.png",
-          "subhub/intro_service_3.png",
-          "subhub/intro_service_4.png",
-          "subhub/intro_service_5.png",
-          "subhub/intro_service_6.png",
-        ],
-      },
-      mobileScreenshots: {
-        android: ["subhub/ss-android-1.jpg", "subhub/ss-android-2.jpg"],
-        ios: [
-          "subhub/ss-iphone16-pro-1.png",
-          "subhub/ss-iphone16-pro-2.png",
-          "subhub/ss-iphone16-pro-3.png",
-          "subhub/ss-iphone16-pro-4.png",
-          "subhub/ss-iphone16-pro-5.png",
-        ],
-      },
+      ...subHubImages,
       brandColors: {
         primary: "#1FD1A7",
         secondary: "#19376D",
