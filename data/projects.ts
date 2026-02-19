@@ -322,10 +322,7 @@ export const projectsData: Project[] = [
     ],
     features: [
       "Kakao Map API 기반 금연·흡연구역 실시간 시각화",
-      "사용자 위치 기반 반경 200m 이내 구역 정보 제공",
-      "관리자 페이지를 통한 구역 데이터 실시간 업데이트",
       "모바일 친화적 반응형 웹 디자인",
-      "공간 인덱스를 활용한 효율적인 위치 기반 검색",
       "금연구역 검증 및 피드백 시스템",
     ],
     githubUrl: "https://github.com/CMU02/cleanbreath-frontend",
@@ -361,7 +358,7 @@ export const projectsData: Project[] = [
         reason:
           "위치 기반 데이터 저장과 공간 인덱스를 활용한 효율적인 검색을 위해 선택했습니다.",
         solved:
-          "Spatial Index를 활용하여 사용자 위치 기반 반경 200m 이내 금연·흡연구역 검색을 빠르게 처리했습니다.",
+          "Spatial Index를 활용하여 금연·흡연구역 검색을 빠르게 처리했습니다.",
       },
       {
         tech: "TypeScript",
@@ -374,17 +371,13 @@ export const projectsData: Project[] = [
     myContributions: [
       "React + TypeScript 기반 프론트엔드 전체 아키텍처 설계 및 구현",
       "Kakao Map API 연동 및 금연·흡연구역 폴리곤 시각화 구현",
-      "사용자 위치 기반 반경 200m 검색 기능 개발",
       "Spring Boot REST API 설계 및 구현",
-      "MySQL Spatial Index를 활용한 위치 기반 쿼리 최적화",
-      "관리자 페이지 개발 및 JWT 기반 인증 시스템 구축",
       "모바일 반응형 UI/UX 설계 및 구현",
     ],
     expectedEffects: [
       "흡연자 편의 제공: 복잡한 법령 및 조례에 의한 혼란을 줄이고, 명확한 정보를 기반으로 행동할 수 있도록 지원",
       "간접흡연 피해 감소: 흡연구역 정보를 명확하게 제공하여 지정된 구역에서만 흡연하도록 유도",
       "공공장소 갈등 해소: 흡연자와 비흡연자 간의 갈등을 줄이고 쾌적한 환경 조성",
-      "실시간 정보 제공: 지자체의 조례 변경 사항을 신속하게 반영하여 최신 정보 제공",
       "서울 서초구 사례 참고: QR 안내판 사업에서 금연구역 내 흡연이 약 25% 감소한 성과를 목표로 함",
     ],
     images: {
