@@ -555,6 +555,39 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
+            {/* 아키텍처 다이어그램 */}
+            {project.images?.architecture &&
+              project.images.architecture.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.54 }}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Database className="w-5 h-5 text-blue-400" />
+                        {t("architecture")}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {project.images.architecture.map((archKey, index) => (
+                        <div
+                          key={index}
+                          className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
+                        >
+                          <CloudFrontImage
+                            s3Key={archKey}
+                            alt={`Architecture ${index + 1}`}
+                            priority={index === 0}
+                          />
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+
             {/* ERD 이미지 */}
             {project.images?.erd && project.images.erd.length > 0 && (
               <motion.div
