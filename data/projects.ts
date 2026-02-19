@@ -237,6 +237,8 @@ export const projectsData: Project[] = [
       "넷플릭스, 유튜브 프리미엄, 스포티파이 등 여러 구독 서비스를 사용하면서 총 지출 금액과 갱신일을 파악하기 어려웠습니다.",
     motivation:
       "파편화된 구독 정보를 한 곳에서 관리하고, 개인정보 보호를 위해 모든 데이터를 기기 내에서만 저장하는 안전한 앱을 만들고 싶었습니다.",
+    playStoreUrl:
+      "https://play.google.com/store/apps/details?id=com.hyeonjun1968.SubHub",
     techReasons: [
       {
         tech: "React Native",
