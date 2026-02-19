@@ -2,18 +2,12 @@
 
 import * as motion from "motion/react-client";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Project } from "@/data/projects";
-import {
-  Github,
-  ExternalLink,
-  User,
-  ArrowRight,
-  ShoppingBag,
-} from "lucide-react";
+import { ProjectLinks } from "@/components/project-detail/project-links";
+import { User, ArrowRight } from "lucide-react";
 
 interface ProjectCardProps {
   project: Project;
@@ -21,7 +15,8 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
-  const t = useTranslations("Projects");
+  const typeLabel =
+    project.type === "personal" ? "개인 프로젝트" : "팀 프로젝트";
 
   return (
     <motion.div
@@ -43,20 +38,18 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                     : ""
                 }
               >
-                {t(project.type)}
+                {typeLabel}
               </Badge>
             </div>
             <p className="text-muted-foreground">{project.subtitle}</p>
           </div>
 
-          {/* Role */}
           <div className="flex items-center gap-2 text-sm">
             <User className="h-4 w-4 text-muted-foreground" />
-            <span className="text-muted-foreground">{t("role")}:</span>
+            <span className="text-muted-foreground">Role:</span>
             <Badge variant="secondary">{project.role}</Badge>
           </div>
 
-          {/* Tech Stack */}
           <div className="flex flex-wrap gap-2">
             {project.techStack.slice(0, 5).map((tech) => (
               <Badge key={tech} variant="outline">
@@ -70,14 +63,12 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         </CardHeader>
 
         <CardContent className="space-y-6 flex-1 flex flex-col">
-          {/* Description */}
           <p className="text-sm leading-relaxed line-clamp-3">
             {project.description}
           </p>
 
-          {/* Features - 최대 3개만 표시 */}
           <div className="space-y-2">
-            <p className="text-sm font-medium">{t("features")}</p>
+            <p className="text-sm font-medium">주요 기능</p>
             <ul className="space-y-1">
               {project.features.slice(0, 3).map((feature, i) => (
                 <li
@@ -99,51 +90,18 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </ul>
           </div>
 
-          {/* Links */}
           <div className="flex flex-wrap gap-2 pt-2 mt-auto">
             <Button size="sm" variant="default" asChild>
               <Link href={`/projects/${project.id}`}>
-                {t("viewDetail")}
+                상세보기
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
-            {project.githubUrl && (
-              <Button size="sm" variant="outline" asChild>
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="w-4 h-4 mr-1" />
-                  GitHub
-                </a>
-              </Button>
-            )}
-            {project.demoUrl && (
-              <Button size="sm" variant="outline" asChild>
-                <a
-                  href={project.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="w-4 h-4 mr-1" />
-                  {t("liveService")}
-                </a>
-              </Button>
-            )}
-            {project.playStoreUrl && (
-              <Button size="sm" variant="outline" asChild>
-                <a
-                  href={project.playStoreUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border-tech-green text-tech-green hover:bg-tech-green/10"
-                >
-                  <ShoppingBag className="w-4 h-4 mr-1" />
-                  Play Store
-                </a>
-              </Button>
-            )}
+            <ProjectLinks
+              githubUrl={project.githubUrl}
+              demoUrl={project.demoUrl}
+              playStoreUrl={project.playStoreUrl}
+            />
           </div>
         </CardContent>
       </Card>
