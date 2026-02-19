@@ -7,7 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Project } from "@/data/projects";
-import { Github, ExternalLink, User, ArrowRight } from "lucide-react";
+import {
+  Github,
+  ExternalLink,
+  User,
+  ArrowRight,
+  ShoppingBag,
+} from "lucide-react";
 
 interface ProjectCardProps {
   project: Project;
@@ -122,6 +128,19 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                 >
                   <ExternalLink className="w-4 h-4 mr-1" />
                   Demo
+                </a>
+              </Button>
+            )}
+            {project.playStoreUrl && (
+              <Button size="sm" variant="outline" asChild>
+                <a
+                  href={project.playStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border-tech-green text-tech-green hover:bg-tech-green/10"
+                >
+                  <ShoppingBag className="w-4 h-4 mr-1" />
+                  Play Store
                 </a>
               </Button>
             )}
