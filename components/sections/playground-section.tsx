@@ -2,46 +2,18 @@
 
 import { useState } from "react";
 import * as motion from "motion/react-client";
-import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageSquare, Activity, Zap } from "lucide-react";
 
-// 서버 상태 표시 컴포넌트
-function ServerStatus() {
-  const t = useTranslations("Playground.status");
-
-  return (
-    <div className="flex flex-wrap gap-4 text-sm">
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-tech-green animate-pulse" />
-        <span className="text-muted-foreground">{t("apiLatency")}:</span>
-        <span className="font-mono text-tech-cyan">24ms</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-tech-green" />
-        <span className="text-muted-foreground">{t("dbStatus")}:</span>
-        <span className="font-mono text-tech-green">{t("healthy")}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-tech-green" />
-        <span className="text-muted-foreground">{t("cacheStatus")}:</span>
-        <span className="font-mono text-tech-yellow">{t("active")}</span>
-      </div>
-    </div>
-  );
-}
-
-// 방명록 아이템 타입
 interface GuestbookEntry {
   id: number;
   message: string;
   createdAt: string;
 }
 
-// 샘플 방명록 데이터
 const sampleEntries: GuestbookEntry[] = [
   { id: 1, message: "멋진 포트폴리오네요! 🚀", createdAt: "2분 전" },
   {
@@ -51,14 +23,34 @@ const sampleEntries: GuestbookEntry[] = [
   },
 ];
 
+function ServerStatus() {
+  return (
+    <div className="flex flex-wrap gap-4 text-sm">
+      <div className="flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-tech-green animate-pulse" />
+        <span className="text-muted-foreground">API Latency:</span>
+        <span className="font-mono text-tech-cyan">24ms</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-tech-green" />
+        <span className="text-muted-foreground">DB Status:</span>
+        <span className="font-mono text-tech-green">Healthy</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-tech-green" />
+        <span className="text-muted-foreground">Redis Cache:</span>
+        <span className="font-mono text-tech-yellow">Active</span>
+      </div>
+    </div>
+  );
+}
+
 export function PlaygroundSection() {
-  const t = useTranslations("Playground");
   const [message, setMessage] = useState("");
   const [entries, setEntries] = useState<GuestbookEntry[]>(sampleEntries);
 
   const handleSubmit = () => {
     if (!message.trim()) return;
-    // 실제로는 Server Action 호출
     const newEntry: GuestbookEntry = {
       id: Date.now(),
       message: message.trim(),
@@ -77,14 +69,16 @@ export function PlaygroundSection() {
           viewport={{ once: true }}
           className="text-center mb-8"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-          <p className="text-xl text-primary mb-2">{t("subtitle")}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Playground</h2>
+          <p className="text-xl text-primary mb-2">
+            This is not a static portfolio
+          </p>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            {t("description")}
+            This section runs on Next.js Server Actions + Supabase, with real
+            data persistence.
           </p>
         </motion.div>
 
-        {/* 기술 배지 */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -93,18 +87,17 @@ export function PlaygroundSection() {
         >
           <Badge variant="outline" className="border-tech-cyan text-tech-cyan">
             <Zap className="w-3 h-3 mr-1" />
-            {t("badges.rsc")}
+            RSC + Server Actions based stateless API
           </Badge>
           <Badge
             variant="outline"
             className="border-tech-green text-tech-green"
           >
-            {t("badges.edge")}
+            Edge-friendly
           </Badge>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* 방명록 입력 */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -114,25 +107,24 @@ export function PlaygroundSection() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5" />
-                  {t("guestbook.title")}
+                  Guestbook
                 </CardTitle>
                 <ServerStatus />
               </CardHeader>
               <CardContent className="space-y-4">
                 <Textarea
-                  placeholder={t("guestbook.placeholder")}
+                  placeholder="Leave a message..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="min-h-[100px]"
                 />
                 <Button onClick={handleSubmit} className="w-full glow-blue">
-                  {t("guestbook.submit")}
+                  Submit
                 </Button>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* 방명록 목록 */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -149,7 +141,7 @@ export function PlaygroundSection() {
                 <div className="space-y-3 max-h-[250px] overflow-y-auto">
                   {entries.length === 0 ? (
                     <p className="text-muted-foreground text-center py-8">
-                      {t("guestbook.empty")}
+                      Be the first to leave a message!
                     </p>
                   ) : (
                     entries.map((entry) => (

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 import { StructuredData } from "@/components/structured-data";
 
 const geistSans = Geist({
@@ -84,38 +82,29 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://cmu02-studio.com",
-    languages: {
-      ko: "https://cmu02-studio.com",
-      en: "https://cmu02-studio.com/en",
-    },
   },
   verification: {
-    google: "your-google-verification-code", // Google Search Console에서 발급받은 코드로 교체
+    google: "your-google-verification-code",
     other: {
       "naver-site-verification": "naver0674842125a8eb4f556999e5c9605548",
     },
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-
   return (
-    <html lang={locale} className="dark">
+    <html lang="ko" className="dark">
       <head>
         <StructuredData />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        {children}
       </body>
     </html>
   );

@@ -1,38 +1,26 @@
 "use client";
 
 import * as motion from "motion/react-client";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Github } from "lucide-react";
 
+const contactLinks = [
+  {
+    icon: Mail,
+    label: "이메일",
+    href: "mailto:your-email@example.com",
+    isPrimary: true,
+  },
+  {
+    icon: Github,
+    label: "GitHub",
+    href: "https://github.com/CMU02",
+    isPrimary: false,
+  },
+];
+
 export function ContactSection() {
-  const t = useTranslations("Contact");
-
-  const contactLinks = [
-    {
-      icon: Mail,
-      label: t("email"),
-      href: "mailto:your-email@example.com",
-      primary: true,
-    },
-    {
-      icon: Github,
-      label: t("github"),
-      href: "https://github.com/CMU02",
-    },
-    // {
-    //   icon: FileText,
-    //   label: t("resume"),
-    //   href: "/resume.pdf",
-    // },
-    // {
-    //   icon: BookOpen,
-    //   label: t("blog"),
-    //   href: "#",
-    // },
-  ];
-
   return (
     <section id="contact" className="py-24">
       <div className="container mx-auto px-6">
@@ -42,8 +30,12 @@ export function ContactSection() {
           viewport={{ once: true }}
           className="text-center mb-12 max-w-2xl mx-auto"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-          <p className="text-muted-foreground text-lg">{t("subtitle")}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Let&apos;s Connect
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            함께 성장하고 싶습니다
+          </p>
         </motion.div>
 
         <motion.div
@@ -64,8 +56,8 @@ export function ContactSection() {
               >
                 <Button
                   size="lg"
-                  variant={link.primary ? "default" : "outline"}
-                  className={link.primary ? "glow-blue" : ""}
+                  variant={link.isPrimary ? "default" : "outline"}
+                  className={link.isPrimary ? "glow-blue" : ""}
                   asChild
                 >
                   <a href={link.href} target="_blank" rel="noopener noreferrer">
@@ -78,7 +70,6 @@ export function ContactSection() {
           </div>
         </motion.div>
 
-        {/* 푸터 */}
         <Separator className="my-16" />
         <motion.div
           initial={{ opacity: 0 }}

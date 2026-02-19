@@ -4,20 +4,18 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import * as motion from "motion/react-client";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/common/logo";
 
 const navItems = [
-  { key: "work", href: "#work" },
-  { key: "impact", href: "#impact" },
-  { key: "contact", href: "#contact" },
+  { label: "Projects", href: "#work" },
+  { label: "Growth", href: "#impact" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function Navigation() {
-  const t = useTranslations("Nav");
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -39,7 +37,7 @@ export function Navigation() {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
           ? "bg-background/80 backdrop-blur-md border-b border-border"
-          : ""
+          : "",
       )}
     >
       <nav className="container mx-auto px-6 py-4">
@@ -55,11 +53,11 @@ export function Navigation() {
               <div className="hidden md:flex items-center gap-8">
                 {navItems.map((item) => (
                   <a
-                    key={item.key}
+                    key={item.href}
                     href={item.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {t(item.key)}
+                    {item.label}
                   </a>
                 ))}
               </div>
@@ -86,12 +84,12 @@ export function Navigation() {
           >
             {navItems.map((item) => (
               <a
-                key={item.key}
+                key={item.href}
                 href={item.href}
                 className="block py-2 text-muted-foreground hover:text-foreground"
                 onClick={() => setIsMobileOpen(false)}
               >
-                {t(item.key)}
+                {item.label}
               </a>
             ))}
           </motion.div>

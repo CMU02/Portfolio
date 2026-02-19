@@ -1,7 +1,6 @@
 "use client";
 
 import * as motion from "motion/react-client";
-import { useTranslations } from "next-intl";
 import {
   Accordion,
   AccordionContent,
@@ -13,8 +12,6 @@ import { troubleShootingData } from "@/data/trouble-shooting";
 import { AlertTriangle, Lightbulb, CheckCircle2, Search } from "lucide-react";
 
 export function TroubleShootingSection() {
-  const t = useTranslations("TroubleShooting");
-
   return (
     <section id="troubleshooting" className="py-24 bg-card/30">
       <div className="container mx-auto px-6">
@@ -24,8 +21,10 @@ export function TroubleShootingSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-          <p className="text-muted-foreground">{t("subtitle")}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Trouble Shooting
+          </h2>
+          <p className="text-muted-foreground">실제 문제 해결 사례</p>
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
@@ -49,23 +48,21 @@ export function TroubleShootingSection() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="space-y-4 pt-2">
-                    {/* 원인 */}
                     <div className="flex items-start gap-3">
                       <Search className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
                       <div>
                         <p className="text-sm font-medium text-muted-foreground mb-1">
-                          {t("cause")}
+                          원인 분석
                         </p>
                         <p className="text-sm">{item.cause}</p>
                       </div>
                     </div>
 
-                    {/* 해결책 */}
                     <div className="flex items-start gap-3">
                       <Lightbulb className="w-4 h-4 text-tech-cyan mt-1 shrink-0" />
                       <div>
                         <p className="text-sm font-medium text-muted-foreground mb-1">
-                          {t("solution")}
+                          해결 방법
                         </p>
                         <ul className="space-y-1">
                           {item.solution.map((sol, i) => (
@@ -81,12 +78,11 @@ export function TroubleShootingSection() {
                       </div>
                     </div>
 
-                    {/* 결과 */}
                     <div className="flex items-start gap-3">
                       <CheckCircle2 className="w-4 h-4 text-tech-green mt-1 shrink-0" />
                       <div>
                         <p className="text-sm font-medium text-muted-foreground mb-1">
-                          {t("result")}
+                          결과
                         </p>
                         <Badge className="bg-tech-green/20 text-tech-green border-tech-green/50">
                           {item.result}

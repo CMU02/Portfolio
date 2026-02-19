@@ -1,13 +1,10 @@
 "use client";
 
 import * as motion from "motion/react-client";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github } from "lucide-react";
 
 export function HeroSection() {
-  const t = useTranslations("Hero");
-
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* 배경 그라데이션 */}
@@ -22,7 +19,7 @@ export function HeroSection() {
             transition={{ duration: 0.6 }}
             className="text-muted-foreground text-lg"
           >
-            {t("greeting")}
+            안녕하세요, 최현준입니다
           </motion.p>
 
           {/* 메인 카피 */}
@@ -32,7 +29,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold leading-tight"
           >
-            {t("mainCopy")}
+            Code with Purpose, Build with Passion.
           </motion.h1>
 
           {/* 서브 카피 */}
@@ -42,7 +39,8 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto"
           >
-            {t("subCopy")}
+            목적이 있는 코드를 쓰고, 열정을 담아 만듭니다. 실제 서비스를
+            운영하며 배운 풀스택 개발 지식을 기록합니다.
           </motion.p>
 
           {/* 핵심 정보 */}
@@ -53,17 +51,13 @@ export function HeroSection() {
             className="flex flex-wrap justify-center gap-8 pt-8"
           >
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">
-                {t("education")}
-              </div>
+              <div className="text-2xl font-bold text-primary">대림대학교</div>
               <div className="text-sm text-muted-foreground mt-1">
                 용용SW 전공
               </div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">
-                {t("techStack")}
-              </div>
+              <div className="text-2xl font-bold text-primary">Full Stack</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Developer
               </div>
@@ -79,7 +73,7 @@ export function HeroSection() {
           >
             <Button size="lg" className="glow-blue" asChild>
               <a href="#work">
-                {t("cta")}
+                프로젝트 보기
                 <ArrowDown className="ml-2 h-4 w-4" />
               </a>
             </Button>

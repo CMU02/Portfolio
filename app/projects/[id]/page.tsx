@@ -3,7 +3,6 @@
 import * as motion from "motion/react-client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { Navigation } from "@/components/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,23 +32,24 @@ import { CloudFrontImage } from "@/components/cloudfront-image";
 
 export default function ProjectDetailPage() {
   const params = useParams();
-  const t = useTranslations("Projects");
-
   const project = projectsData.find((p) => p.id === params.id);
 
-  // 프로젝트를 찾지 못한 경우
   if (!project) {
     return (
       <main className="dark min-h-screen">
         <Navigation />
         <section className="py-24 pt-32">
           <div className="container mx-auto px-6 text-center">
-            <h1 className="text-4xl font-bold mb-4">{t("notFound")}</h1>
-            <p className="text-muted-foreground mb-8">{t("notFoundDesc")}</p>
+            <h1 className="text-4xl font-bold mb-4">
+              프로젝트를 찾을 수 없습니다
+            </h1>
+            <p className="text-muted-foreground mb-8">
+              요청하신 프로젝트가 존재하지 않습니다.
+            </p>
             <Button asChild>
               <Link href="/projects">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                {t("backToProjects")}
+                프로젝트 목록
               </Link>
             </Button>
           </div>
@@ -58,24 +58,21 @@ export default function ProjectDetailPage() {
     );
   }
 
-  // 구조화된 데이터 생성
   const structuredData = generateProjectStructuredData(project);
+  const typeLabel =
+    project.type === "personal" ? "개인 프로젝트" : "팀 프로젝트";
 
   return (
     <main className="dark min-h-screen">
-      {/* 구조화된 데이터 추가 */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
       <Navigation />
 
       <section className="py-24 pt-32">
         <div className="container mx-auto px-6 max-w-4xl">
-          {/* 뒤로가기 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -84,12 +81,11 @@ export default function ProjectDetailPage() {
             <Button variant="ghost" size="sm" asChild>
               <Link href="/projects">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                {t("backToProjects")}
+                프로젝트 목록
               </Link>
             </Button>
           </motion.div>
 
-          {/* 프로젝트 헤더 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -108,14 +104,13 @@ export default function ProjectDetailPage() {
                     : ""
                 }
               >
-                {t(project.type)}
+                {typeLabel}
               </Badge>
             </div>
             <p className="text-xl text-muted-foreground mb-4">
               {project.subtitle}
             </p>
 
-            {/* Role & Links */}
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 text-muted-foreground" />
@@ -141,7 +136,7 @@ export default function ProjectDetailPage() {
                     rel="noopener noreferrer"
                   >
                     <ExternalLink className="w-4 h-4 mr-1" />
-                    {t("liveService")}
+                    서비스 바로가기
                   </a>
                 </Button>
               )}
@@ -153,7 +148,7 @@ export default function ProjectDetailPage() {
                     rel="noopener noreferrer"
                   >
                     <Store className="w-4 h-4 mr-1" />
-                    {t("viewOnPlayStore")}
+                    Play Store에서 보기
                   </a>
                 </Button>
               )}
@@ -165,14 +160,13 @@ export default function ProjectDetailPage() {
                     rel="noopener noreferrer"
                   >
                     <Store className="w-4 h-4 mr-1" />
-                    {t("viewOnAppStore")}
+                    App Store에서 보기
                   </a>
                 </Button>
               )}
             </div>
           </motion.div>
 
-          {/* Tech Stack */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -188,7 +182,6 @@ export default function ProjectDetailPage() {
             </div>
           </motion.div>
 
-          {/* 프로젝트 설명 */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -198,9 +191,7 @@ export default function ProjectDetailPage() {
             <p className="text-lg leading-relaxed">{project.description}</p>
           </motion.div>
 
-          {/* 상세 정보 카드들 */}
           <div className="space-y-6">
-            {/* 문제 정의 */}
             {project.problem && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -211,7 +202,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Target className="w-5 h-5 text-red-400" />
-                      {t("problemTitle")}
+                      해결한 문제
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -223,7 +214,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 동기 및 문제정의 */}
             {project.motivation && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -234,7 +224,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Lightbulb className="w-5 h-5 text-yellow-400" />
-                      {t("motivationTitle")}
+                      동기 및 문제정의
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -246,7 +236,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 기술 선택 이유 */}
             {project.techReasons && project.techReasons.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -257,7 +246,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Wrench className="w-5 h-5 text-blue-400" />
-                      {t("techReasonsTitle")}
+                      기술 선택 이유
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -272,13 +261,13 @@ export default function ProjectDetailPage() {
                         <div className="space-y-2 text-sm">
                           <p>
                             <span className="text-muted-foreground">
-                              {t("whyChose")}:{" "}
+                              선택 이유:{" "}
                             </span>
                             {item.reason}
                           </p>
                           <p>
                             <span className="text-muted-foreground">
-                              {t("whatSolved")}:{" "}
+                              해결한 것:{" "}
                             </span>
                             {item.solved}
                           </p>
@@ -290,7 +279,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 주요 기능 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -300,7 +288,7 @@ export default function ProjectDetailPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    {t("features")}
+                    주요 기능
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -316,7 +304,6 @@ export default function ProjectDetailPage() {
               </Card>
             </motion.div>
 
-            {/* 내가 기여한 부분 */}
             {project.myContributions && project.myContributions.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -327,7 +314,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <User className="w-5 h-5 text-tech-purple" />
-                      {t("myContributions")}
+                      내가 기여한 부분
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -344,7 +331,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 기대 효과 */}
             {project.expectedEffects && project.expectedEffects.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -355,7 +341,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <TrendingUp className="w-5 h-5 text-orange-400" />
-                      {t("expectedEffects")}
+                      기대 효과
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -374,7 +360,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 앱 아이콘 & 로고 (모바일 앱 전용) */}
             {(project.images?.appIcon || project.images?.logo) && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -384,8 +369,7 @@ export default function ProjectDetailPage() {
                 <Card className="border-blue-500/30">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
-                      <Smartphone className="w-5 h-5 text-blue-400" />
-                      {t("appAssets")}
+                      <Smartphone className="w-5 h-5 text-blue-400" />앱 에셋
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -393,7 +377,7 @@ export default function ProjectDetailPage() {
                       {project.images?.appIcon && (
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-muted-foreground">
-                            {t("appIcon")}
+                            앱 아이콘
                           </p>
                           <div className="w-24 h-24 rounded-2xl overflow-hidden border border-border bg-muted/30">
                             <CloudFrontImage
@@ -407,7 +391,7 @@ export default function ProjectDetailPage() {
                         project.images.logo.length > 0 && (
                           <div className="space-y-2">
                             <p className="text-sm font-medium text-muted-foreground">
-                              {t("logo")}
+                              로고
                             </p>
                             <div className="flex flex-wrap gap-4">
                               {project.images.logo.map((logoKey, index) => (
@@ -420,7 +404,7 @@ export default function ProjectDetailPage() {
                                     alt={`Logo ${index + 1}`}
                                     width={300}
                                     height={72}
-                                    className="!w-auto !h-full max-h-18 object-contain"
+                                    className="w-auto! h-full! max-h-18 object-contain"
                                   />
                                 </div>
                               ))}
@@ -433,7 +417,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 스토어 에셋 (모바일 앱 전용) */}
             {project.images?.storeAssets && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -444,14 +427,14 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Store className="w-5 h-5 text-green-400" />
-                      {t("storeAssets")}
+                      스토어 에셋
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {project.images.storeAssets.featureGraphic && (
                       <div className="space-y-2">
                         <p className="text-sm font-medium text-muted-foreground">
-                          {t("featureGraphic")}
+                          대표 이미지
                         </p>
                         <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
                           <CloudFrontImage
@@ -465,7 +448,7 @@ export default function ProjectDetailPage() {
                       project.images.storeAssets.introScreens.length > 0 && (
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-muted-foreground">
-                            {t("introScreens")}
+                            소개 화면
                           </p>
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {project.images.storeAssets.introScreens.map(
@@ -489,7 +472,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 모바일 스크린샷 (모바일 앱 전용) */}
             {project.images?.mobileScreenshots && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -500,7 +482,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Smartphone className="w-5 h-5 text-cyan-400" />
-                      {t("mobileScreenshots")}
+                      모바일 스크린샷
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -508,7 +490,7 @@ export default function ProjectDetailPage() {
                       project.images.mobileScreenshots.android.length > 0 && (
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-muted-foreground">
-                            {t("androidScreenshots")}
+                            Android 스크린샷
                           </p>
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {project.images.mobileScreenshots.android.map(
@@ -531,7 +513,7 @@ export default function ProjectDetailPage() {
                       project.images.mobileScreenshots.ios.length > 0 && (
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-green-400">
-                            {t("iosScreenshots")}
+                            iOS 스크린샷
                           </p>
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {project.images.mobileScreenshots.ios.map(
@@ -555,7 +537,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 아키텍처 다이어그램 */}
             {project.images?.architecture &&
               project.images.architecture.length > 0 && (
                 <motion.div
@@ -567,7 +548,7 @@ export default function ProjectDetailPage() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <Database className="w-5 h-5 text-blue-400" />
-                        {t("architecture")}
+                        아키텍처
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -588,7 +569,6 @@ export default function ProjectDetailPage() {
                 </motion.div>
               )}
 
-            {/* ERD 이미지 */}
             {project.images?.erd && project.images.erd.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -599,7 +579,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Database className="w-5 h-5 text-purple-400" />
-                      {t("erdDiagram")}
+                      ERD 다이어그램
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -608,8 +588,8 @@ export default function ProjectDetailPage() {
                         {project.images!.erd!.length > 1 && (
                           <p className="text-sm font-medium text-muted-foreground">
                             {erdKey.includes("legacy")
-                              ? t("erdLegacy")
-                              : t("erdLatest")}
+                              ? "레거시 버전"
+                              : "최신 버전"}
                           </p>
                         )}
                         <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
@@ -626,7 +606,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* 스크린샷 */}
             {project.images?.screenshots &&
               project.images.screenshots.length > 0 && (
                 <motion.div
@@ -638,7 +617,7 @@ export default function ProjectDetailPage() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <ImageIcon className="w-5 h-5 text-cyan-400" />
-                        {t("screenshots")}
+                        스크린샷
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -660,7 +639,6 @@ export default function ProjectDetailPage() {
                 </motion.div>
               )}
 
-            {/* 현장 조사 이미지 */}
             {project.images?.fieldSurvey && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -671,7 +649,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <MapPin className="w-5 h-5 text-green-400" />
-                      {t("fieldSurvey")}
+                      현장 조사
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -686,7 +664,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* UI 디자인 개선 */}
             {project.images?.uiDesign &&
               (project.images.uiDesign.before ||
                 project.images.uiDesign.after) && (
@@ -699,7 +676,7 @@ export default function ProjectDetailPage() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-xl">
                         <Palette className="w-5 h-5 text-pink-400" />
-                        {t("uiDesignImprovement")}
+                        UI 디자인 개선
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -707,7 +684,7 @@ export default function ProjectDetailPage() {
                         {project.images.uiDesign.before && (
                           <div className="space-y-2">
                             <p className="text-sm font-medium text-muted-foreground">
-                              {t("designBefore")}
+                              개선 전
                             </p>
                             <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
                               <CloudFrontImage
@@ -720,7 +697,7 @@ export default function ProjectDetailPage() {
                         {project.images.uiDesign.after && (
                           <div className="space-y-2">
                             <p className="text-sm font-medium text-pink-400">
-                              {t("designAfter")}
+                              개선 후
                             </p>
                             <div className="relative w-full rounded-lg overflow-hidden border border-pink-500/30 bg-muted/30">
                               <CloudFrontImage
@@ -736,7 +713,6 @@ export default function ProjectDetailPage() {
                 </motion.div>
               )}
 
-            {/* 문제 해결 사례 */}
             {project.troubleShooting && project.troubleShooting.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -747,7 +723,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <AlertTriangle className="w-5 h-5 text-red-400" />
-                      {t("troubleShooting")}
+                      문제 해결 사례
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -757,7 +733,7 @@ export default function ProjectDetailPage() {
                         <div className="grid gap-3 text-sm">
                           <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
                             <p className="font-medium text-red-400 mb-1">
-                              {t("tsProblem")}
+                              문제 상황
                             </p>
                             <p className="text-muted-foreground">
                               {item.problem}
@@ -765,7 +741,7 @@ export default function ProjectDetailPage() {
                           </div>
                           <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
                             <p className="font-medium text-yellow-400 mb-1">
-                              {t("tsCause")}
+                              원인 분석
                             </p>
                             <p className="text-muted-foreground">
                               {item.cause}
@@ -773,7 +749,7 @@ export default function ProjectDetailPage() {
                           </div>
                           <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
                             <p className="font-medium text-blue-400 mb-1">
-                              {t("tsSolution")}
+                              해결 방법
                             </p>
                             <p className="text-muted-foreground">
                               {item.solution}
@@ -781,7 +757,7 @@ export default function ProjectDetailPage() {
                           </div>
                           <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
                             <p className="font-medium text-green-400 mb-1">
-                              {t("tsResult")}
+                              결과
                             </p>
                             <p className="text-muted-foreground">
                               {item.result}
@@ -795,7 +771,6 @@ export default function ProjectDetailPage() {
               </motion.div>
             )}
 
-            {/* SEO 성과 */}
             {project.seoResult && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -806,7 +781,7 @@ export default function ProjectDetailPage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl">
                       <Search className="w-5 h-5 text-green-400" />
-                      {t("seoResult")}
+                      SEO 성과
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -814,9 +789,8 @@ export default function ProjectDetailPage() {
                       {project.seoResult.description}
                     </p>
 
-                    {/* 지표 비교 */}
                     <div className="space-y-3">
-                      <h4 className="font-semibold">{t("seoMetrics")}</h4>
+                      <h4 className="font-semibold">지표 변화</h4>
                       <div className="grid gap-3">
                         {project.seoResult.metrics.map((metric, index) => (
                           <div
@@ -825,10 +799,10 @@ export default function ProjectDetailPage() {
                           >
                             <span className="font-medium">{metric.label}</span>
                             <span className="text-muted-foreground">
-                              {t("seoBefore")}: {metric.before}
+                              적용 전: {metric.before}
                             </span>
                             <span className="text-muted-foreground">
-                              {t("seoAfter")}: {metric.after}
+                              적용 후: {metric.after}
                             </span>
                             <span
                               className={
@@ -844,13 +818,12 @@ export default function ProjectDetailPage() {
                       </div>
                     </div>
 
-                    {/* 키워드 변화 */}
                     <div className="space-y-3">
-                      <h4 className="font-semibold">{t("seoKeywords")}</h4>
+                      <h4 className="font-semibold">키워드 변화</h4>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="p-3 rounded-lg bg-muted/30">
                           <p className="text-sm font-medium text-muted-foreground mb-2">
-                            {t("seoBefore")}
+                            적용 전
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {project.seoResult.keywords.before.map(
@@ -864,7 +837,7 @@ export default function ProjectDetailPage() {
                         </div>
                         <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
                           <p className="text-sm font-medium text-green-400 mb-2">
-                            {t("seoAfter")}
+                            적용 후
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {project.seoResult.keywords.after.map(
@@ -883,13 +856,12 @@ export default function ProjectDetailPage() {
                       </div>
                     </div>
 
-                    {/* SEO 이미지 비교 */}
                     <div className="space-y-3">
-                      <h4 className="font-semibold">{t("seoSearchConsole")}</h4>
+                      <h4 className="font-semibold">Google Search Console</h4>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-muted-foreground">
-                            {t("seoBefore")}
+                            적용 전
                           </p>
                           {project.seoResult.images.before.map((imgKey, i) => (
                             <div
@@ -905,7 +877,7 @@ export default function ProjectDetailPage() {
                         </div>
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-green-400">
-                            {t("seoAfter")}
+                            적용 후
                           </p>
                           {project.seoResult.images.after.map((imgKey, i) => (
                             <div

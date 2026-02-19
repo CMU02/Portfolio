@@ -1,7 +1,6 @@
 "use client";
 
 import * as motion from "motion/react-client";
-import { useTranslations } from "next-intl";
 import {
   Accordion,
   AccordionContent,
@@ -13,8 +12,6 @@ import { impactStoriesData } from "@/data/impact-stories";
 import { AlertCircle, Lightbulb, CheckCircle2 } from "lucide-react";
 
 export function ImpactSection() {
-  const t = useTranslations("Impact");
-
   return (
     <section id="impact" className="py-24 bg-card/30">
       <div className="container mx-auto px-6">
@@ -24,8 +21,12 @@ export function ImpactSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("title")}</h2>
-          <p className="text-muted-foreground text-lg">{t("subtitle")}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Impact Stories
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            실제로 만들어낸 변화들
+          </p>
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
@@ -53,7 +54,6 @@ export function ImpactSection() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="space-y-6 pt-4">
-                    {/* Challenge */}
                     <div className="flex items-start gap-3">
                       <AlertCircle className="w-5 h-5 text-tech-yellow shrink-0 mt-0.5" />
                       <div>
@@ -64,7 +64,6 @@ export function ImpactSection() {
                       </div>
                     </div>
 
-                    {/* Action */}
                     <div className="flex items-start gap-3">
                       <Lightbulb className="w-5 h-5 text-tech-cyan shrink-0 mt-0.5" />
                       <div>
@@ -83,7 +82,6 @@ export function ImpactSection() {
                       </div>
                     </div>
 
-                    {/* Result */}
                     <div className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-tech-green shrink-0 mt-0.5" />
                       <div className="flex-1">
