@@ -11,6 +11,7 @@ interface CloudFrontImageProps {
   priority?: boolean;
   fill?: boolean;
   sizes?: string;
+  quality?: number;
 }
 
 // Server Component — URL 생성이 단순 문자열 조합이므로 클라이언트 fetch 불필요
@@ -23,6 +24,7 @@ export function CloudFrontImage({
   priority = false,
   fill = false,
   sizes,
+  quality = 85,
 }: CloudFrontImageProps) {
   const imageUrl = getCloudFrontImageUrl(s3Key);
 
@@ -35,7 +37,7 @@ export function CloudFrontImage({
         sizes={sizes ?? "100vw"}
         className={cn("object-cover", className)}
         priority={priority}
-        unoptimized
+        quality={quality}
       />
     );
   }
@@ -46,9 +48,12 @@ export function CloudFrontImage({
       alt={alt}
       width={width}
       height={height}
+      sizes={
+        sizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+      }
       className={cn("w-full h-auto", className)}
       priority={priority}
-      unoptimized
+      quality={quality}
     />
   );
 }
