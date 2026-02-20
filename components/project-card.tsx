@@ -76,7 +76,9 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                   className="text-sm text-muted-foreground flex gap-2"
                 >
                   <span className="text-tech-cyan">•</span>
-                  <span className="line-clamp-1">{feature}</span>
+                  <span className="line-clamp-1">
+                    {typeof feature === "string" ? feature : feature.text}
+                  </span>
                 </li>
               ))}
               {project.features.length > 3 && (
