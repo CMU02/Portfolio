@@ -1,5 +1,3 @@
-import { subHubImages, phantomFileImages } from "@/lib/cloudfront";
-
 // 프로젝트 데이터
 export interface TechReason {
   tech: string;
@@ -178,7 +176,7 @@ export const projectsData: Project[] = [
       "비용 효율성: 서버리스 아키텍처로 사용량 기반 과금, 유휴 비용 최소화",
     ],
     images: {
-      architecture: phantomFileImages.architecture,
+      architecture: ["phantom-file/phantomfile-serverless-architecture.jpg"],
     },
   },
   {
@@ -296,7 +294,29 @@ export const projectsData: Project[] = [
       "오프라인 사용: 네트워크 연결 없이도 언제든지 구독 정보 확인 가능",
     ],
     images: {
-      ...subHubImages,
+      appIcon: "subhub/app_icon.png",
+      logo: ["subhub/logo_name.png", "subhub/logo_name_dark.png"],
+      storeAssets: {
+        featureGraphic: "subhub/graph_image.png",
+        introScreens: [
+          "subhub/intro_service_1.png",
+          "subhub/intro_service_2.png",
+          "subhub/intro_service_3.png",
+          "subhub/intro_service_4.png",
+          "subhub/intro_service_5.png",
+          "subhub/intro_service_6.png",
+        ],
+      },
+      mobileScreenshots: {
+        android: ["subhub/ss-android-1.jpg", "subhub/ss-android-2.jpg"],
+        ios: [
+          "subhub/ss-iphone16-pro-1.png",
+          "subhub/ss-iphone16-pro-2.png",
+          "subhub/ss-iphone16-pro-3.png",
+          "subhub/ss-iphone16-pro-4.png",
+          "subhub/ss-iphone16-pro-5.png",
+        ],
+      },
       brandColors: {
         primary: "#1FD1A7",
         secondary: "#19376D",
