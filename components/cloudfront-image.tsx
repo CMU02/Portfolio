@@ -1,8 +1,5 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Image from "next/image";
-import { fetchCloudFrontImageUrl } from "@/app/actions/cloudfront";
+import { getCloudFrontImageUrl } from "@/lib/cloudfront";
 import { cn } from "@/lib/utils";
 
 interface CloudFrontImageProps {
@@ -12,8 +9,11 @@ interface CloudFrontImageProps {
   height?: number;
   className?: string;
   priority?: boolean;
+  fill?: boolean;
+  sizes?: string;
 }
 
+// Server Component — URL 생성이 단순 문자열 조합이므로 클라이언트 fetch 불필요
 export function CloudFrontImage({
   s3Key,
   alt,
@@ -21,54 +21,22 @@ export function CloudFrontImage({
   height = 800,
   className,
   priority = false,
+  fill = false,
+  sizes,
 }: CloudFrontImageProps) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const imageUrl = getCloudFrontImageUrl(s3Key);
 
-  useEffect(() => {
-    async function loadImage() {
-      try {
-        setIsLoading(true);
-        // CloudFront URL을 Server Action을 통해 가져오기
-        const url = await fetchCloudFrontImageUrl(s3Key);
-        setImageUrl(url);
-      } catch (err) {
-        setError("이미지를 불러올 수 없습니다.");
-        console.error("CloudFront 이미지 로드 실패:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadImage();
-  }, [s3Key]);
-
-  if (isLoading) {
+  if (fill) {
     return (
-      <div
-        className={cn(
-          "animate-pulse bg-muted rounded-lg flex items-center justify-center",
-          className
-        )}
-        style={{ aspectRatio: `${width}/${height}` }}
-      >
-        <span className="text-muted-foreground text-sm">로딩 중...</span>
-      </div>
-    );
-  }
-
-  if (error || !imageUrl) {
-    return (
-      <div
-        className={cn(
-          "bg-muted/50 rounded-lg flex items-center justify-center border border-border",
-          className
-        )}
-        style={{ aspectRatio: `${width}/${height}` }}
-      >
-        <span className="text-muted-foreground text-sm">{error}</span>
-      </div>
+      <Image
+        src={imageUrl}
+        alt={alt}
+        fill
+        sizes={sizes ?? "100vw"}
+        className={cn("object-cover", className)}
+        priority={priority}
+        unoptimized
+      />
     );
   }
 

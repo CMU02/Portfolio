@@ -1,5 +1,3 @@
-"use client";
-
 import { CloudFrontImage } from "@/components/cloudfront-image";
 
 interface ImageGridProps {
