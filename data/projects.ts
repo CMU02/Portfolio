@@ -202,28 +202,33 @@ export const projectsData: Project[] = [
     title: "StreamX",
     subtitle: "당신만의 맞춤 AI 스트리머 플랫폼",
     description:
-      "사용자가 원하는 시간과 취향에 맞춰 AI 스트리머와 실시간 소통 및 교감을 나눌 수 있는 혁신적인 플랫폼. Unity 기반 3D 인터랙티브 환경과 Spring Boot 백엔드로 개인화된 스트리밍 경험을 제공합니다.",
+      "사용자가 원하는 시간과 취향에 맞춰 AI 스트리머와 실시간 소통 및 교감을 나눌 수 있는 혁신적인 플랫폼. Unity 기반 3D 인터랙티브 환경과 Spring Boot 백엔드, RAG 기반 개인화 시스템으로 맞춤형 스트리밍 경험을 제공합니다.",
     role: "Backend Developer",
     type: "team",
     techStack: [
       "Spring Boot",
       "Unity",
-      "AWS",
+      "AWS RDS (MySQL)",
       "LLM",
       "TTS",
+      "RAG",
+      "Pinecone",
+      "Redis",
       "Bone-based Rigging",
     ],
     features: [
       {
-        text: "사용자 행동 데이터 분석 기반 맞춤형 AI 스트리머 제공",
+        text: "RAG 기반 사용자 행동 및 대화 분석을 통한 맞춤형 AI 스트리머 제공",
         images: ["streamx/my_streamer_1.png"],
       },
       {
         text: "LLM + TTS 기술을 활용한 실시간 1:1 자연어 소통",
         images: ["streamx/chating_1.png", "streamx/chating_2.png"],
       },
+      { text: "Pinecone vector store를 활용한 사용자 행동 패턴 분석" },
+      { text: "Redis 기반 대화 컨텍스트 관리 및 세션 유지" },
       { text: "Unity6 기반 몰입도 높은 3D 인터랙티브 콘텐츠 구현" },
-      { text: "안정적인 사용자 데이터 관리 및 트랜잭션 처리" },
+      { text: "AWS RDS for MySQL을 통한 안정적인 데이터 관리" },
     ],
     githubUrl: "https://github.com/CMU02/StreamX-BE",
     problem: [
@@ -234,14 +239,35 @@ export const projectsData: Project[] = [
       },
     ],
     motivation:
-      "사용자의 다양한 취향과 라이프스타일을 분석하여 최적의 AI 스트리머를 제공하고, 직접 커스터마이징할 수 있는 마켓플레이스를 구축하여 몰입도 높은 경험을 제공하고자 했습니다.",
+      "사용자의 다양한 취향과 라이프스타일을 분석하여 최적의 AI 스트리머를 제공하고, RAG 기술을 활용해 사용자의 행동 패턴과 대화 내용을 학습하여 더욱 개인화된 경험을 제공하고자 했습니다.",
     techReasons: [
       {
         tech: "Spring Boot",
         reason:
           "안정적이고 효율적인 백엔드 서비스와 트랜잭션 처리를 위해 선택했습니다.",
         solved:
-          "사용자 정보 관리, AI 스트리머 데이터 처리, 마켓플레이스 거래 등 핵심 백엔드 서비스를 안정적으로 제공했습니다.",
+          "사용자 정보 관리, AI 스트리머 데이터 처리 등 핵심 백엔드 서비스를 안정적으로 제공했습니다.",
+      },
+      {
+        tech: "RAG + Pinecone",
+        reason:
+          "사용자의 행동 패턴과 대화 내용을 벡터화하여 저장하고, 유사도 검색을 통해 개인화된 응답을 생성하기 위해 도입했습니다.",
+        solved:
+          "사용자의 과거 대화와 행동 데이터를 기반으로 AI 스트리머가 맥락에 맞는 개인화된 응답을 제공할 수 있게 되었습니다.",
+      },
+      {
+        tech: "Redis",
+        reason:
+          "실시간 대화 세션 관리와 빠른 컨텍스트 조회를 위해 인메모리 데이터베이스를 선택했습니다.",
+        solved:
+          "사용자의 대화 내용을 실시간으로 캐싱하여 AI 스트리머가 이전 대화를 기억하고 자연스러운 대화 흐름을 유지할 수 있게 되었습니다.",
+      },
+      {
+        tech: "AWS RDS for MySQL",
+        reason:
+          "사용자 정보, AI 스트리머 데이터 등 구조화된 데이터를 안정적으로 관리하기 위해 선택했습니다.",
+        solved:
+          "관계형 데이터베이스를 통해 데이터 무결성을 보장하고, AWS의 자동 백업 및 복구 기능으로 안정성을 확보했습니다.",
       },
       {
         tech: "Unity",
@@ -260,8 +286,10 @@ export const projectsData: Project[] = [
     ],
     myContributions: [
       "Spring Boot 기반 RESTful API 설계 및 구현",
+      "RAG 파이프라인 구축 및 Pinecone vector store 연동",
+      "Redis를 활용한 대화 컨텍스트 관리 시스템 개발",
       "사용자 행동 데이터 분석 로직 개발",
-      "마켓플레이스 트랜잭션 처리 및 데이터 무결성 관리",
+      "AWS RDS for MySQL 데이터베이스 설계 및 최적화",
       "AWS 인프라 구축 및 배포 환경 설정",
     ],
   },
