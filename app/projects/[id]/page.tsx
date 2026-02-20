@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Navigation } from "@/components/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { projectsData } from "@/data/projects";
+import { projectsData, FeatureSection } from "@/data/projects";
 import { generateProjectStructuredData } from "@/lib/seo-utils";
 import {
   ArrowLeft,
@@ -127,21 +127,74 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.problem && (
               <SectionCard
                 title="해결한 문제"
-                icon={Target}
-                iconColor="text-red-400"
+                icon={<Target className="w-5 h-5 text-red-400" />}
                 delay={0.25}
               >
-                <p className="text-muted-foreground leading-relaxed">
-                  {project.problem}
-                </p>
+                {Array.isArray(project.problem) ? (
+                  <div className="grid gap-6">
+                    {project.problem.map((item, index) => (
+                      <div key={index} className="space-y-3">
+                        <h4 className="font-semibold text-base">
+                          {item.title}
+                        </h4>
+                        <p className="text-muted-foreground leading-relaxed text-sm">
+                          {item.description}
+                        </p>
+                        {item.images && item.images.length > 0 && (
+                          <div className="space-y-4 mt-4">
+                            {/* 1열: 처음 3개 이미지 가로 배치 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              {item.images
+                                .slice(0, 3)
+                                .map((imgKey, imgIndex) => (
+                                  <div
+                                    key={imgIndex}
+                                    className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
+                                  >
+                                    <CloudFrontImage
+                                      s3Key={imgKey}
+                                      alt={`${item.title} 사례 ${imgIndex + 1}`}
+                                      sizes="(max-width: 768px) 100vw, 33vw"
+                                    />
+                                  </div>
+                                ))}
+                            </div>
+                            {/* 2열: 4번째 이미지 */}
+                            {item.images[3] && (
+                              <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
+                                <CloudFrontImage
+                                  s3Key={item.images[3]}
+                                  alt={`${item.title} 사례 4`}
+                                  sizes="(max-width: 768px) 100vw, 100vw"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {item.image && !item.images && (
+                          <div className="relative w-full max-w-[35%] rounded-lg overflow-hidden border border-border bg-muted/30">
+                            <CloudFrontImage
+                              s3Key={item.image}
+                              alt={item.title}
+                              sizes="(max-width: 768px) 35vw, 280px"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground leading-relaxed">
+                    {project.problem}
+                  </p>
+                )}
               </SectionCard>
             )}
 
             {project.motivation && (
               <SectionCard
                 title="동기 및 문제정의"
-                icon={Lightbulb}
-                iconColor="text-yellow-400"
+                icon={<Lightbulb className="w-5 h-5 text-yellow-400" />}
                 delay={0.3}
               >
                 <p className="text-muted-foreground leading-relaxed">
@@ -153,8 +206,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.techReasons && project.techReasons.length > 0 && (
               <SectionCard
                 title="기술 선택 이유"
-                icon={Wrench}
-                iconColor="text-blue-400"
+                icon={<Wrench className="w-5 h-5 text-blue-400" />}
                 delay={0.35}
               >
                 <div className="space-y-6">
@@ -188,18 +240,50 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
             <SectionCard
               title="주요 기능"
-              icon={CheckCircle}
-              iconColor="text-green-400"
+              icon={<CheckCircle className="w-5 h-5 text-green-400" />}
               delay={0.4}
             >
-              <BulletList items={project.features} />
+              {Array.isArray(project.features) &&
+              typeof project.features[0] === "object" ? (
+                <ul className="space-y-4">
+                  {(project.features as FeatureSection[]).map(
+                    (feature, index) => (
+                      <li key={index} className="space-y-3">
+                        <div className="flex gap-2">
+                          <span className="text-green-400 mt-1">•</span>
+                          <span className="flex-1">{feature.text}</span>
+                        </div>
+                        {feature.images && feature.images.length > 0 && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-4">
+                            {feature.images.map(
+                              (imgKey: string, imgIndex: number) => (
+                                <div
+                                  key={imgIndex}
+                                  className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
+                                >
+                                  <CloudFrontImage
+                                    s3Key={imgKey}
+                                    alt={`${feature.text} 이미지 ${imgIndex + 1}`}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                  />
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        )}
+                      </li>
+                    ),
+                  )}
+                </ul>
+              ) : (
+                <BulletList items={project.features as string[]} />
+              )}
             </SectionCard>
 
             {project.myContributions && project.myContributions.length > 0 && (
               <SectionCard
                 title="내가 기여한 부분"
-                icon={User}
-                iconColor="text-tech-purple"
+                icon={<User className="w-5 h-5 text-tech-purple" />}
                 borderColor="border-tech-purple/30"
                 delay={0.45}
               >
@@ -215,8 +299,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.expectedEffects && project.expectedEffects.length > 0 && (
               <SectionCard
                 title="기대 효과"
-                icon={TrendingUp}
-                iconColor="text-orange-400"
+                icon={<TrendingUp className="w-5 h-5 text-orange-400" />}
                 delay={0.5}
               >
                 <BulletList
@@ -230,8 +313,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {(project.images?.appIcon || project.images?.logo) && (
               <SectionCard
                 title="앱 에셋"
-                icon={Smartphone}
-                iconColor="text-blue-400"
+                icon={<Smartphone className="w-5 h-5 text-blue-400" />}
                 borderColor="border-blue-500/30"
                 delay={0.52}
               >
@@ -245,6 +327,9 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         <CloudFrontImage
                           s3Key={project.images.appIcon}
                           alt="App Icon"
+                          width={96}
+                          height={96}
+                          sizes="96px"
                         />
                       </div>
                     </div>
@@ -265,6 +350,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                               alt={`Logo ${index + 1}`}
                               width={300}
                               height={72}
+                              sizes="300px"
                               className="w-auto! h-full! max-h-18 object-contain"
                             />
                           </div>
@@ -279,8 +365,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.images?.storeAssets && (
               <SectionCard
                 title="스토어 에셋"
-                icon={Store}
-                iconColor="text-green-400"
+                icon={<Store className="w-5 h-5 text-green-400" />}
                 borderColor="border-green-500/30"
                 delay={0.53}
               >
@@ -294,6 +379,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         <CloudFrontImage
                           s3Key={project.images.storeAssets.featureGraphic}
                           alt="Feature Graphic"
+                          sizes="(max-width: 768px) 100vw, 800px"
+                          priority
                         />
                       </div>
                     </div>
@@ -317,8 +404,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.images?.mobileScreenshots && (
               <SectionCard
                 title="모바일 스크린샷"
-                icon={Smartphone}
-                iconColor="text-cyan-400"
+                icon={<Smartphone className="w-5 h-5 text-cyan-400" />}
                 delay={0.54}
               >
                 <div className="space-y-6">
@@ -354,8 +440,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               project.images.architecture.length > 0 && (
                 <SectionCard
                   title="아키텍처"
-                  icon={Database}
-                  iconColor="text-blue-400"
+                  icon={<Database className="w-5 h-5 text-blue-400" />}
                   delay={0.54}
                 >
                   <div className="space-y-4">
@@ -368,6 +453,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                           s3Key={archKey}
                           alt={`Architecture ${index + 1}`}
                           priority={index === 0}
+                          sizes="(max-width: 768px) 100vw, 800px"
                         />
                       </div>
                     ))}
@@ -378,8 +464,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.images?.erd && project.images.erd.length > 0 && (
               <SectionCard
                 title="ERD 다이어그램"
-                icon={Database}
-                iconColor="text-purple-400"
+                icon={<Database className="w-5 h-5 text-purple-400" />}
                 delay={0.55}
               >
                 <div className="space-y-6">
@@ -397,6 +482,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                           s3Key={erdKey}
                           alt={`ERD ${index + 1}`}
                           priority={index === 0}
+                          sizes="(max-width: 768px) 100vw, 800px"
                         />
                       </div>
                     </div>
@@ -409,8 +495,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               project.images.screenshots.length > 0 && (
                 <SectionCard
                   title="스크린샷"
-                  icon={ImageIcon}
-                  iconColor="text-cyan-400"
+                  icon={<ImageIcon className="w-5 h-5 text-cyan-400" />}
                   delay={0.6}
                 >
                   <div className="space-y-6">
@@ -422,6 +507,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                         <CloudFrontImage
                           s3Key={screenshotKey}
                           alt={`Screenshot ${index + 1}`}
+                          sizes="(max-width: 768px) 100vw, 800px"
                         />
                       </div>
                     ))}
@@ -432,14 +518,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.images?.fieldSurvey && (
               <SectionCard
                 title="현장 조사"
-                icon={MapPin}
-                iconColor="text-green-400"
+                icon={<MapPin className="w-5 h-5 text-green-400" />}
                 delay={0.65}
               >
                 <div className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30">
                   <CloudFrontImage
                     s3Key={project.images.fieldSurvey}
                     alt="Field Survey"
+                    sizes="(max-width: 768px) 100vw, 800px"
                   />
                 </div>
               </SectionCard>
@@ -450,8 +536,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 project.images.uiDesign.after) && (
                 <SectionCard
                   title="UI 디자인 개선"
-                  icon={Palette}
-                  iconColor="text-pink-400"
+                  icon={<Palette className="w-5 h-5 text-pink-400" />}
                   borderColor="border-pink-500/30"
                   delay={0.68}
                 >
@@ -465,6 +550,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                           <CloudFrontImage
                             s3Key={project.images.uiDesign.before}
                             alt="UI Design Before"
+                            sizes="(max-width: 768px) 100vw, 50vw"
                           />
                         </div>
                       </div>
@@ -478,6 +564,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                           <CloudFrontImage
                             s3Key={project.images.uiDesign.after}
                             alt="UI Design After"
+                            sizes="(max-width: 768px) 100vw, 50vw"
                           />
                         </div>
                       </div>
@@ -489,8 +576,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.troubleShooting && project.troubleShooting.length > 0 && (
               <SectionCard
                 title="문제 해결 사례"
-                icon={AlertTriangle}
-                iconColor="text-red-400"
+                icon={<AlertTriangle className="w-5 h-5 text-red-400" />}
                 borderColor="border-red-500/30"
                 delay={0.7}
               >
@@ -529,8 +615,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             {project.seoResult && (
               <SectionCard
                 title="SEO 성과"
-                icon={Search}
-                iconColor="text-green-400"
+                icon={<Search className="w-5 h-5 text-green-400" />}
                 borderColor="border-green-500/30"
                 delay={0.75}
               >
@@ -538,6 +623,38 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   <p className="text-muted-foreground">
                     {project.seoResult.description}
                   </p>
+
+                  {project.seoResult.searchRankings &&
+                    project.seoResult.searchRankings.length > 0 && (
+                      <div className="space-y-3">
+                        <h4 className="font-semibold">구글 검색어 순위</h4>
+                        <div className="grid gap-4">
+                          {project.seoResult.searchRankings.map(
+                            (ranking, index) => (
+                              <div key={index} className="space-y-2">
+                                <p className="text-sm font-medium text-muted-foreground">
+                                  {new Date(ranking.date).toLocaleDateString(
+                                    "ko-KR",
+                                    {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    },
+                                  )}
+                                </p>
+                                <div className="rounded-lg overflow-hidden border border-border">
+                                  <CloudFrontImage
+                                    s3Key={ranking.image}
+                                    alt={`Search Ranking ${ranking.date}`}
+                                    sizes="(max-width: 768px) 100vw, 800px"
+                                  />
+                                </div>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                   <div className="space-y-3">
                     <h4 className="font-semibold">지표 변화</h4>
@@ -621,6 +738,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                             <CloudFrontImage
                               s3Key={imgKey}
                               alt={`SEO Before ${i + 1}`}
+                              sizes="(max-width: 768px) 100vw, 50vw"
                             />
                           </div>
                         ))}
@@ -637,6 +755,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                             <CloudFrontImage
                               s3Key={imgKey}
                               alt={`SEO After ${i + 1}`}
+                              sizes="(max-width: 768px) 100vw, 50vw"
                             />
                           </div>
                         ))}
