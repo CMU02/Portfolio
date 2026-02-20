@@ -5,6 +5,20 @@ export interface TechReason {
   solved: string;
 }
 
+// 해결한 문제 섹션 (구조화된 형태)
+export interface ProblemSection {
+  title: string;
+  description: string;
+  image?: string; // 단일 이미지 (하위 호환성)
+  images?: string[]; // 여러 이미지 배열
+}
+
+// 주요 기능 섹션 (구조화된 형태)
+export interface FeatureSection {
+  text: string;
+  images?: string[]; // 기능 설명 이미지
+}
+
 // 문제 해결 사례
 export interface TroubleShooting {
   title: string;
@@ -27,6 +41,10 @@ export interface SeoResult {
     before: string[];
     after: string[];
   };
+  searchRankings?: {
+    date: string;
+    image: string;
+  }[];
   images: {
     before: string[];
     after: string[];
@@ -41,13 +59,13 @@ export interface Project {
   role: string;
   type: "team" | "personal";
   techStack: string[];
-  features: string[];
+  features: string[] | FeatureSection[];
   githubUrl?: string;
   demoUrl?: string;
   playStoreUrl?: string; // Google Play Store URL
   appStoreUrl?: string; // Apple App Store URL
   // 상세 정보
-  problem?: string; // 무슨 문제를 해결한 프로젝트인가?
+  problem?: string | ProblemSection[]; // 무슨 문제를 해결한 프로젝트인가?
   motivation?: string; // 동기 및 문제정의
   techReasons?: TechReason[]; // 기술 선택 이유
   myContributions?: string[]; // 내가 직접 만든 부분
@@ -196,14 +214,25 @@ export const projectsData: Project[] = [
       "Bone-based Rigging",
     ],
     features: [
-      "사용자 행동 데이터 분석 기반 맞춤형 AI 스트리머 제공",
-      "LLM + TTS 기술을 활용한 실시간 1:1 자연어 소통",
-      "Unity6 기반 몰입도 높은 3D 인터랙티브 콘텐츠 구현",
-      "안정적인 사용자 데이터 관리 및 트랜잭션 처리",
+      {
+        text: "사용자 행동 데이터 분석 기반 맞춤형 AI 스트리머 제공",
+        images: ["streamx/my_streamer_1.png"],
+      },
+      {
+        text: "LLM + TTS 기술을 활용한 실시간 1:1 자연어 소통",
+        images: ["streamx/chating_1.png", "streamx/chating_2.png"],
+      },
+      { text: "Unity6 기반 몰입도 높은 3D 인터랙티브 콘텐츠 구현" },
+      { text: "안정적인 사용자 데이터 관리 및 트랜잭션 처리" },
     ],
     githubUrl: "https://github.com/CMU02/StreamX-BE",
-    problem:
-      "기존 스트리밍 서비스는 방송 시간이 정해져 있어 원하는 시간에 컨텐츠를 즐기기 어렵고, 유명 스트리머와의 직접 소통이 거의 불가능하여 일방적인 시청만 가능했습니다.",
+    problem: [
+      {
+        title: "기존 스트리밍 서비스의 한계",
+        description:
+          "기존 스트리밍 서비스는 방송 시간이 정해져 있어 원하는 시간에 컨텐츠를 즐기기 어렵고, 유명 스트리머와의 직접 소통이 거의 불가능하여 일방적인 시청만 가능했습니다.",
+      },
+    ],
     motivation:
       "사용자의 다양한 취향과 라이프스타일을 분석하여 최적의 AI 스트리머를 제공하고, 직접 커스터마이징할 수 있는 마켓플레이스를 구축하여 몰입도 높은 경험을 제공하고자 했습니다.",
     techReasons: [
@@ -346,8 +375,29 @@ export const projectsData: Project[] = [
     ],
     githubUrl: "https://github.com/CMU02/cleanbreath-frontend",
     demoUrl: "https://cleanbreath.cmu02-studio.com",
-    problem:
-      "안양시의 금연구역과 흡연구역이 명확하게 구분되어 있지 않아 흡연자와 비흡연자 간의 갈등이 발생하고 있습니다. 국민건강증진법과 안양시 조례는 복잡하고 이해하기 어려운 형태로 정의되어 있으며, 지자체의 홍보에도 불구하고 시민들에게 제대로 전달되지 않고 있습니다.",
+    problem: [
+      {
+        title: "흡연구역 인식 부족",
+        description:
+          "많은 사람들이 흡연구역과 금연구역 경계에 대해 혼동이 오고 있습니다.",
+      },
+      {
+        title: "공공장소의 갈등",
+        description:
+          "이러한 문제들로 인해 공공장소에서 비흡연자와 흡연자 간의 갈등이 발생하고 있습니다.",
+      },
+      {
+        title: "문제점의 사례",
+        description:
+          "법령과 조례는 금연구역을 복잡하고 이해하기 어려운 형태로 정의가 되어있습니다. 이러한 규정은 자주 변경될 뿐만 아니라, 지자체마다 조례를 통해 세부 사항을 다르게 조정할 수 있어 지역별로 혼란이 발생하기도 합니다. 지자체가 변경된 사항을 지속적으로 홍보하려 하지만, 시민들에게 제대로 전달되지 않는 것이 현실입니다.",
+        images: [
+          "clean-breath/problem_1.jpg",
+          "clean-breath/problem_2.jpg",
+          "clean-breath/problem_3.jpg",
+          "clean-breath/problem_4.png",
+        ],
+      },
+    ],
     motivation:
       "법령과 조례는 시민들이 이해하기 어렵지만, 이를 직관적인 시각화로 쉽게 전달하는 서비스를 제공하고자 했습니다. 특히 안양시에 한정된 금연·흡연구역 정보를 지속적으로 업데이트하며, 시민들이 이해하기 쉽게 정보를 제공하는 것이 핵심입니다.",
     techReasons: [
@@ -463,6 +513,24 @@ export const projectsData: Project[] = [
           "cleanbreath",
         ],
       },
+      searchRankings: [
+        {
+          date: "2024-10-31",
+          image: "clean-breath/2024_10_31_seo.png",
+        },
+        {
+          date: "2024-11-11",
+          image: "clean-breath/2024_11_11_seo_01.png",
+        },
+        {
+          date: "2024-11-11",
+          image: "clean-breath/2024_11_11_seo_02.png",
+        },
+        {
+          date: "2024-11-18",
+          image: "clean-breath/2024_11_18_seo.png",
+        },
+      ],
       images: {
         before: [
           "clean-breath/google_search_console_before.webp",
