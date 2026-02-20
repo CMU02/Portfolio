@@ -1,7 +1,5 @@
-"use client";
-
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Navigation } from "@/components/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -34,33 +32,19 @@ import {
   TroubleShootingItem,
 } from "@/components/project-detail";
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const project = projectsData.find((p) => p.id === params.id);
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 
-  if (!project) {
-    return (
-      <main className="dark min-h-screen">
-        <Navigation />
-        <section className="py-24 pt-32">
-          <div className="container mx-auto px-6 text-center">
-            <h1 className="text-4xl font-bold mb-4">
-              프로젝트를 찾을 수 없습니다
-            </h1>
-            <p className="text-muted-foreground mb-8">
-              요청하신 프로젝트가 존재하지 않습니다.
-            </p>
-            <Button asChild>
-              <Link href="/projects">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                프로젝트 목록
-              </Link>
-            </Button>
-          </div>
-        </section>
-      </main>
-    );
-  }
+export async function generateStaticParams() {
+  return projectsData.map((p) => ({ id: p.id }));
+}
+
+export default async function ProjectDetailPage({ params }: PageProps) {
+  const { id } = await params;
+  const project = projectsData.find((p) => p.id === id);
+
+  if (!project) notFound();
 
   const structuredData = generateProjectStructuredData(project);
   const typeLabel =
@@ -140,7 +124,6 @@ export default function ProjectDetailPage() {
 
           {/* 상세 섹션들 */}
           <div className="space-y-6">
-            {/* 해결한 문제 */}
             {project.problem && (
               <SectionCard
                 title="해결한 문제"
@@ -154,7 +137,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 동기 및 문제정의 */}
             {project.motivation && (
               <SectionCard
                 title="동기 및 문제정의"
@@ -168,7 +150,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 기술 선택 이유 */}
             {project.techReasons && project.techReasons.length > 0 && (
               <SectionCard
                 title="기술 선택 이유"
@@ -205,7 +186,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 주요 기능 */}
             <SectionCard
               title="주요 기능"
               icon={CheckCircle}
@@ -215,7 +195,6 @@ export default function ProjectDetailPage() {
               <BulletList items={project.features} />
             </SectionCard>
 
-            {/* 내가 기여한 부분 */}
             {project.myContributions && project.myContributions.length > 0 && (
               <SectionCard
                 title="내가 기여한 부분"
@@ -233,7 +212,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 기대 효과 */}
             {project.expectedEffects && project.expectedEffects.length > 0 && (
               <SectionCard
                 title="기대 효과"
@@ -249,7 +227,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 앱 에셋 */}
             {(project.images?.appIcon || project.images?.logo) && (
               <SectionCard
                 title="앱 에셋"
@@ -299,7 +276,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 스토어 에셋 */}
             {project.images?.storeAssets && (
               <SectionCard
                 title="스토어 에셋"
@@ -338,7 +314,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 모바일 스크린샷 */}
             {project.images?.mobileScreenshots && (
               <SectionCard
                 title="모바일 스크린샷"
@@ -375,7 +350,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 아키텍처 */}
             {project.images?.architecture &&
               project.images.architecture.length > 0 && (
                 <SectionCard
@@ -401,7 +375,6 @@ export default function ProjectDetailPage() {
                 </SectionCard>
               )}
 
-            {/* ERD 다이어그램 */}
             {project.images?.erd && project.images.erd.length > 0 && (
               <SectionCard
                 title="ERD 다이어그램"
@@ -432,7 +405,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* 스크린샷 */}
             {project.images?.screenshots &&
               project.images.screenshots.length > 0 && (
                 <SectionCard
@@ -457,7 +429,6 @@ export default function ProjectDetailPage() {
                 </SectionCard>
               )}
 
-            {/* 현장 조사 */}
             {project.images?.fieldSurvey && (
               <SectionCard
                 title="현장 조사"
@@ -474,7 +445,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* UI 디자인 개선 */}
             {project.images?.uiDesign &&
               (project.images.uiDesign.before ||
                 project.images.uiDesign.after) && (
@@ -516,7 +486,6 @@ export default function ProjectDetailPage() {
                 </SectionCard>
               )}
 
-            {/* 문제 해결 사례 */}
             {project.troubleShooting && project.troubleShooting.length > 0 && (
               <SectionCard
                 title="문제 해결 사례"
@@ -557,7 +526,6 @@ export default function ProjectDetailPage() {
               </SectionCard>
             )}
 
-            {/* SEO 성과 */}
             {project.seoResult && (
               <SectionCard
                 title="SEO 성과"
@@ -571,7 +539,6 @@ export default function ProjectDetailPage() {
                     {project.seoResult.description}
                   </p>
 
-                  {/* 지표 변화 */}
                   <div className="space-y-3">
                     <h4 className="font-semibold">지표 변화</h4>
                     <div className="grid gap-3">
@@ -601,7 +568,6 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
 
-                  {/* 키워드 변화 */}
                   <div className="space-y-3">
                     <h4 className="font-semibold">키워드 변화</h4>
                     <div className="grid md:grid-cols-2 gap-4">
@@ -640,7 +606,6 @@ export default function ProjectDetailPage() {
                     </div>
                   </div>
 
-                  {/* Google Search Console */}
                   <div className="space-y-3">
                     <h4 className="font-semibold">Google Search Console</h4>
                     <div className="grid md:grid-cols-2 gap-4">
