@@ -89,6 +89,16 @@ export function GrowthSection() {
                           <p className="text-sm text-muted-foreground">
                             {story.learned}
                           </p>
+                          {story.metrics && (
+                            <div className="mt-3 pt-3 border-t border-border">
+                              <p className="text-xs font-medium text-tech-green mb-1">
+                                성과
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {story.metrics}
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
