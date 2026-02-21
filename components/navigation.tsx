@@ -12,6 +12,7 @@ import { Logo } from "@/components/common/logo";
 const navItems = [
   { label: "Projects", href: "#work" },
   { label: "Growth", href: "#impact" },
+  { label: "Certifications", href: "/certifications" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -51,15 +52,26 @@ export function Navigation() {
           {!isProjectsPage && (
             <>
               <div className="hidden md:flex items-center gap-8">
-                {navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {item.label}
-                  </a>
-                ))}
+                {navItems.map((item) => {
+                  const isExternal = item.href.startsWith("#");
+                  return isExternal ? (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </div>
 
               {/* 모바일 메뉴 버튼 */}
@@ -82,16 +94,28 @@ export function Navigation() {
             animate={{ opacity: 1, height: "auto" }}
             className="md:hidden pt-4 pb-2"
           >
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="block py-2 text-muted-foreground hover:text-foreground"
-                onClick={() => setIsMobileOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isExternal = item.href.startsWith("#");
+              return isExternal ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="block py-2 text-muted-foreground hover:text-foreground"
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block py-2 text-muted-foreground hover:text-foreground"
+                  onClick={() => setIsMobileOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </motion.div>
         )}
       </nav>
