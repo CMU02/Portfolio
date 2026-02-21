@@ -23,6 +23,7 @@ import {
   Store,
 } from "lucide-react";
 import { CloudFrontImage } from "@/components/cloudfront-image";
+import { ArchitectureImageWithLink } from "@/components/architecture-image-with-link";
 import {
   AnimatedSection,
   SectionCard,
@@ -445,17 +446,12 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 >
                   <div className="space-y-4">
                     {project.images.architecture.map((archKey, index) => (
-                      <div
+                      <ArchitectureImageWithLink
                         key={index}
-                        className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
-                      >
-                        <CloudFrontImage
-                          s3Key={archKey}
-                          alt={`Architecture ${index + 1}`}
-                          priority={index === 0}
-                          sizes="(max-width: 768px) 100vw, 800px"
-                        />
-                      </div>
+                        s3Key={archKey}
+                        alt={`Architecture ${index + 1}`}
+                        priority={index === 0}
+                      />
                     ))}
                   </div>
                 </SectionCard>
