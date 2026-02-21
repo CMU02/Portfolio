@@ -13,6 +13,9 @@ import {
   CheckCircle,
   TrendingUp,
   Database,
+  AlertTriangle,
+  Search,
+  CheckCircle2,
 } from "lucide-react";
 import { ArchitectureImageWithLink } from "@/components/architecture-image-with-link";
 import {
@@ -21,6 +24,12 @@ import {
   BulletList,
   ProjectLinks,
 } from "@/components/project-detail";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export function PhantomFilePage() {
   const project = projectsData.find((p) => p.id === "phantom-file")!;
@@ -193,6 +202,84 @@ export function PhantomFilePage() {
                 ))}
               </div>
             </SectionCard>
+
+            {/* 트러블슈팅 */}
+            {project.troubleShooting && project.troubleShooting.length > 0 && (
+              <SectionCard
+                title="트러블슈팅"
+                icon={<AlertTriangle className="w-5 h-5 text-yellow-400" />}
+                delay={0.58}
+              >
+                <Accordion type="single" collapsible className="space-y-4">
+                  {project.troubleShooting.map((item, index) => (
+                    <AccordionItem
+                      key={index}
+                      value={`item-${index}`}
+                      className="border border-border rounded-lg px-4 bg-card/50"
+                    >
+                      <AccordionTrigger className="hover:no-underline">
+                        <div className="flex items-center gap-3 text-left">
+                          <AlertTriangle className="w-5 h-5 text-yellow-400 shrink-0" />
+                          <span className="font-medium">{item.title}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="space-y-4 pt-2">
+                        <div className="flex items-start gap-3">
+                          <AlertTriangle className="w-4 h-4 text-red-400 mt-1 shrink-0" />
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground mb-1">
+                              문제 상황
+                            </p>
+                            <p className="text-sm">{item.problem}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <Search className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-muted-foreground mb-1">
+                              원인 분석
+                            </p>
+                            <div
+                              className="text-sm"
+                              dangerouslySetInnerHTML={{ __html: item.cause }}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <Lightbulb className="w-4 h-4 text-tech-cyan mt-1 shrink-0" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-muted-foreground mb-1">
+                              해결 방법
+                            </p>
+                            <div
+                              className="text-sm"
+                              dangerouslySetInnerHTML={{
+                                __html: item.solution,
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <CheckCircle2 className="w-4 h-4 text-green-400 mt-1 shrink-0" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-muted-foreground mb-1">
+                              결과
+                            </p>
+                            <div
+                              className="text-sm text-green-400"
+                              dangerouslySetInnerHTML={{ __html: item.result }}
+                            />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </SectionCard>
+            )}
           </div>
         </div>
       </section>
