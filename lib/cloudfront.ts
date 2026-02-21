@@ -1,5 +1,6 @@
 // CloudFront를 통한 이미지 URL 생성
-const CLOUDFRONT_URL = process.env.CLOUD_FRONT_URL!;
+const CLOUDFRONT_URL =
+  process.env.NEXT_PUBLIC_CLOUD_FRONT_URL || process.env.CLOUD_FRONT_URL!;
 
 // CloudFront에서 이미지 URL 생성
 export function getCloudFrontImageUrl(key: string): string {
