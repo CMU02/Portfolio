@@ -196,6 +196,30 @@ export const projectsData: Project[] = [
     images: {
       architecture: ["phantom-file/phantomfile-serverless-architecture.jpg"],
     },
+    troubleShooting: [
+      {
+        title: "API Gateway JWT Authorizer 알고리즘 불일치",
+        problem:
+          "API Gateway에서 401 Unauthorized 에러가 발생하며 사용자 인증이 실패했습니다. 에러 로그에서 'signing method ES256 is invalid' 메시지를 확인했습니다.",
+        cause:
+          "<ul class='list-disc list-inside space-y-1'><li>AWS API Gateway의 JWT Authorizer는 RS256 (RSA) 알고리즘만 지원</li><li>Supabase의 기본 JWT 서명 키는 ES256 (ECDSA) 알고리즘 사용</li><li>알고리즘 불일치로 토큰 검증 실패</li></ul>",
+        solution:
+          "<ul class='list-disc list-inside space-y-1'><li>Supabase 프로젝트 설정에서 JWT 서명 알고리즘을 RS256으로 변경</li><li>새로운 RS256 키로 JWT 토큰 재발급</li><li>API Gateway JWT Authorizer 설정(Issuer, Audience)은 유지</li></ul>",
+        result:
+          "<ul class='list-disc list-inside space-y-1'><li>알고리즘 변경으로 인증 문제 해결</li><li>API Gateway JWT Authorizer는 Lambda Authorizer 대비 성능과 비용 측면에서 유리</li><li>RS256은 공개키/개인키 방식으로 보안성 우수</li></ul>",
+      },
+      {
+        title: "Cleanup Lambda S3 권한 에러 (403 Forbidden)",
+        problem:
+          "Cleanup Lambda에서 S3 객체 삭제 시 403 Forbidden 에러가 발생했습니다. Terraform apply 실행 시 'Policy has invalid action' 에러가 발생하며 s3:HeadObject Action이 버킷 정책에서 지원되지 않는다는 것을 확인했습니다.",
+        cause:
+          "<ul class='list-disc list-inside space-y-1'><li>AWS S3는 IAM 역할 정책과 S3 버킷 정책의 이중 권한 구조 (두 정책 모두 허용 필요)</li><li>s3:HeadObject는 IAM 정책에서만 사용 가능, 버킷 정책에서는 미지원</li><li>초기 구현에서 HeadObject로 객체 존재 여부 확인 후 삭제 수행</li><li>S3 DeleteObject API는 멱등성 설계로 객체가 없어도 200 OK 반환 (사전 확인 불필요)</li></ul>",
+        solution:
+          "<ul class='list-disc list-inside space-y-1'><li>S3 버킷 정책과 IAM 역할 정책에서 s3:HeadObject 제거, s3:DeleteObject만 사용</li><li>Cleanup Lambda 코드 리팩토링: HeadObject 호출 제거, 바로 DeleteObject 시도</li><li>최소 권한 원칙 적용: 각 Lambda 함수별로 필요한 최소 권한만 부여하도록 버킷 정책 분리</li></ul>",
+        result:
+          "<ul class='list-disc list-inside space-y-1'><li>HeadObject API 호출 제거로 API 요청 50% 감소</li><li>네트워크 왕복 제거로 응답 시간 단축</li><li>S3 API 요청 비용 절감</li><li>권한 분리로 보안 강화 및 공격 표면 축소</li></ul>",
+      },
+    ],
   },
   {
     id: "streamx",
