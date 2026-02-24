@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 import { Logo } from "@/components/common/logo";
 
 const navItems = [
-  { label: "Projects", href: "#work" },
-  { label: "Growth", href: "#growth" },
-  { label: "Certifications", href: "/certifications" },
-  { label: "Contact", href: "#contact" },
+  { label: "Projects", href: "#work", isAnchor: true },
+  { label: "Growth", href: "#growth", isAnchor: true },
+  { label: "Certifications", href: "/certifications", isAnchor: false },
+  { label: "Contact", href: "#contact", isAnchor: true },
 ];
 
 export function Navigation() {
@@ -23,6 +23,8 @@ export function Navigation() {
 
   // /projects 경로에서는 네비게이션 링크 숨김
   const isProjectsPage = pathname?.startsWith("/projects");
+  // /certifications 페이지인지 확인
+  const isCertificationsPage = pathname === "/certifications";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -53,20 +55,45 @@ export function Navigation() {
             <>
               <div className="hidden md:flex items-center gap-8">
                 {navItems.map((item) => {
-                  const isExternal = item.href.startsWith("#");
-                  return isExternal ? (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
+                  // Certifications 페이지에서 앵커 링크는 비활성화
+                  const isDisabled = isCertificationsPage && item.isAnchor;
+                  // 현재 페이지 확인
+                  const isActive = !item.isAnchor && pathname === item.href;
+
+                  if (item.isAnchor) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={isDisabled ? undefined : item.href}
+                        className={cn(
+                          "text-sm transition-colors",
+                          isDisabled
+                            ? "text-muted-foreground/50 cursor-not-allowed"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                        onClick={(e) => {
+                          if (isDisabled) {
+                            e.preventDefault();
+                          }
+                        }}
+                        aria-disabled={isDisabled}
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  }
+
+                  return (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      className={cn(
+                        "text-sm transition-colors",
+                        isActive
+                          ? "text-foreground font-semibold"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                      aria-current={isActive ? "page" : undefined}
                     >
                       {item.label}
                     </Link>
@@ -97,22 +124,48 @@ export function Navigation() {
             className="md:hidden pt-4 pb-2"
           >
             {navItems.map((item) => {
-              const isExternal = item.href.startsWith("#");
-              return isExternal ? (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  className="block py-2 text-muted-foreground hover:text-foreground"
-                  onClick={() => setIsMobileOpen(false)}
-                >
-                  {item.label}
-                </a>
-              ) : (
+              // Certifications 페이지에서 앵커 링크는 비활성화
+              const isDisabled = isCertificationsPage && item.isAnchor;
+              // 현재 페이지 확인
+              const isActive = !item.isAnchor && pathname === item.href;
+
+              if (item.isAnchor) {
+                return (
+                  <a
+                    key={item.href}
+                    href={isDisabled ? undefined : item.href}
+                    className={cn(
+                      "block py-2 transition-colors",
+                      isDisabled
+                        ? "text-muted-foreground/50 cursor-not-allowed"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                    onClick={(e) => {
+                      if (isDisabled) {
+                        e.preventDefault();
+                      } else {
+                        setIsMobileOpen(false);
+                      }
+                    }}
+                    aria-disabled={isDisabled}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
+              return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block py-2 text-muted-foreground hover:text-foreground"
+                  className={cn(
+                    "block py-2 transition-colors",
+                    isActive
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
                   onClick={() => setIsMobileOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {item.label}
                 </Link>
