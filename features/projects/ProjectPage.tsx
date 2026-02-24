@@ -20,5 +20,8 @@ export function ProjectPage({ id }: Props) {
       return <CleanBreathPage />;
     case "streamx":
       return <StreamxPage />;
+    default:
+      // isValidProjectId로 이미 검증되었으므로 여기 도달하면 안 됨
+      return null;
   }
 }
