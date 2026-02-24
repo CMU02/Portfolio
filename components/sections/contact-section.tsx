@@ -4,18 +4,19 @@ import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Github } from "lucide-react";
+import { SITE_CONFIG } from "@/lib/constants";
 
 const contactLinks = [
   {
     icon: Mail,
     label: "이메일",
-    href: "mailto:your-email@example.com",
+    href: `mailto:${SITE_CONFIG.email}`,
     isPrimary: true,
   },
   {
     icon: Github,
     label: "GitHub",
-    href: "https://github.com/CMU02",
+    href: SITE_CONFIG.githubUrl,
     isPrimary: false,
   },
 ];
@@ -60,8 +61,13 @@ export function ContactSection() {
                   className={link.isPrimary ? "glow-blue" : ""}
                   asChild
                 >
-                  <a href={link.href} target="_blank" rel="noopener noreferrer">
-                    <link.icon className="w-5 h-5 mr-2" />
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${link.label} (새 탭에서 열림)`}
+                  >
+                    <link.icon className="w-5 h-5 mr-2" aria-hidden="true" />
                     {link.label}
                   </a>
                 </Button>

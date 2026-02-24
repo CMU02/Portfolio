@@ -1,13 +1,15 @@
+import { SITE_CONFIG } from "@/lib/constants";
+
 // 구조화된 데이터 컴포넌트 (JSON-LD)
 export function StructuredData() {
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "CMU02",
+    name: SITE_CONFIG.author,
     jobTitle: "풀스택 개발자",
     description: "문제를 해결하고 성장하는 것을 즐기는 풀스택 개발자",
-    url: "https://cmu02-studio.com",
-    sameAs: ["https://github.com/CMU02"],
+    url: SITE_CONFIG.url,
+    sameAs: [SITE_CONFIG.githubUrl],
     knowsAbout: [
       "React",
       "Next.js",
@@ -32,12 +34,12 @@ export function StructuredData() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "CMU02 Portfolio",
-    url: "https://cmu02-studio.com",
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
     description: "CMU02의 풀스택 개발자 포트폴리오 웹사이트",
     author: {
       "@type": "Person",
-      name: "CMU02",
+      name: SITE_CONFIG.author,
     },
     inLanguage: "ko-KR",
   };
@@ -50,9 +52,9 @@ export function StructuredData() {
       "React, Next.js, Spring Boot, NestJS를 활용한 풀스택 개발 프로젝트 모음",
     author: {
       "@type": "Person",
-      name: "CMU02",
+      name: SITE_CONFIG.author,
     },
-    url: "https://cmu02-studio.com",
+    url: SITE_CONFIG.url,
     dateCreated: "2024-12-01",
     dateModified: new Date().toISOString().split("T")[0],
     inLanguage: "ko-KR",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { projectsData, type Project } from "@/data/projects";
+import { SITE_CONFIG } from "@/lib/constants";
 
 // 프로젝트별 메타데이터 생성 유틸리티
 export function generateProjectMetadata(projectId: string): Metadata {
@@ -14,7 +15,7 @@ export function generateProjectMetadata(projectId: string): Metadata {
 
   const title = `${project.title} | CMU02 Portfolio`;
   const description = `${project.subtitle} - ${project.description}`;
-  const url = `https://cmu02-studio.com/projects/${project.id}`;
+  const url = `${SITE_CONFIG.url}/projects/${project.id}`;
 
   // 기술 스택을 키워드에 추가
   const techKeywords = project.techStack.map((tech) => `${tech} 프로젝트`);
@@ -66,13 +67,13 @@ export function generateProjectStructuredData(project: Project) {
     operatingSystem: "Web Browser",
     author: {
       "@type": "Person",
-      name: "CMU02",
-      url: "https://github.com/CMU02",
+      name: SITE_CONFIG.author,
+      url: SITE_CONFIG.githubUrl,
     },
     programmingLanguage: project.techStack,
     dateCreated: "2024-12-01",
     dateModified: new Date().toISOString().split("T")[0],
-    url: `https://cmu02-studio.com/projects/${project.id}`,
+    url: `${SITE_CONFIG.url}/projects/${project.id}`,
     ...(project.githubUrl && {
       codeRepository: project.githubUrl,
     }),

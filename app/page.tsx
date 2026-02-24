@@ -4,6 +4,7 @@ import { ExpertiseSection } from "@/components/sections/expertise-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
 import { GrowthSection } from "@/components/sections/growth-section";
 import { ContactSection } from "@/components/sections/contact-section";
+import { SITE_CONFIG } from "@/lib/constants";
 
 export default function Home() {
   // 홈페이지용 추가 구조화된 데이터
@@ -15,7 +16,7 @@ export default function Home() {
         "@type": "ListItem",
         position: 1,
         name: "홈",
-        item: "https://cmu02-studio.com",
+        item: SITE_CONFIG.url,
       },
     ],
   };
