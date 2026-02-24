@@ -12,7 +12,7 @@ import { AlertCircle, Lightbulb, BookOpen } from "lucide-react";
 
 export function GrowthSection() {
   return (
-    <section id="impact" className="py-24 bg-card/30">
+    <section id="growth" className="py-24 bg-card/30">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

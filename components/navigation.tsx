@@ -11,7 +11,7 @@ import { Logo } from "@/components/common/logo";
 
 const navItems = [
   { label: "Projects", href: "#work" },
-  { label: "Growth", href: "#impact" },
+  { label: "Growth", href: "#growth" },
   { label: "Certifications", href: "/certifications" },
   { label: "Contact", href: "#contact" },
 ];
@@ -79,6 +79,8 @@ export function Navigation() {
                 variant="ghost"
                 size="icon"
                 className="md:hidden"
+                aria-label={isMobileOpen ? "메뉴 닫기" : "메뉴 열기"}
+                aria-expanded={isMobileOpen}
                 onClick={() => setIsMobileOpen(!isMobileOpen)}
               >
                 {isMobileOpen ? <X /> : <Menu />}
