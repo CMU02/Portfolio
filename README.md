@@ -91,6 +91,19 @@ npm run build
 npm start
 ```
 
+### 테스트 실행
+
+```bash
+# 단일 실행 (CI/CD용)
+npm test
+
+# Watch 모드 (개발용)
+npm run test:watch
+
+# UI 모드
+npm run test:ui
+```
+
 ## 📂 프로젝트 구조
 
 ```
