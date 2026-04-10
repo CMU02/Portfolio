@@ -50,42 +50,57 @@
   --color-tech-purple: var(--tech-purple);
 }
 
-/* Deep Blue Dark Mode 테마 - Architect & Builder 컨셉 */
+/*
+  디자인 컬러 팔레트:
+  #0A2342 - Deep Navy (배경 베이스)
+  #2CA58D - Teal (primary 액션 컬러)
+  #84BC9C - Sage Green (secondary/accent)
+  #FFFDF7 - Warm White (전경/텍스트)
+  #F46197 - Pink (강조/포인트)
+*/
 :root {
   --radius: 0.625rem;
-  --deep-blue: oklch(0.25 0.08 250);
-  --deep-blue-light: oklch(0.35 0.1 250);
-  --tech-cyan: oklch(0.75 0.15 195);
-  --tech-green: oklch(0.7 0.18 145);
-  --tech-yellow: oklch(0.8 0.15 85);
-  --tech-purple: oklch(0.65 0.2 290);
+  /* 커스텀 브랜드 컬러 */
+  --deep-blue: #0a2342;
+  --deep-blue-light: #0f2e55;
+  --tech-cyan: #2ca58d;
+  --tech-green: #84bc9c;
+  --tech-yellow: #f5c842;
+  --tech-purple: #f46197;
 }
 
 /* 다크 모드 기본 적용 */
 .dark {
-  --background: oklch(0.12 0.03 250);
-  --foreground: oklch(0.95 0.01 250);
-  --card: oklch(0.16 0.04 250);
-  --card-foreground: oklch(0.95 0.01 250);
-  --popover: oklch(0.16 0.04 250);
-  --popover-foreground: oklch(0.95 0.01 250);
-  --primary: oklch(0.7 0.15 220);
-  --primary-foreground: oklch(0.12 0.03 250);
-  --secondary: oklch(0.22 0.05 250);
-  --secondary-foreground: oklch(0.95 0.01 250);
-  --muted: oklch(0.22 0.05 250);
-  --muted-foreground: oklch(0.65 0.03 250);
-  --accent: oklch(0.25 0.08 250);
-  --accent-foreground: oklch(0.95 0.01 250);
+  /* #0A2342 기반 배경 */
+  --background: #0a2342;
+  /* #FFFDF7 기반 전경 */
+  --foreground: #fffdf7;
+  /* 카드: 배경보다 약간 밝은 네이비 */
+  --card: #0d2a4f;
+  --card-foreground: #fffdf7;
+  --popover: #0d2a4f;
+  --popover-foreground: #fffdf7;
+  /* primary: #2CA58D teal */
+  --primary: #2ca58d;
+  --primary-foreground: #fffdf7;
+  /* secondary: #84BC9C sage green */
+  --secondary: #122d52;
+  --secondary-foreground: #fffdf7;
+  --muted: #122d52;
+  --muted-foreground: #ffffff;
+  /* accent: #2CA58D 계열 */
+  --accent: #163660;
+  --accent-foreground: #fffdf7;
   --destructive: oklch(0.6 0.2 25);
-  --border: oklch(0.3 0.05 250);
-  --input: oklch(0.22 0.05 250);
-  --ring: oklch(0.6 0.15 220);
-  --chart-1: oklch(0.7 0.15 220);
-  --chart-2: oklch(0.7 0.18 145);
-  --chart-3: oklch(0.8 0.15 85);
-  --chart-4: oklch(0.65 0.2 290);
-  --chart-5: oklch(0.75 0.15 195);
+  --border: #1e3f6e;
+  --input: #122d52;
+  --ring: #2ca58d;
+  /* 차트 컬러 */
+  --chart-1: #2ca58d;
+  --chart-2: #84bc9c;
+  --chart-3: #f46197;
+  --chart-4: #0a2342;
+  --chart-5: #fffdf7;
 }
 
 @layer base {
@@ -105,20 +120,23 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: oklch(0.15 0.03 250);
+  background: #0a2342;
 }
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.35 0.08 250);
+  background: #1e3f6e;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.45 0.1 250);
+  background: #2ca58d;
 }
 
 /* 글로우 효과 */
 .glow-blue {
-  box-shadow: 0 0 20px oklch(0.6 0.15 220 / 0.3);
+  box-shadow: 0 0 20px rgba(44, 165, 141, 0.35);
 }
 .glow-cyan {
-  box-shadow: 0 0 20px oklch(0.75 0.15 195 / 0.3);
+  box-shadow: 0 0 20px rgba(132, 188, 156, 0.35);
+}
+.glow-pink {
+  box-shadow: 0 0 20px rgba(244, 97, 151, 0.35);
 }
