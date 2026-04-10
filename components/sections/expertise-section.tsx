@@ -8,23 +8,23 @@ const expertiseItems = [
   {
     icon: Code2,
     color: "text-tech-cyan",
-    title: "Full Stack Development",
+    title: "Java/Spring & AWS",
     description:
-      "React, Next.js로 사용자 인터페이스를 만들고, Spring Boot, NestJS로 백엔드 API를 구현합니다.",
+      "Java/Spring Boot 백엔드와 AWS 인프라 중심으로 프로젝트를 구축합니다. Lambda, DynamoDB, S3 등 클라우드 서비스를 직접 설계하고 운영합니다.",
   },
   {
     icon: Zap,
     color: "text-tech-yellow",
-    title: "Fast Learner",
+    title: "아이디어를 끝까지",
     description:
-      "새로운 기술을 빠르게 학습하고 프로젝트에 적용합니다. 문서를 읽고 직접 구현하며 배웁니다.",
+      "한번 떠올린 서비스 아이디어는 실제로 굴러갈 때까지 놓지 않습니다. 기획부터 배포·운영까지 혼자 밀어붙이는 프로젝트를 경험했습니다.",
   },
   {
     icon: Lightbulb,
     color: "text-tech-purple",
-    title: "Problem Solving",
+    title: "집요한 개선",
     description:
-      "에러를 만나면 포기하지 않고 해결책을 찾습니다. 디버깅과 문제 해결 과정을 즐깁니다.",
+      "성능 수치와 장애 로그를 보면서 집요하게 개선합니다. 멋진 기술보다 끝까지 살아남는 프로젝트를 우선순위에 둡니다.",
   },
 ];
 
@@ -40,7 +40,7 @@ export function ExpertiseSection() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">What I Do</h2>
           <p className="text-muted-foreground text-lg">
-            프론트엔드부터 백엔드까지 직접 만들어봤습니다
+            일상의 불편을 서비스로 전환하고, 직접 운영하며 배웁니다
           </p>
         </motion.div>
 

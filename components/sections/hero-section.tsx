@@ -29,7 +29,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold leading-tight"
           >
-            Code with Purpose, Build with Passion.
+            Idea to Production, Never Let Go.
           </motion.h1>
 
           {/* 서브 카피 */}
@@ -39,8 +39,8 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto"
           >
-            목적이 있는 코드를 쓰고, 열정을 담아 만듭니다. 실제 서비스를
-            운영하며 배운 풀스택 개발 지식을 기록합니다.
+            일상의 불편을 서비스로 바꾸고, 기획부터 배포·운영까지 혼자
+            밀어붙입니다. 멋진 기술보다 끝까지 살아남는 프로젝트를 만듭니다.
           </motion.p>
 
           {/* 핵심 정보 */}
