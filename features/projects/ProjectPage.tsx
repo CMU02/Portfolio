@@ -4,7 +4,6 @@ import { ProjectId } from "./types";
 import { SubhubPage } from "./subhub/SubhubPage";
 import { PhantomFilePage } from "./phantom-file/PhantomFilePage";
 import { CleanBreathPage } from "./cleanbreath/CleanBreathPage";
-import { StreamxPage } from "./streamx/StreamxPage";
 
 interface Props {
   id: ProjectId;
@@ -18,8 +17,6 @@ export function ProjectPage({ id }: Props) {
       return <PhantomFilePage />;
     case "cleanbreath":
       return <CleanBreathPage />;
-    case "streamx":
-      return <StreamxPage />;
     default:
       // isValidProjectId로 이미 검증되었으므로 여기 도달하면 안 됨
       return null;

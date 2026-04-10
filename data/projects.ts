@@ -58,6 +58,8 @@ export interface Project {
   description: string;
   role: string;
   type: "team" | "personal";
+  teamSize?: number; // 팀 프로젝트 인원 수
+  previewImage?: string; // 카드 미리보기 이미지 S3 키
   techStack: string[];
   features: string[] | FeatureSection[];
   githubUrl?: string;
@@ -106,7 +108,7 @@ export const projectsData: Project[] = [
     title: "Phantom File",
     subtitle: "한 번 열리면 사라지는, 첩보 영화급 휘발성 보안 파일 공유 서비스",
     description:
-      "계약서, 신분증, 임시 비밀번호처럼 메신저·메일로 남기기 찝찝한 민감 파일을, 일정 시간·조건 이후 자동 소멸되는 링크로 공유하는 보안 파일 공유 플랫폼. AWS 서버리스 아키텍처 기반으로 파일이 열람된 이후 흔적을 최소화합니다.",
+      "여러 SNS 플랫폼에서 민감한 파일을 공유할 때 서버에 영구 기록이 남거나 만료 처리를 놓치는 위험을 줄이기 위해 만든 휘발성 보안 파일 공유 서비스.",
     role: "Full Stack Developer",
     type: "personal",
     techStack: [
@@ -130,8 +132,9 @@ export const projectsData: Project[] = [
       "Supabase Auth 기반 사용자 인증 및 권한 관리",
       "Terraform IaC로 전체 AWS 인프라 코드화 및 버전 관리",
     ],
-    githubUrl: "https://github.com/CMU02/phantom-file",
+    githubUrl: "https://github.com/CMU02/phantom-file-web",
     demoUrl: "https://phantomfile.cmu02-studio.com",
+    previewImage: "phantom-file/phantomfile.cmu02-studio.com_ko.png",
     problem:
       "카카오톡, 이메일, 슬랙 등으로 보낸 민감 파일은 영구히 기록으로 남습니다. 계약서나 신분증 사본을 공유한 뒤 '나중에 유출되면 어쩌지'라는 불안감, 잘못된 채팅방에 올렸을 때 상대 서버·백업·스크린샷은 통제 불가능한 상황이 반복됩니다. 일반 클라우드 드라이브는 만료 설정이 번거롭고, 접근 권한 제어가 복잡하며, '보안 특화' 관점의 신뢰감을 주지 못합니다.",
     motivation:
@@ -195,6 +198,7 @@ export const projectsData: Project[] = [
     ],
     images: {
       architecture: ["phantom-file/phantomfile-serverless-architecture.jpg"],
+      screenshots: ["phantom-file/phantomfile.cmu02-studio.com_ko.png"],
     },
     troubleShooting: [
       {
@@ -222,107 +226,11 @@ export const projectsData: Project[] = [
     ],
   },
   {
-    id: "streamx",
-    title: "StreamX",
-    subtitle: "당신만의 맞춤 AI 스트리머 플랫폼",
-    description:
-      "사용자가 원하는 시간과 취향에 맞춰 AI 스트리머와 실시간 소통 및 교감을 나눌 수 있는 혁신적인 플랫폼. Unity 기반 3D 인터랙티브 환경과 Spring Boot 백엔드, RAG 기반 개인화 시스템으로 맞춤형 스트리밍 경험을 제공합니다.",
-    role: "Backend Developer",
-    type: "team",
-    techStack: [
-      "Spring Boot",
-      "Unity",
-      "AWS RDS (MySQL)",
-      "LLM",
-      "TTS",
-      "RAG",
-      "Pinecone",
-      "Redis",
-      "Bone-based Rigging",
-    ],
-    features: [
-      {
-        text: "RAG 기반 사용자 행동 및 대화 분석을 통한 맞춤형 AI 스트리머 제공",
-        images: ["streamx/my_streamer_1.png"],
-      },
-      {
-        text: "LLM + TTS 기술을 활용한 실시간 1:1 자연어 소통",
-        images: ["streamx/chating_1.png", "streamx/chating_2.png"],
-      },
-      { text: "Pinecone vector store를 활용한 사용자 행동 패턴 분석" },
-      { text: "Redis 기반 대화 컨텍스트 관리 및 세션 유지" },
-      { text: "Unity6 기반 몰입도 높은 3D 인터랙티브 콘텐츠 구현" },
-      { text: "AWS RDS for MySQL을 통한 안정적인 데이터 관리" },
-    ],
-    githubUrl: "https://github.com/CMU02/StreamX-BE",
-    problem: [
-      {
-        title: "기존 스트리밍 서비스의 한계",
-        description:
-          "기존 스트리밍 서비스는 방송 시간이 정해져 있어 원하는 시간에 컨텐츠를 즐기기 어렵고, 유명 스트리머와의 직접 소통이 거의 불가능하여 일방적인 시청만 가능했습니다.",
-      },
-    ],
-    motivation:
-      "사용자의 다양한 취향과 라이프스타일을 분석하여 최적의 AI 스트리머를 제공하고, RAG 기술을 활용해 사용자의 행동 패턴과 대화 내용을 학습하여 더욱 개인화된 경험을 제공하고자 했습니다.",
-    techReasons: [
-      {
-        tech: "Spring Boot",
-        reason:
-          "안정적이고 효율적인 백엔드 서비스와 트랜잭션 처리를 위해 선택했습니다.",
-        solved:
-          "사용자 정보 관리, AI 스트리머 데이터 처리 등 핵심 백엔드 서비스를 안정적으로 제공했습니다.",
-      },
-      {
-        tech: "RAG + Pinecone",
-        reason:
-          "사용자의 행동 패턴과 대화 내용을 벡터화하여 저장하고, 유사도 검색을 통해 개인화된 응답을 생성하기 위해 도입했습니다.",
-        solved:
-          "사용자의 과거 대화와 행동 데이터를 기반으로 AI 스트리머가 맥락에 맞는 개인화된 응답을 제공할 수 있게 되었습니다.",
-      },
-      {
-        tech: "Redis",
-        reason:
-          "실시간 대화 세션 관리와 빠른 컨텍스트 조회를 위해 인메모리 데이터베이스를 선택했습니다.",
-        solved:
-          "사용자의 대화 내용을 실시간으로 캐싱하여 AI 스트리머가 이전 대화를 기억하고 자연스러운 대화 흐름을 유지할 수 있게 되었습니다.",
-      },
-      {
-        tech: "AWS RDS for MySQL",
-        reason:
-          "사용자 정보, AI 스트리머 데이터 등 구조화된 데이터를 안정적으로 관리하기 위해 선택했습니다.",
-        solved:
-          "관계형 데이터베이스를 통해 데이터 무결성을 보장하고, AWS의 자동 백업 및 복구 기능으로 안정성을 확보했습니다.",
-      },
-      {
-        tech: "Unity",
-        reason:
-          "AI 스트리머의 실시간 커스터마이징과 3D 인터랙티브 환경 구현을 위해 도입했습니다.",
-        solved:
-          "Unity6 엔진으로 몰입도 높은 3D 콘텐츠와 실시간 소통 기능을 구현했습니다.",
-      },
-      {
-        tech: "LLM + TTS",
-        reason:
-          "자연스러운 실시간 대화와 음성 합성을 위해 대규모 언어 모델과 TTS 기술을 결합했습니다.",
-        solved:
-          "AI 스트리머가 사용자의 대화 패턴을 분석하고 자연스러운 목소리로 실시간 응답할 수 있게 되었습니다.",
-      },
-    ],
-    myContributions: [
-      "Spring Boot 기반 RESTful API 설계 및 구현",
-      "RAG 파이프라인 구축 및 Pinecone vector store 연동",
-      "Redis를 활용한 대화 컨텍스트 관리 시스템 개발",
-      "사용자 행동 데이터 분석 로직 개발",
-      "AWS RDS for MySQL 데이터베이스 설계 및 최적화",
-      "AWS 인프라 구축 및 배포 환경 설정",
-    ],
-  },
-  {
     id: "subhub",
     title: "SubHub",
     subtitle: "구독 서비스 통합 관리 앱",
     description:
-      "파편화된 구독 서비스를 한 곳에서 관리하고 시각화하는 모바일 애플리케이션. 로컬 저장소를 활용한 오프라인 우선 설계로 빠르고 안전한 데이터 관리를 제공합니다.",
+      "여러 구독 서비스를 한 곳에서 관리하고 결제일과 월별 비용을 한눈에 파악할 수 있도록 설계된 구독 관리 앱.",
     role: "Full Stack Developer",
     type: "personal",
     techStack: ["React Native", "Expo", "AsyncStorage", "TypeScript"],
@@ -339,6 +247,7 @@ export const projectsData: Project[] = [
       "파편화된 구독 정보를 한 곳에서 관리하고, 개인정보 보호를 위해 모든 데이터를 기기 내에서만 저장하는 안전한 앱을 만들고 싶었습니다.",
     playStoreUrl:
       "https://play.google.com/store/apps/details?id=com.hyeonjun1968.SubHub",
+    previewImage: "subhub/ss-iphone16-pro-1.png",
     techReasons: [
       {
         tech: "React Native",
@@ -409,9 +318,10 @@ export const projectsData: Project[] = [
     title: "CleanBreath",
     subtitle: "안양시 금연·흡연구역 시각화 서비스",
     description:
-      "안양시 내의 명확하게 구분되어 있지 않은 금연구역 및 흡연구역을 시각화하여, 흡연자와 비흡연자 간의 갈등을 해결하는 웹 애플리케이션입니다. 복잡한 법령과 조례를 직관적인 지도 기반 UI로 제공합니다.",
-    role: "Full Stack Developer",
+      "안양시 내 금연·흡연구역의 모호한 경계를 지도 위 폴리곤으로 시각화해 시민 간 갈등을 줄이기 위한 웹 서비스.",
+    role: "PL / 백엔드 개발 (현재 프론트엔드 유지보수 병행)",
     type: "team",
+    teamSize: 6,
     techStack: [
       "TypeScript",
       "React",
@@ -427,6 +337,7 @@ export const projectsData: Project[] = [
     ],
     githubUrl: "https://github.com/CMU02/cleanbreath-frontend",
     demoUrl: "https://cleanbreath.cmu02-studio.com",
+    previewImage: "clean-breath/clean_breath_01.png",
     problem: [
       {
         title: "흡연구역 인식 부족",
