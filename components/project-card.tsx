@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Project } from "@/data/projects";
 import { ProjectLinks } from "@/components/project-detail/project-links";
+import { CloudFrontImage } from "@/components/cloudfront-image";
 import { User, ArrowRight } from "lucide-react";
 
 interface ProjectCardProps {
@@ -16,7 +17,9 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const typeLabel =
-    project.type === "personal" ? "개인 프로젝트" : "팀 프로젝트";
+    project.type === "personal"
+      ? "개인 프로젝트"
+      : `팀 프로젝트 (${project.teamSize ?? "?"}인)`;
 
   return (
     <motion.div
@@ -25,7 +28,20 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
     >
-      <Card className="h-full hover:border-primary/50 transition-colors flex flex-col">
+      <Card className="h-full hover:border-primary/50 transition-colors flex flex-col overflow-hidden">
+        {/* 미리보기 이미지 */}
+        {project.previewImage && (
+          <div className="relative w-full h-44 overflow-hidden bg-muted/30">
+            <CloudFrontImage
+              s3Key={project.previewImage}
+              alt={`${project.title} 미리보기`}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        )}
+
         <CardHeader className="space-y-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -62,35 +78,8 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6 flex-1 flex flex-col">
-          <p className="text-sm leading-relaxed line-clamp-3">
-            {project.description}
-          </p>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">주요 기능</p>
-            <ul className="space-y-1">
-              {project.features.slice(0, 3).map((feature, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-muted-foreground flex gap-2"
-                >
-                  <span className="text-tech-cyan">•</span>
-                  <span className="line-clamp-1">
-                    {typeof feature === "string" ? feature : feature.text}
-                  </span>
-                </li>
-              ))}
-              {project.features.length > 3 && (
-                <li className="text-sm text-muted-foreground">
-                  <span className="text-tech-cyan">...</span>
-                  <span className="ml-2">
-                    +{project.features.length - 3} more
-                  </span>
-                </li>
-              )}
-            </ul>
-          </div>
+        <CardContent className="flex-1 flex flex-col">
+          <p className="text-sm leading-relaxed mb-6">{project.description}</p>
 
           <div className="flex flex-wrap gap-2 pt-2 mt-auto">
             <Button size="sm" variant="default" asChild>

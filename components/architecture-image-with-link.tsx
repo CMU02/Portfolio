@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +11,7 @@ interface ArchitectureImageWithLinkProps {
 }
 
 // 아키텍처 이미지에 새창에서 보기 버튼을 추가한 컴포넌트
+// Server Component로 유지하여 클라이언트 네비게이션 시 hydration 불일치 방지
 export function ArchitectureImageWithLink({
   s3Key,
   alt,

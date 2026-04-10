@@ -16,8 +16,10 @@ import {
   AlertTriangle,
   Search,
   CheckCircle2,
+  Monitor,
 } from "lucide-react";
 import { ArchitectureImageWithLink } from "@/components/architecture-image-with-link";
+import { CloudFrontImage } from "@/components/cloudfront-image";
 import {
   AnimatedSection,
   SectionCard,
@@ -202,6 +204,32 @@ export function PhantomFilePage() {
                 ))}
               </div>
             </SectionCard>
+
+            {/* 웹사이트 스크린샷 */}
+            {project.images?.screenshots &&
+              project.images.screenshots.length > 0 && (
+                <SectionCard
+                  title="웹사이트"
+                  icon={<Monitor className="w-5 h-5 text-tech-cyan" />}
+                  delay={0.52}
+                >
+                  <div className="space-y-3">
+                    {project.images.screenshots.map((key, index) => (
+                      <div
+                        key={index}
+                        className="relative w-full rounded-lg overflow-hidden border border-border bg-muted/30"
+                      >
+                        <CloudFrontImage
+                          s3Key={key}
+                          alt={`웹사이트 스크린샷 ${index + 1}`}
+                          priority={index === 0}
+                          sizes="(max-width: 768px) 100vw, 800px"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </SectionCard>
+              )}
 
             {/* 트러블슈팅 */}
             {project.troubleShooting && project.troubleShooting.length > 0 && (

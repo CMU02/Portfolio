@@ -1,10 +1,9 @@
 // CloudFront를 통한 이미지 URL 생성
-const CLOUDFRONT_URL =
-  process.env.NEXT_PUBLIC_CLOUD_FRONT_URL || process.env.CLOUD_FRONT_URL!;
-
-// CloudFront에서 이미지 URL 생성
+// 함수 내부에서 환경변수를 읽어 클라이언트 네비게이션 시 undefined 방지
 export function getCloudFrontImageUrl(key: string): string {
-  return `https://${CLOUDFRONT_URL}/${key}`;
+  const cloudfrontUrl =
+    process.env.NEXT_PUBLIC_CLOUD_FRONT_URL || process.env.CLOUD_FRONT_URL;
+  return `https://${cloudfrontUrl}/${key}`;
 }
 
 // 여러 이미지 URL 한번에 가져오기
