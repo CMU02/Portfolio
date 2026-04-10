@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { getCloudFrontImageUrl } from "@/lib/cloudfront";
 import { cn } from "@/lib/utils";
@@ -14,7 +16,8 @@ interface CloudFrontImageProps {
   quality?: number;
 }
 
-// Server Component — URL 생성이 단순 문자열 조합이므로 클라이언트 fetch 불필요
+// Client Component — Client Component 내부에서 사용되므로 명시적으로 선언하여
+// 뒤로가기(client-side navigation) 시에도 이미지가 정상 렌더링되도록 보장
 export function CloudFrontImage({
   s3Key,
   alt,
