@@ -247,6 +247,7 @@ export const projectsData: Project[] = [
       "파편화된 구독 정보를 한 곳에서 관리하고, 개인정보 보호를 위해 모든 데이터를 기기 내에서만 저장하는 안전한 앱을 만들고 싶었습니다.",
     playStoreUrl:
       "https://play.google.com/store/apps/details?id=com.hyeonjun1968.SubHub",
+    githubUrl: "https://github.com/CMU02/SubHub",
     previewImage: "subhub/ss-iphone16-pro-1.png",
     techReasons: [
       {
