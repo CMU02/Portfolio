@@ -2,16 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      // CloudFront 도메인
-      {
-        protocol: "https",
-        hostname: process.env.CLOUD_FRONT_URL!,
-        pathname: "/**",
-      },
-    ],
-    // 이미지 품질 설정 (75, 85 지원)
-    qualities: [75, 85],
+    // CloudFront CDN에서 직접 이미지를 서빙하므로 커스텀 로더 사용
+    // /_next/image 프록시를 우회하여 다수 이미지 동시 로드 시 400 에러 방지
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
   },
 };
 
