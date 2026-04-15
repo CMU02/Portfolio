@@ -1,8 +1,8 @@
 // CloudFront를 통한 이미지 URL 생성
-// 함수 내부에서 환경변수를 읽어 클라이언트 네비게이션 시 undefined 방지
+// NEXT_PUBLIC_ 접두사 변수만 사용 — 클라이언트 번들에서도 안전하게 접근 가능
+// CLOUD_FRONT_URL은 서버 전용이므로 클라이언트 컴포넌트에서 undefined가 됨
 export function getCloudFrontImageUrl(key: string): string {
-  const cloudfrontUrl =
-    process.env.NEXT_PUBLIC_CLOUD_FRONT_URL || process.env.CLOUD_FRONT_URL;
+  const cloudfrontUrl = process.env.NEXT_PUBLIC_CLOUD_FRONT_URL;
   return `https://${cloudfrontUrl}/${key}`;
 }
 
