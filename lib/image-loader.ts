@@ -13,7 +13,11 @@ export default function cloudFrontLoader({
   width,
   quality,
 }: ImageLoaderParams): string {
-  // src가 이미 완전한 URL인 경우 그대로 반환
-  // Next.js Image 컴포넌트가 width/quality를 쿼리 파라미터로 붙이지 않도록 원본 URL 사용
-  return src;
+  // CloudFront에서 직접 서빙하므로 최적화 파라미터 없이 원본 URL 반환
+  // width를 사용하지 않지만 Next.js loader 인터페이스 충족을 위해 파라미터로 받음
+  const params = new URLSearchParams();
+  params.set("width", String(width));
+  if (quality) params.set("quality", String(quality));
+  // CloudFront는 쿼리 파라미터를 무시하고 원본 이미지를 서빙
+  return `${src}?${params.toString()}`;
 }
