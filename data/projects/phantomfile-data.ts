@@ -175,6 +175,8 @@ export const phantomFileDeepDive: ProjectDeepDive = {
         ],
       },
       comparison: {
+        summary:
+          "이벤트 기반 파이프라인 선택, SQS DLQ로 장애 시에도 이벤트 유실 없이 100% 재처리를 보장합니다.",
         options: [
           {
             name: "TTL 단독 의존",
@@ -202,8 +204,6 @@ export const phantomFileDeepDive: ProjectDeepDive = {
         ],
         decision:
           "파일 만료 후 후속 처리의 안정성과 재처리를 보장하기 위해 DynamoDB TTL 만료 이벤트를 Streams → EventBridge Pipes → SQS → Lambda로 이어지는 비동기 파이프라인을 선택했습니다.",
-        summary:
-          "이벤트 기반 파이프라인 선택, SQS DLQ로 장애 시에도 이벤트 유실 없이 100% 재처리를 보장합니다.",
       },
       implementation: {
         summary:
@@ -288,6 +288,8 @@ export const phantomFileDeepDive: ProjectDeepDive = {
         ],
       },
       comparison: {
+        summary:
+          "K6 시나리오 기반 부하테스트로 실제 사용 흐름을 검증하고, Terraform MCP로 보안 설정을 재점검했습니다.",
         options: [
           {
             name: "수동 테스트 (Postman 등)",
@@ -314,8 +316,6 @@ export const phantomFileDeepDive: ProjectDeepDive = {
         ],
         decision:
           "실제 사용 흐름(업로드 → 링크 조회 → 다운로드 → 만료 삭제)을 시나리오로 작성하여 K6로 검증하고, AWS Terraform MCP로 인프라 보안 설정을 재점검하는 방식을 선택했습니다.",
-        summary:
-          "K6 시나리오 기반 부하테스트로 실제 사용 흐름을 검증하고, Terraform MCP로 보안 설정을 재점검했습니다.",
       },
       implementation: {
         summary:
@@ -432,12 +432,12 @@ export const phantomFileDeepDive: ProjectDeepDive = {
             ],
           },
         ],
+        summary:
+          "Supabase를 RS256으로 변경해 API Gateway JWT Authorizer를 유지, Lambda Authorizer 대비 비용과 지연 시간을 절감했습니다.",
         decision:
           "Supabase 프로젝트 설정에서 JWT 서명 알고리즘을 RS256으로 변경하여 API Gateway JWT Authorizer를 그대로 활용하는 방식을 선택했습니다. 성능과 비용 측면에서 Lambda Authorizer보다 유리하기 때문입니다.",
         tradeOff:
           "Supabase 설정 변경이 필요하지만, Lambda Authorizer 대비 운영 비용과 지연 시간이 절감됩니다. 향후 ES256이 필요한 경우를 대비해 Lambda Authorizer 코드(functions/jwt-authorizer/)를 보존해두었습니다.",
-        summary:
-          "Supabase를 RS256으로 변경해 API Gateway JWT Authorizer를 유지, Lambda Authorizer 대비 비용과 지연 시간을 절감했습니다.",
       },
       implementation: {
         summary:

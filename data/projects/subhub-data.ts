@@ -34,6 +34,19 @@ export const subhubDeepDive: ProjectDeepDive = {
       ],
     },
     {
+      title: "AI 도구 활용",
+      items: [
+        {
+          label:
+            "Kiro IDE Specs — OCR 파이프라인·초기 UI 구현 초안을 빠르게 개발",
+        },
+        {
+          label:
+            "Kiro IDE — 유지보수 시 오류 재현 → 원인 분석 → 수정 → 검증 에이전틱 워크플로우로 문제 해결",
+        },
+      ],
+    },
+    {
       title: "추가 자료",
       items: [
         {
@@ -129,25 +142,40 @@ export const subhubDeepDive: ProjectDeepDive = {
       },
       verification: {
         summary:
-          "gpt-4o-mini → gpt-4o 전환으로 인식 정확도 90% 이상을 확보했습니다.",
+          "24장 영수증 테스트에서 gpt-4o가 23장 정인식으로 가장 높은 정확도를 기록했습니다.",
         description:
-          "Cloudflare 저사양 모델, 고성능 모델, OpenAI gpt-4o-mini, gpt-4o를 순차적으로 테스트하며 정확도·비용·토큰 사용량을 비교 검증했습니다.",
+          "Cloudflare 저사양 모델(Llava-1.5, Uform), 고성능 모델(Llama-3.2-11B-Vision), OpenAI gpt-4o-mini, gpt-4o를 동일한 24장의 영수증으로 순차 테스트하여 정확도·비용·토큰 사용량을 비교했습니다. 주요 오인식 케이스는 서비스명 오타(예: YouTube → Yoube)와 가격 자릿수 오류(예: $20 → $200)였으며, gpt-4o에서 이 케이스들이 가장 적게 발생했습니다.",
         metrics: [
           {
-            label: "최종 인식 정확도",
-            value: "90%+",
-            description: "GPT-4o Vision 기준, 국문 영수증 포함",
+            label: "Llava-1.5",
+            value: "4 / 24장",
+            description: "토큰 제한 완화 후에도 실사용 수준 미달",
           },
           {
-            label: "추출 필드",
-            value: "5개",
-            description: "서비스명, 가격, 통화, 카테고리, 결제일",
+            label: "Uform",
+            value: "0 / 24장",
+            description: "국문 영수증 인식 불가 수준",
+          },
+          {
+            label: "Llama-3.2-11B-Vision",
+            value: "18 / 24장",
+            description: "정확도 우수하나 비용 구조 부적합",
+          },
+          {
+            label: "GPT-4o-mini",
+            value: "22 / 24장",
+            description: "비용 효율적이나 일부 오인식 존재",
+          },
+          {
+            label: "GPT-4o",
+            value: "23 / 24장",
+            description: "최종 채택 — 정확도·비용 균형 최적",
           },
         ],
         evidence: [
-          "Cloudflare 저사양 모델은 토큰 제한 완화 후에도 실사용 수준 미달 확인",
-          "Cloudflare 고성능 모델은 정확도 우수하나 비용 구조 부적합 확인",
-          "gpt-4o-mini → gpt-4o 전환으로 인식 정확도 유의미한 개선 확인",
+          "Cloudflare 저사양 모델(Llava-1.5 4장, Uform 0장)은 토큰 제한 완화 후에도 실사용 수준 미달 확인",
+          "Llama-3.2-11B-Vision은 18장 정인식으로 정확도 우수하나, 모바일 앱 호출 빈도 기준 비용 구조 부적합 확인",
+          "gpt-4o-mini → gpt-4o 전환으로 서비스명 오타·가격 자릿수 오류 케이스 감소 확인",
         ],
       },
       limitations: {

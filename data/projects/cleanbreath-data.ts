@@ -33,6 +33,15 @@ export const cleanbreathDeepDive: ProjectDeepDive = {
       ],
     },
     {
+      title: "AI 도구 활용",
+      items: [
+        {
+          label:
+            "Kiro IDE — 유지보수 시 오류 재현 → 원인 분석 → 수정 → 검증 에이전틱 워크플로우로 문제 해결",
+        },
+      ],
+    },
+    {
       title: "추가 자료",
       items: [
         {
@@ -121,13 +130,30 @@ export const cleanbreathDeepDive: ProjectDeepDive = {
       },
       verification: {
         summary:
-          "팀원들의 현장 답사 데이터가 수집 툴을 통해 서비스 DB에 정상 적재되어 폴리곤으로 시각화되었습니다.",
+          "공공 데이터와 1주일 현장 수집을 병합하여 흡연구역 12개·금연구역 226개의 데이터 기반을 마련했습니다.",
         description:
-          "수집 툴을 통해 팀원들이 현장에서 입력한 좌표·메타데이터가 CleanBreath 서비스 DB에 정상 적재되고, 지도 위 폴리곤으로 시각화되는 전체 파이프라인을 검증했습니다.",
+          "2024년 7월 10일부터 17일까지 약 1주일간, 팀원 5명이 안양시 동안구를 3개 구역으로 나눠 직접 현장을 돌며 데이터를 수집했습니다. 수집 툴을 통해 입력된 좌표·메타데이터가 CleanBreath 서비스 DB에 정상 적재되고, 지도 위 폴리곤으로 시각화되는 전체 파이프라인을 검증했습니다.",
+        metrics: [
+          {
+            label: "흡연구역",
+            value: "12개",
+            description: "공공 데이터 + 현장 수집 합산",
+          },
+          {
+            label: "금연구역",
+            value: "226개",
+            description: "공공 데이터 + 현장 수집 합산",
+          },
+          {
+            label: "현장 답사 기간",
+            value: "약 1주일",
+            description: "2024.07.10 ~ 07.17, 팀원 5명 참여",
+          },
+        ],
         evidence: [
-          "안양시 동안구 3개 구역 현장 답사 완료 및 데이터 수집",
+          "안양시 동안구 3개 구역 현장 답사 완료 — 팀원 5명이 구역 분담하여 흡연 부스·금연 표지판·실사용 장소 조사",
           "수집 웹사이트를 통한 좌표 입력 → DB 적재 → 폴리곤 렌더링 파이프라인 정상 동작 확인",
-          "공공 데이터 대비 현장 실측 데이터로 폴리곤 정확도 향상",
+          "공공 데이터 단독 대비 현장 실측 데이터 병합으로 폴리곤 커버리지 및 경계 정확도 향상",
         ],
       },
       limitations: {
@@ -289,7 +315,7 @@ export const cleanbreathDeepDive: ProjectDeepDive = {
           },
         ],
         decision:
-          "도메인 특성(정적 데이터)을 활용하여 IndexedDB(30일 보존)와 TanStack Query(staleTime 1시간)를 조합한 2중 캐싱 구조를 설계했습니다. 월말 배치 스케줄러로 변경분만 차분 업데이트하고, 버전 정보 기준으로 캐시를 무효화합니다.",
+          "구역 데이터는 Key-Value 형태로 저장하기 적합한 정적 데이터입니다. Key-Value 저장소로 Redis를 검토했지만, 학생 신분으로 Redis 인프라를 지속 운영하기 어려웠습니다. 브라우저에 내장된 Key-Value 데이터베이스인 IndexedDB가 추가 인프라 없이 동일한 역할을 할 수 있다고 판단하여 선택했습니다. IndexedDB(30일 보존)와 TanStack Query(staleTime 1시간)를 조합한 2중 캐싱 구조로, 월말 배치 스케줄러로 변경분만 차분 업데이트하고 버전 정보 기준으로 캐시를 무효화합니다.",
       },
       implementation: {
         summary:
