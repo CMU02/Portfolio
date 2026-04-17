@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { phantomFileDeepDive } from "@/data/projects/phantomfile-data";
 import { subhubDeepDive } from "@/data/projects/subhub-data";
+import { cleanbreathDeepDive } from "@/data/projects/cleanbreath-data";
 import { PhantomFileDeepDivePage } from "@/features/projects/phantom-file/PhantomFileDeepDivePage";
 import { SubhubDeepDivePage } from "@/features/projects/subhub/SubhubDeepDivePage";
+import { CleanBreathDeepDivePage } from "@/features/projects/cleanbreath/CleanBreathDeepDivePage";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -17,6 +19,7 @@ const deepDiveMap: Record<string, { topics: { id: string; title: string }[] }> =
   {
     "phantom-file": phantomFileDeepDive,
     subhub: subhubDeepDive,
+    cleanbreath: cleanbreathDeepDive,
   };
 
 export async function generateStaticParams() {
@@ -69,6 +72,17 @@ export default async function DeepDiveTopicPage({ params }: PageProps) {
     return (
       <Suspense>
         <SubhubDeepDivePage topicId={topicId} />
+      </Suspense>
+    );
+  }
+
+  if (id === "cleanbreath") {
+    const validTopicIds = cleanbreathDeepDive.topics.map((t) => t.id);
+    if (!validTopicIds.includes(topicId)) notFound();
+
+    return (
+      <Suspense>
+        <CleanBreathDeepDivePage topicId={topicId} />
       </Suspense>
     );
   }

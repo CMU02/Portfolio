@@ -3,9 +3,10 @@
 import { ProjectId } from "./types";
 import { SubhubDeepDivePage } from "./subhub/SubhubDeepDivePage";
 import { PhantomFileDeepDivePage } from "./phantom-file/PhantomFileDeepDivePage";
-import { CleanBreathPage } from "./cleanbreath/CleanBreathPage";
+import { CleanBreathDeepDivePage } from "./cleanbreath/CleanBreathDeepDivePage";
 import { phantomFileDeepDive } from "@/data/projects/phantomfile-data";
 import { subhubDeepDive } from "@/data/projects/subhub-data";
+import { cleanbreathDeepDive } from "@/data/projects/cleanbreath-data";
 
 interface Props {
   id: ProjectId;
@@ -20,7 +21,9 @@ export function ProjectPage({ id }: Props) {
         <PhantomFileDeepDivePage topicId={phantomFileDeepDive.topics[0].id} />
       );
     case "cleanbreath":
-      return <CleanBreathPage />;
+      return (
+        <CleanBreathDeepDivePage topicId={cleanbreathDeepDive.topics[0].id} />
+      );
     default:
       return null;
   }
