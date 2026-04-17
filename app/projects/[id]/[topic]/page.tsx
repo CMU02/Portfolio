@@ -3,7 +3,9 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { phantomFileDeepDive } from "@/data/projects/phantomfile-data";
+import { subhubDeepDive } from "@/data/projects/subhub-data";
 import { PhantomFileDeepDivePage } from "@/features/projects/phantom-file/PhantomFileDeepDivePage";
+import { SubhubDeepDivePage } from "@/features/projects/subhub/SubhubDeepDivePage";
 import type { Metadata } from "next";
 
 interface PageProps {
@@ -14,6 +16,7 @@ interface PageProps {
 const deepDiveMap: Record<string, { topics: { id: string; title: string }[] }> =
   {
     "phantom-file": phantomFileDeepDive,
+    subhub: subhubDeepDive,
   };
 
 export async function generateStaticParams() {
@@ -47,7 +50,7 @@ export async function generateMetadata({
 export default async function DeepDiveTopicPage({ params }: PageProps) {
   const { id, topic: topicId } = await params;
 
-  // 현재는 phantom-file만 지원 (프로젝트 추가 시 switch 분기)
+  // 현재는 phantom-file, subhub 지원 (프로젝트 추가 시 switch 분기)
   if (id === "phantom-file") {
     const validTopicIds = phantomFileDeepDive.topics.map((t) => t.id);
     if (!validTopicIds.includes(topicId)) notFound();
@@ -55,6 +58,17 @@ export default async function DeepDiveTopicPage({ params }: PageProps) {
     return (
       <Suspense>
         <PhantomFileDeepDivePage topicId={topicId} />
+      </Suspense>
+    );
+  }
+
+  if (id === "subhub") {
+    const validTopicIds = subhubDeepDive.topics.map((t) => t.id);
+    if (!validTopicIds.includes(topicId)) notFound();
+
+    return (
+      <Suspense>
+        <SubhubDeepDivePage topicId={topicId} />
       </Suspense>
     );
   }
