@@ -168,6 +168,193 @@ export const cleanbreathDeepDive: ProjectDeepDive = {
           },
         ],
       },
+      gallery: [
+        // ── 대표 7장 (그리드에 표시) ──
+        {
+          s3Key: "clean-breath/visit/map-1.png",
+          caption:
+            "빨간색으로 표시한 구역이 답사 완료 구역. 동안구를 3개 구역으로 나눠 팀원 5명이 분담했습니다.",
+          category: "답사 지도",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-1.png",
+          caption:
+            "학운공원 — 금연공원으로 지정되어 금연구역 표시가 많지만, 버스기사님들이 버스정류장 앞에서 흡연하는 실태를 현장에서 확인했습니다.",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-6.png",
+          caption:
+            "한가람한양 아파트 — 금연아파트로 지정되어 곳곳에 금연구역 표시가 있습니다.",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-2.png",
+          caption:
+            "직접 개발한 수집 툴로 현장 데이터를 입력하는 모습. 금연지정 아파트에서는 흡연구역이 없어 대부분 경비실 앞이나 금연구역에서 흡연하는 패턴을 발견했습니다.",
+          category: "수집 툴",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-1-1.png",
+          caption:
+            "샛별한양 아파트 — 공식 흡연구역이 아닌 암묵적 흡연 장소 2곳을 현장에서 발견. 공공 데이터에는 없는 정보입니다.",
+          category: "암묵적 흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-3-1.png",
+          caption: "동안구청 앞 흡연구역 — 공공기관 앞 실제 흡연 실태.",
+          category: "흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-4-1.png",
+          caption:
+            "범계역 신한은행 앞 — 정확한 주소 특정이 어려운 케이스로, 공공 데이터만으로는 파악 불가능한 흡연 장소입니다.",
+          category: "흡연구역",
+        },
+        // ── 나머지 27장 (전체 보기 모달에서만 표시) ──
+        {
+          s3Key: "clean-breath/visit/area-features-2.png",
+          caption: "학운공원 주변 현장",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-3.png",
+          caption: "중앙에 금연구역 표시 확인",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-4.png",
+          caption: "현장 답사 구역 상세",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-5.png",
+          caption: "현장 답사 구역 상세",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/map-2.png",
+          caption: "흡연구역 없는 구역 지도",
+          category: "답사 지도",
+        },
+        {
+          s3Key: "clean-breath/visit/area-1.png",
+          caption: "한가람한양 아파트 주변",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-2.png",
+          caption: "한가람한양 아파트 주변",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-7.png",
+          caption: "한가람 어린이 공원 — 금연구역으로 지정",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-features-8.png",
+          caption:
+            "한가람 삼성 아파트 — 금연구역 지정 아파트로 보임. 돌아다니면서 흡연구역이 아예 없었습니다.",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/map-3.png",
+          caption: "3구역 답사 지도",
+          category: "답사 지도",
+        },
+        {
+          s3Key: "clean-breath/visit/map-4.png",
+          caption: "4구역 답사 지도",
+          category: "답사 지도",
+        },
+        {
+          s3Key: "clean-breath/visit/area-3.png",
+          caption: "한가람두산 아파트",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-4.png",
+          caption: "한가람두산 아파트 주변",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-5.png",
+          caption:
+            "한가람두산 아파트 — 경비아저씨와 얘기해본 결과 금연 지정 아파트는 아니지만 금연구역으로 표시된 구역이 많음. 흡연구역 1개 있음.",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/area-5.png",
+          caption: "한가람두산 아파트 상세",
+          category: "현장",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-1.png",
+          caption: "수집 툴 화면 1",
+          category: "수집 툴",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-3-smok-1.png",
+          caption: "샛별한양 아파트 — 암묵적 흡연장소 2개 수집 툴 입력 화면",
+          category: "수집 툴",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-1-2.png",
+          caption: "샛별한양 아파트 — 암묵적 흡연구역 2번째",
+          category: "암묵적 흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-1-3.png",
+          caption: "샛별한양 아파트 — 바로 앞에 의자가 있는 암묵적 흡연 장소",
+          category: "암묵적 흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-1-4.png",
+          caption: "샛별한양 아파트 — 의자 앞 암묵적 흡연 장소 추가 확인",
+          category: "암묵적 흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-4-smok-1.png",
+          caption: "샛별한양 아파트 흡연구역 수집 툴 입력",
+          category: "수집 툴",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-5-smok-2.png",
+          caption: "KT 지사 흡연구역 수집 툴 입력",
+          category: "수집 툴",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-2-1.png",
+          caption: "KT 지사 앞 흡연구역",
+          category: "흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-2-2.png",
+          caption: "KT 지사 앞 흡연구역 상세",
+          category: "흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-6-smok-3.png",
+          caption: "동안구청 흡연구역 수집 툴 입력",
+          category: "수집 툴",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-3-2.png",
+          caption: "동안구청 앞 흡연구역 2",
+          category: "흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/smok-3-3.png",
+          caption: "동안구청 앞 흡연구역 3",
+          category: "흡연구역",
+        },
+        {
+          s3Key: "clean-breath/visit/tool-7-smok-4.png",
+          caption: "범계역 신한은행 앞 흡연구역 수집 툴 입력",
+          category: "수집 툴",
+        },
+      ],
     },
 
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

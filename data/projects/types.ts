@@ -63,6 +63,13 @@ export interface LimitationsSection {
   items: LimitationItem[];
 }
 
+// ── 갤러리 ──
+export interface GalleryItem {
+  s3Key: string; // S3 이미지 키
+  caption: string; // 사진 설명
+  category?: string; // 카테고리 레이블 (선택)
+}
+
 // ── 토픽 (소단원) ──
 export interface DeepDiveTopic {
   id: string; // URL slug (라우팅에 사용)
@@ -73,6 +80,7 @@ export interface DeepDiveTopic {
   implementation: ImplementationSection;
   verification: VerificationSection;
   limitations: LimitationsSection;
+  gallery?: GalleryItem[]; // 현장 사진 갤러리 (선택)
 }
 
 // ── 핵심 지표 (상단 하이라이트 카드) ──

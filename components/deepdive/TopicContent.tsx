@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   AlertTriangle,
   GitCompare,
@@ -8,19 +9,103 @@ import {
   ArrowUpRight,
   Check,
   X,
+  Camera,
+  ChevronLeft,
+  ChevronRight,
+  Images,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CloudFrontImage } from "@/components/cloudfront-image";
 import { MermaidDiagram } from "./MermaidDiagram";
-import type { DeepDiveTopic } from "@/data/projects/types";
+import type { DeepDiveTopic, GalleryItem } from "@/data/projects/types";
 
 interface TopicContentProps {
   topic: DeepDiveTopic;
 }
 
+// ── 갤러리 모달 ──
+function GalleryModal({
+  items,
+  initialIndex,
+  onClose,
+}: {
+  items: GalleryItem[];
+  initialIndex: number;
+  onClose: () => void;
+}) {
+  const [current, setCurrent] = useState(initialIndex);
+
+  const prev = () => setCurrent((c) => (c - 1 + items.length) % items.length);
+  const next = () => setCurrent((c) => (c + 1) % items.length);
+
+  const item = items[current];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-3xl bg-background rounded-xl overflow-hidden shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 닫기 */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* 이미지 */}
+        <div className="relative w-full aspect-4/3 bg-muted">
+          <CloudFrontImage
+            s3Key={item.s3Key}
+            alt={item.caption}
+            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-contain w-full h-full"
+          />
+        </div>
+
+        {/* 캡션 + 카운터 */}
+        <div className="p-4 space-y-1">
+          <div className="flex items-center justify-between">
+            {item.category && (
+              <span className="text-[10px] font-medium text-tech-cyan bg-tech-cyan/10 px-1.5 py-0.5 rounded">
+                {item.category}
+              </span>
+            )}
+            <span className="text-xs text-muted-foreground ml-auto">
+              {current + 1} / {items.length}
+            </span>
+          </div>
+          <p className="text-sm text-foreground/80 leading-relaxed">
+            {item.caption}
+          </p>
+        </div>
+
+        {/* 이전/다음 버튼 */}
+        <button
+          onClick={prev}
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={next}
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // 중앙 메인 콘텐츠: 토픽의 5개 섹션을 순서대로 렌더링
 export function TopicContent({ topic }: TopicContentProps) {
+  const [modalIndex, setModalIndex] = useState<number | null>(null);
   return (
     <div className="space-y-16 max-w-[860px] mx-auto w-full">
       {/* 토픽 헤더 */}
@@ -265,6 +350,70 @@ export function TopicContent({ topic }: TopicContentProps) {
           ))}
         </div>
       </section>
+
+      {/* 6. Gallery (현장 사진) — 선택적 렌더링 */}
+      {topic.gallery && topic.gallery.length > 0 && (
+        <section id="section-gallery" className="scroll-mt-28 space-y-4">
+          <SectionHeader
+            icon={<Camera className="w-5 h-5 text-orange-400" />}
+            label="Gallery"
+            summary="현장 답사에서 직접 촬영한 사진입니다."
+          />
+          {/* 대표 7장 그리드 */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {topic.gallery.slice(0, 7).map((item, i) => (
+              <div
+                key={i}
+                className="rounded-lg border border-border overflow-hidden bg-muted/30 group cursor-pointer"
+                onClick={() => setModalIndex(i)}
+              >
+                <div className="relative aspect-4/3 overflow-hidden">
+                  <CloudFrontImage
+                    s3Key={item.s3Key}
+                    alt={item.caption}
+                    sizes="(max-width: 768px) 50vw, 280px"
+                    className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-2 space-y-1">
+                  {item.category && (
+                    <span className="text-[10px] font-medium text-tech-cyan bg-tech-cyan/10 px-1.5 py-0.5 rounded">
+                      {item.category}
+                    </span>
+                  )}
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                    {item.caption}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {/* 전체 보기 버튼 — 7번째 카드 옆에 배치 */}
+            {topic.gallery.length > 7 && (
+              <div className="flex">
+                <button
+                  onClick={() => setModalIndex(7)}
+                  className="rounded-lg border border-border overflow-hidden bg-muted/20 hover:bg-muted/40 transition-colors group flex-1 flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
+                >
+                  <Images className="w-6 h-6" />
+                  <span className="text-xs font-medium">전체 보기</span>
+                  <span className="text-[10px] text-muted-foreground/70">
+                    +{topic.gallery.length - 7}장 더
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* 갤러리 모달 */}
+      {topic.gallery && modalIndex !== null && (
+        <GalleryModal
+          items={topic.gallery}
+          initialIndex={modalIndex}
+          onClose={() => setModalIndex(null)}
+        />
+      )}
     </div>
   );
 }
