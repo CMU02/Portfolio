@@ -66,6 +66,8 @@ export const phantomFileDeepDive: ProjectDeepDive = {
         ],
       },
       comparison: {
+        summary:
+          "Lambda+DynamoDB 조합 선택, 동시성 제한은 개인 서비스 규모에서 감수 가능한 수준으로 판단했습니다.",
         options: [
           {
             name: "EC2 + RDS",
@@ -101,8 +103,6 @@ export const phantomFileDeepDive: ProjectDeepDive = {
           "파일 조회/상태/갱신 위주의 키-값 기반 접근 패턴과 서버리스 친화성, 운영 단순성을 우선순위에 두고 Lambda + DynamoDB + S3 조합을 선택했습니다.",
         tradeOff:
           "Lambda 동시성 제한으로 인해 갑작스러운 트래픽 급증 시 스로틀링이 발생할 수 있으나, 개인 서비스 규모에서 감수 가능한 수준으로 판단했습니다.",
-        summary:
-          "Lambda+DynamoDB 조합 선택, 동시성 제한은 개인 서비스 규모에서 감수 가능한 수준으로 판단했습니다.",
       },
       implementation: {
         summary:
@@ -147,7 +147,7 @@ export const phantomFileDeepDive: ProjectDeepDive = {
         items: [
           {
             limitation:
-              "AWS 계정의 Lambda 동시성 기본 한도는 1,000이지만, 실제 적용된 계정 수준 할당값은 10으로 제한되어 120TPS 부하 테스트 시 스로틀링이 발생했습니다.",
+              "AWS 계정의 Lambda 동시성 기본 한도는 1,000이지만, 실제 적용된 계정 수준 할당값은 10으로 제한되어 동시 요청 120건 부하 테스트 시 스로틀링이 발생했습니다.",
             improvement:
               "함수별 Reserved Concurrency를 트래픽 예측치에 맞게 상향하고, API Gateway 앞단에 CloudFront + WAF를 두어 Rate Limiting으로 급격한 트래픽 유입을 제어하거나, 트래픽 규모가 커질 경우 ECS Fargate로 워크로드 이관을 고려할 수 있습니다.",
           },
@@ -302,7 +302,7 @@ export const phantomFileDeepDive: ProjectDeepDive = {
             name: "K6 부하테스트",
             pros: [
               "실제 사용 흐름 시나리오 작성 가능",
-              "점진적 TPS 증가로 임계치 파악",
+              "점진적 부하 증가로 임계치 파악",
               "P99, P95 등 상세 응답 시간 분석",
               "스크립트 기반 반복 실행 가능",
             ],
@@ -319,21 +319,21 @@ export const phantomFileDeepDive: ProjectDeepDive = {
       },
       implementation: {
         summary:
-          "17 TPS 기준 9,800건 처리, P99 671ms 달성. 120TPS에서 Lambda 동시성 병목 지점을 명확히 식별했습니다.",
+          "초당 17건 기준 9,800건 처리, P99 671ms 달성. 동시 요청 120건에서 Lambda 동시성 병목 지점을 명확히 식별했습니다.",
         description:
           "K6 부하테스트를 활용하여 서버리스 아키텍처의 동시 요청 수용 능력을 시뮬레이션하고, 테스트 결과를 기반으로 Lambda 메모리 할당량과 동시성 설정을 최적화했습니다. 또한 AWS Terraform MCP로 IAM 권한과 S3 보안 설정을 재점검했습니다.",
         steps: [
           "K6 시나리오 작성: 업로드 → 링크 조회 → 다운로드 → 만료 삭제 실제 사용 흐름 구현",
-          "점진적 TPS 증가 테스트: 17 TPS → 120 TPS까지 단계적 부하 증가",
+          "점진적 부하 증가 테스트: 초당 17건 → 120건까지 단계적 부하 증가",
           "Lambda 메모리/동시성 설정 튜닝: 테스트 결과 기반 최적값 도출",
           "AWS Terraform MCP로 IAM 권한 최소화 및 S3 퍼블릭 ACL 노출 수정",
         ],
       },
       verification: {
         summary:
-          "P99 671ms, 요청 유실 0건 달성. 120TPS에서 Lambda 동시성 한계를 병목으로 명확히 식별했습니다.",
+          "P99 671ms, 요청 유실 0건 달성. 동시 요청 120건에서 Lambda 동시성 한계를 병목으로 명확히 식별했습니다.",
         description:
-          "10분간 약 9,800건의 요청을 처리하며 P99 671ms의 안정적인 응답 성능을 확보했습니다. 120TPS에서 Lambda 동시성 제한으로 스로틀링이 발생하는 병목 구간을 명확히 식별했습니다.",
+          "10분간 약 9,800건의 요청을 처리하며 P99 671ms의 안정적인 응답 성능을 확보했습니다. 동시 요청 120건에서 Lambda 동시성 제한으로 스로틀링이 발생하는 병목 구간을 명확히 식별했습니다.",
         metrics: [
           {
             label: "테스트 기준 TPS",
