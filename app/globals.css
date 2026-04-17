@@ -76,9 +76,9 @@
   /* #FFFDF7 기반 전경 */
   --foreground: #fffdf7;
   /* 카드: 배경보다 약간 밝은 네이비 */
-  --card: #0d2a4f;
+  --card: #112d55;
   --card-foreground: #fffdf7;
-  --popover: #0d2a4f;
+  --popover: #112d55;
   --popover-foreground: #fffdf7;
   /* primary: #2CA58D teal */
   --primary: #2ca58d;
@@ -87,12 +87,14 @@
   --secondary: #122d52;
   --secondary-foreground: #fffdf7;
   --muted: #122d52;
-  --muted-foreground: #ffffff;
+  /* 보조 텍스트: 배경 대비 충분한 명도 차이로 위계 형성 */
+  --muted-foreground: #8ba3c4;
   /* accent: #2CA58D 계열 */
   --accent: #163660;
   --accent-foreground: #fffdf7;
   --destructive: oklch(0.6 0.2 25);
-  --border: #1e3f6e;
+  /* 카드 경계를 더 명확하게 */
+  --border: #264a7a;
   --input: #122d52;
   --ring: #2ca58d;
   /* 차트 컬러 */
