@@ -23,15 +23,16 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
     >
       <Card className="h-full hover:border-primary/50 transition-colors flex flex-col overflow-hidden">
-        {/* 미리보기 이미지 */}
-        {project.previewImage && (
-          <div className="relative w-full h-44 overflow-hidden bg-muted/30">
+        {/* 미리보기 이미지 — 높이 고정으로 카드 크기 통일 */}
+        <div className="relative w-full h-48 overflow-hidden bg-muted/30 shrink-0">
+          {project.previewImage ? (
             <CloudFrontImage
               s3Key={project.previewImage}
               alt={`${project.title} 미리보기`}
@@ -39,8 +40,10 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-          </div>
-        )}
+          ) : (
+            <div className="w-full h-full bg-muted/50" />
+          )}
+        </div>
 
         <CardHeader className="space-y-4">
           <div>
