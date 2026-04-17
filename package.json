@@ -12,8 +12,6 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1028.0",
-    "@aws-sdk/s3-request-presigner": "^3.1028.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-separator": "^1.1.8",
