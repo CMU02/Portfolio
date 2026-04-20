@@ -310,15 +310,23 @@ export function TopicContent({ topic }: TopicContentProps) {
         {/* 근거 */}
         {topic.verification.evidence && (
           <ul className="space-y-3">
-            {topic.verification.evidence.map((item, i) => (
-              <li
-                key={i}
-                className="flex items-start gap-2 text-sm text-muted-foreground"
-              >
-                <CheckCircle2 className="w-3.5 h-3.5 text-green-400 mt-0.5 shrink-0" />
-                {item}
-              </li>
-            ))}
+            {topic.verification.evidence.map((item, i) => {
+              // 들여쓰기 항목: "  "로 시작하면 체크 아이콘 없이 indent 처리
+              const isIndented = item.startsWith("  ");
+              const displayText = isIndented ? item.trimStart() : item;
+
+              return (
+                <li
+                  key={i}
+                  className={`flex items-start gap-2 text-sm text-muted-foreground ${isIndented ? "ml-6" : ""}`}
+                >
+                  {!isIndented && (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-green-400 mt-0.5 shrink-0" />
+                  )}
+                  {displayText}
+                </li>
+              );
+            })}
           </ul>
         )}{" "}
       </section>
