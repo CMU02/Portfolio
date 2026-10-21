@@ -10,7 +10,7 @@ import { ArrowLeft, Shield, Camera, Mail } from "lucide-react";
 
 export default function SubHubPrivacyPage() {
   return (
-    <main className="dark min-h-screen">
+    <main className="min-h-screen">
       <Navigation />
 
       <section className="py-24 pt-32">

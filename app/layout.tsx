@@ -4,6 +4,7 @@ import "./globals.css";
 import { StructuredData } from "@/components/structured-data";
 import { SITE_CONFIG } from "@/lib/constants";
 import { MotionProvider } from "@/components/motion-provider";
+import { themeInitScript } from "@/lib/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -100,11 +101,15 @@ export default function RootLayout({
 }>) {
   return (
     // 폰트 변수는 html에 둬야 Tailwind의 html font-family(--font-sans)가 해석된다
+    // dark 클래스·colorScheme은 head 스크립트가 하이드레이션 전에 바꾸므로 경고를 끈다
     <html
       lang="ko"
-      className={`dark ${geistSans.variable} ${notoSansKr.variable} ${geistMono.variable}`}
+      className={`${geistSans.variable} ${notoSansKr.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
     >
       <head>
+        {/* 첫 페인트 전에 테마를 정해 깜빡임을 막는다 */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <StructuredData />
       </head>
       <body className="antialiased">

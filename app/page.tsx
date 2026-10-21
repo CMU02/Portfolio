@@ -22,7 +22,7 @@ export default function Home() {
   };
 
   return (
-    <main className="dark min-h-screen">
+    <main className="min-h-screen">
       {/* 홈페이지 전용 구조화된 데이터 */}
       <script
         type="application/ld+json"

@@ -32,7 +32,7 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
   const { doc, toc } = await loadTopicContent(projectId, topicId);
 
   return (
-    <main className="dark min-h-screen">
+    <main className="min-h-screen">
       <Navigation />
 
       <div className="pt-24 pb-16">
