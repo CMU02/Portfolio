@@ -18,6 +18,7 @@ export default function NotFound() {
   return (
     <PageLayout>
       <div className="text-center max-w-2xl mx-auto">
+        {/* 404 글리프는 의도적으로 size-10 (아이콘 크기 규칙의 예외) */}
         <Compass aria-hidden className="mx-auto mb-4 size-10 text-muted-foreground" />
         <h1 className="text-6xl font-bold mb-4 text-balance">404</h1>
         <h2 className="text-2xl font-semibold mb-6">

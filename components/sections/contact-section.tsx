@@ -16,7 +16,7 @@ export function ContactSection() {
         </p>
         <div className="mt-8 flex flex-col items-start gap-2 sm:flex-row sm:gap-10">
           <a href={`mailto:${SITE_CONFIG.email}`} className={linkClass}>
-            <Mail aria-hidden className="size-5 shrink-0" />
+            <Mail aria-hidden className="size-5 shrink-0 text-muted-foreground group-hover:text-foreground" />
             {SITE_CONFIG.email}
             <ArrowUpRight
               aria-hidden="true"
@@ -30,7 +30,7 @@ export function ContactSection() {
             aria-label="GitHub (새 탭에서 열림)"
             className={linkClass}
           >
-            <Github aria-hidden className="size-5 shrink-0" />
+            <Github aria-hidden className="size-5 shrink-0 text-muted-foreground group-hover:text-foreground" />
             GitHub
             <ArrowUpRight
               aria-hidden="true"
