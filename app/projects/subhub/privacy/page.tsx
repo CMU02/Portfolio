@@ -37,8 +37,8 @@ export default function SubHubPrivacyPage() {
             className="mb-12 text-center"
           >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <Shield className="w-10 h-10 text-tech-cyan" />
-              <h1 className="text-4xl md:text-5xl font-bold">
+              <Shield className="w-10 h-10 text-primary-text" />
+              <h1 className="text-4xl md:text-5xl font-bold text-balance">
                 개인정보처리방침
               </h1>
             </div>
@@ -96,10 +96,10 @@ export default function SubHubPrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
             >
-              <Card className="border-tech-purple/30">
+              <Card className="border-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Camera className="w-5 h-5 text-tech-purple" />
+                    <Camera className="w-5 h-5 text-primary-text" />
                     2. 카메라 권한 사용 안내
                   </CardTitle>
                 </CardHeader>
@@ -110,21 +110,21 @@ export default function SubHubPrivacyPage() {
 
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
-                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-primary-text mt-1">✓</span>
                       <span className="text-muted-foreground">
                         구독 서비스 로고 촬영 및 등록
                       </span>
                     </div>
 
                     <div className="flex items-start gap-3">
-                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-primary-text mt-1">✓</span>
                       <span className="text-muted-foreground">
                         카메라로 촬영된 이미지는 기기 내에서만 저장됩니다
                       </span>
                     </div>
 
                     <div className="flex items-start gap-3">
-                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-primary-text mt-1">✓</span>
                       <span className="text-muted-foreground">
                         촬영된 이미지는 서비스 제공을 위해 일시적으로 서버 및
                         인공지능 분석 서비스(예: OpenAI API)로 전송될 수
@@ -135,7 +135,7 @@ export default function SubHubPrivacyPage() {
                     </div>
 
                     <div className="flex items-start gap-3">
-                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-primary-text mt-1">✓</span>
                       <span className="text-muted-foreground">
                         촬영된 이미지는 광고·마케팅 등 다른 목적으로 이용되지
                         않으며, 관련 법령에서 허용하는 범위를 넘어 제3자에게
@@ -144,15 +144,15 @@ export default function SubHubPrivacyPage() {
                     </div>
 
                     <div className="flex items-start gap-3">
-                      <span className="text-green-400 mt-1">✓</span>
+                      <span className="text-primary-text mt-1">✓</span>
                       <span className="text-muted-foreground">
                         사용자가 명시적으로 허용한 경우에만 카메라에 접근합니다
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                    <h4 className="font-semibold text-blue-400 mb-3">
+                  <div className="mt-6 p-4 rounded-lg bg-muted border border-border">
+                    <h4 className="font-semibold text-foreground mb-3">
                       개인정보의 제3자 제공
                     </h4>
                     <div className="space-y-2 text-sm text-muted-foreground">
@@ -195,7 +195,7 @@ export default function SubHubPrivacyPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Bell className="w-5 h-5 text-yellow-400" />
+                    <Bell className="w-5 h-5 text-primary-text" />
                     3. 알림 권한 사용 안내
                   </CardTitle>
                 </CardHeader>
@@ -205,11 +205,11 @@ export default function SubHubPrivacyPage() {
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex gap-2">
-                      <span className="text-yellow-400">•</span>
+                      <span className="text-primary-text">•</span>
                       <span>구독 갱신일 D-3, D-1 알림</span>
                     </li>
                     <li className="flex gap-2">
-                      <span className="text-yellow-400">•</span>
+                      <span className="text-primary-text">•</span>
                       <span>월간 구독 비용 리포트 알림</span>
                     </li>
                   </ul>
@@ -234,11 +234,11 @@ export default function SubHubPrivacyPage() {
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex gap-2">
-                      <span className="text-tech-cyan">•</span>
+                      <span className="text-primary-text">•</span>
                       <span>앱 삭제를 통한 모든 데이터 삭제</span>
                     </li>
                     <li className="flex gap-2">
-                      <span className="text-tech-cyan">•</span>
+                      <span className="text-primary-text">•</span>
                       <span>카메라 권한 철회 (기기 설정에서 가능)</span>
                     </li>
                   </ul>
@@ -252,10 +252,10 @@ export default function SubHubPrivacyPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
             >
-              <Card className="border-tech-cyan/30">
+              <Card className="border-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Mail className="w-5 h-5 text-tech-cyan" />
+                    <Mail className="w-5 h-5 text-primary-text" />
                     4. 문의
                   </CardTitle>
                 </CardHeader>
@@ -264,7 +264,7 @@ export default function SubHubPrivacyPage() {
                     개인정보 처리에 관한 문의사항이 있으시면 아래로 연락해
                     주세요:
                   </p>
-                  <div className="p-4 rounded-lg bg-tech-cyan/10 border border-tech-cyan/20">
+                  <div className="p-4 rounded-lg bg-muted border border-border">
                     <ul className="space-y-2 text-sm">
                       <li>
                         <strong>개발자:</strong> CMU02

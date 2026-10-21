@@ -51,7 +51,7 @@ interface LogoProps {
 export function Logo({ className, showText = true }: LogoProps) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <LogoIcon size={28} className="text-tech-cyan" />
+      <LogoIcon size={28} className="text-primary-text" />
       {showText && <span className="font-bold text-xl">CMU02</span>}
     </div>
   );
