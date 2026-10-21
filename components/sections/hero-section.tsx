@@ -24,7 +24,7 @@ export function HeroSection() {
 
           {/* 메인 카피 */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold leading-tight"
@@ -34,7 +34,7 @@ export function HeroSection() {
 
           {/* 서브 카피 */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto"
@@ -53,7 +53,7 @@ export function HeroSection() {
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">대림대학교</div>
               <div className="text-sm text-muted-foreground mt-1">
-                용용SW 전공
+                응용SW 전공
               </div>
             </div>
             <div className="text-center">

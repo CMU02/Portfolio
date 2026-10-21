@@ -6,7 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans), var(--font-noto-kr), sans-serif;
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -45,6 +45,7 @@
   --color-deep-blue: var(--deep-blue);
   --color-deep-blue-light: var(--deep-blue-light);
   --color-tech-cyan: var(--tech-cyan);
+  --color-primary-text: var(--primary-text);
   --color-tech-green: var(--tech-green);
   --color-tech-yellow: var(--tech-yellow);
   --color-tech-purple: var(--tech-purple);
@@ -82,7 +83,10 @@
   --popover-foreground: #fffdf7;
   /* primary: #2CA58D teal */
   --primary: #2ca58d;
-  --primary-foreground: #fffdf7;
+  /* 네이비 글자: teal 위 5.16:1 (흰 글자는 3.0:1로 AA 미달) */
+  --primary-foreground: #0a2342;
+  /* 작은 teal 글자용: card·옅은 teal 칩 위에서도 4.5:1 이상 (#2ca58d는 4.3~4.49:1) */
+  --primary-text: #34b89d;
   /* secondary: #84BC9C sage green */
   --secondary: #122d52;
   --secondary-foreground: #fffdf7;
@@ -92,7 +96,8 @@
   /* accent: #2CA58D 계열 */
   --accent: #163660;
   --accent-foreground: #fffdf7;
-  --destructive: oklch(0.6 0.2 25);
+  /* card(#112d55) 위 작은 글자 4.72:1 */
+  --destructive: oklch(0.7 0.19 25);
   /* 카드 경계를 더 명확하게 */
   --border: #264a7a;
   --input: #122d52;
@@ -107,13 +112,17 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
   body {
     @apply bg-background text-foreground;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
-  html {
-    scroll-behavior: smooth;
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 }
 
