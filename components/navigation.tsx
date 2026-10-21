@@ -4,15 +4,15 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Briefcase, Mail, Menu, User, X, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 // 루트 기준 앵커라 홈이 아닌 페이지에서도 해당 섹션으로 이동한다
-const navItems = [
-  { label: "Work", href: "/#work" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
+  { label: "Work", href: "/#work", Icon: Briefcase },
+  { label: "About", href: "/#about", Icon: User },
+  { label: "Contact", href: "/#contact", Icon: Mail },
 ];
 
 export function Navigation() {
@@ -26,7 +26,7 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const renderLinks = (itemClassName: string) =>
+  const renderLinks = (itemClassName: string, withIcon = false) =>
     navItems.map((item) => {
       const isActive = pathname === item.href;
       return (
@@ -43,6 +43,7 @@ export function Navigation() {
           onClick={() => setIsMobileOpen(false)}
           aria-current={isActive ? "page" : undefined}
         >
+          {withIcon && <item.Icon aria-hidden className="size-4" />}
           {item.label}
         </Link>
       );
@@ -88,7 +89,7 @@ export function Navigation() {
 
         {isMobileOpen && (
           <div className="md:hidden pt-2 pb-2">
-            {renderLinks("flex min-h-11 items-center")}
+            {renderLinks("flex min-h-11 items-center gap-2", true)}
           </div>
         )}
       </nav>

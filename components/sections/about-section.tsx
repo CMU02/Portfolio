@@ -1,15 +1,18 @@
 import Link from "next/link";
+import { ArrowRight, Award, Cloud, Database, Monitor, Server, TrendingUp, type LucideIcon } from "lucide-react";
 import { techStackData } from "@/data/tech-stack";
 import { growthStoriesData } from "@/data/growth-stories";
 
 // 백엔드 포지셔닝에 맞춰 백엔드부터 나열한다
 const techRows = [
-  ["Backend", "backend"],
-  ["Database", "database"],
-  ["DevOps", "devops"],
-  ["Frontend", "frontend"],
-] as const;
+  ["Backend", "backend", Server],
+  ["Database", "database", Database],
+  ["DevOps", "devops", Cloud],
+  ["Frontend", "frontend", Monitor],
+] as const satisfies readonly (readonly [string, string, LucideIcon])[];
 
+const dtClass = "flex items-center gap-2 font-semibold";
+const iconClass = "size-4 shrink-0 text-muted-foreground";
 const rowClass =
   "grid gap-1 border-t border-border py-4 sm:grid-cols-[8rem_1fr] sm:gap-6";
 
@@ -32,27 +35,37 @@ export function AboutSection() {
         </p>
 
         <dl className="mt-10 border-b border-border text-sm md:text-base">
-          {techRows.map(([label, id]) => (
+          {techRows.map(([label, id, Icon]) => (
             <div key={id} className={rowClass}>
-              <dt className="font-semibold">{label}</dt>
+              <dt className={dtClass}>
+                <Icon aria-hidden className={iconClass} />
+                {label}
+              </dt>
               <dd className="text-muted-foreground">
                 {techStackData[id].items.map((item) => item.name).join(" · ")}
               </dd>
             </div>
           ))}
           <div className={rowClass}>
-            <dt className="font-semibold">자격증</dt>
+            <dt className={dtClass}>
+              <Award aria-hidden className={iconClass} />
+              자격증
+            </dt>
             <dd>
               <Link
                 href="/certifications"
-                className="inline-flex min-h-11 items-center text-primary-text underline underline-offset-4 hover:no-underline"
+                className="inline-flex min-h-11 items-center gap-1.5 text-primary-text underline underline-offset-4 hover:no-underline"
               >
                 AWS Certified Solutions Architect – Associate
+                <ArrowRight aria-hidden className="size-4 shrink-0" />
               </Link>
             </dd>
           </div>
           <div className={rowClass}>
-            <dt className="font-semibold">성장</dt>
+            <dt className={dtClass}>
+              <TrendingUp aria-hidden className={iconClass} />
+              성장
+            </dt>
             <dd>
               <ul className="space-y-1">
                 {growthStoriesData.map((story) => (

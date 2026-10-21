@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User, Users } from "lucide-react";
 import { projectsData } from "@/data/projects";
 import { deepDives } from "@/lib/deepdive-content";
+import { highlightIcons } from "@/components/deepdive/icons";
 import type { ProjectId } from "@/features/projects/types";
 
 // 프로젝트를 표처럼 한 줄씩: 왼쪽 이름·설명·유형, 오른쪽 딥다이브 첫 지표 하나
@@ -14,6 +15,8 @@ export function WorkSection() {
       <ul className="border-t border-foreground">
         {projectsData.map((project) => {
           const metric = deepDives[project.id as ProjectId].highlights[0];
+          const MetricIcon = metric.icon ? highlightIcons[metric.icon] : undefined;
+          const TypeIcon = project.type === "team" ? Users : User;
           return (
             <li key={project.id} className="border-b border-border">
               <Link
@@ -24,7 +27,8 @@ export function WorkSection() {
                   <span className="text-xl font-bold tracking-tight md:text-3xl">
                     {project.title}
                   </span>
-                  <span className="ml-2 text-xs text-muted-foreground md:text-sm">
+                  <span className="ml-2 inline-flex items-center gap-1 align-middle text-xs text-muted-foreground md:text-sm">
+                    <TypeIcon aria-hidden className="size-4 shrink-0" />
                     {project.type === "team"
                       ? `${project.teamSize}인 팀`
                       : "개인"}
@@ -37,7 +41,8 @@ export function WorkSection() {
                   <span className="block text-2xl leading-none font-extrabold tracking-tight text-primary-text tabular-nums md:text-5xl">
                     {metric.value}
                   </span>
-                  <span className="mt-1.5 block text-xs text-muted-foreground md:text-sm">
+                  <span className="mt-1.5 flex items-center justify-end gap-1.5 text-xs text-muted-foreground md:text-sm">
+                    {MetricIcon && <MetricIcon aria-hidden className="size-4 shrink-0" />}
                     {metric.label}
                   </span>
                 </span>

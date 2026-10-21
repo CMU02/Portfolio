@@ -18,3 +18,12 @@ it("프로젝트를 시안 순서대로 한 줄씩, 줄마다 상세 링크와 �
   expect(rows[2]).toHaveTextContent("6인 팀");
   expect(rows[0]).toHaveTextContent("개인");
 });
+
+it("줄마다 유형·지표 아이콘(svg)을 보여주고 장식이라 숨긴다", () => {
+  render(<WorkSection />);
+  for (const row of screen.getAllByRole("link")) {
+    const svgs = row.querySelectorAll("svg");
+    expect(svgs.length).toBeGreaterThanOrEqual(3); // 유형 + 지표 + 화살표
+    svgs.forEach((s) => expect(s).toHaveAttribute("aria-hidden", "true"));
+  }
+});

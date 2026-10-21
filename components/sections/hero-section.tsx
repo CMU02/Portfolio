@@ -1,3 +1,5 @@
+import { ArrowDown, Cloud, Server } from "lucide-react";
+
 // 첫 화면에 Work 목록까지 보이도록 높이를 강제하지 않는다 (min-h-screen 없음, 등장 모션 없음)
 export function HeroSection() {
   return (
@@ -7,8 +9,24 @@ export function HeroSection() {
         Idea to Production, Never Let Go.
       </h1>
       <p className="mt-4 text-base text-muted-foreground md:mt-6 md:text-xl">
-        만들고, 배포하고, 운영합니다. 백엔드 · AWS
+        만들고, 배포하고, 운영합니다.{" "}
+        <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+          <Server aria-hidden className="size-4 shrink-0 md:size-5" />
+          백엔드
+        </span>
+        {" · "}
+        <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+          <Cloud aria-hidden className="size-4 shrink-0 md:size-5" />
+          AWS
+        </span>
       </p>
+      <a
+        href="#work"
+        className="mt-6 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-primary-text underline-offset-4 hover:underline"
+      >
+        <ArrowDown aria-hidden className="size-4" />
+        Work 보기
+      </a>
     </section>
   );
 }

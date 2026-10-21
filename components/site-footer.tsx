@@ -1,3 +1,4 @@
+import { Github, Mail } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export function SiteFooter() {
@@ -8,14 +9,16 @@ export function SiteFooter() {
         <div className="flex gap-4">
           <a
             href={SITE_CONFIG.githubUrl}
-            className="inline-flex min-h-11 items-center hover:text-foreground"
+            className="inline-flex min-h-11 items-center gap-1.5 hover:text-foreground"
           >
+            <Github aria-hidden className="size-4" />
             GitHub
           </a>
           <a
             href={`mailto:${SITE_CONFIG.email}`}
-            className="inline-flex min-h-11 items-center hover:text-foreground"
+            className="inline-flex min-h-11 items-center gap-1.5 hover:text-foreground"
           >
+            <Mail aria-hidden className="size-4" />
             이메일
           </a>
         </div>
