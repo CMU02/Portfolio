@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Navigation } from "@/components/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield, Camera, Mail } from "lucide-react";
+import { ArrowLeft, Shield, Camera, Mail, Database, UserCheck, RefreshCw } from "lucide-react";
 // import { Bell } from "lucide-react"; // 알림 기능 추가 시 사용
 
 export default function SubHubPrivacyPage() {
@@ -37,7 +37,7 @@ export default function SubHubPrivacyPage() {
             className="mb-12 text-center"
           >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <Shield className="w-10 h-10 text-primary-text" />
+              <Shield aria-hidden className="size-10 text-primary-text" />
               <h1 className="text-4xl md:text-5xl font-bold text-balance">
                 개인정보처리방침
               </h1>
@@ -76,7 +76,8 @@ export default function SubHubPrivacyPage() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <Database aria-hidden className="size-5 text-primary-text" />
                     1. 개인정보 수집 안내
                   </CardTitle>
                 </CardHeader>
@@ -99,7 +100,7 @@ export default function SubHubPrivacyPage() {
               <Card className="border-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Camera className="w-5 h-5 text-primary-text" />
+                    <Camera aria-hidden className="size-5 text-primary-text" />
                     2. 카메라 권한 사용 안내
                   </CardTitle>
                 </CardHeader>
@@ -195,7 +196,7 @@ export default function SubHubPrivacyPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Bell className="w-5 h-5 text-primary-text" />
+                    <Bell aria-hidden className="size-5 text-primary-text" />
                     3. 알림 권한 사용 안내
                   </CardTitle>
                 </CardHeader>
@@ -226,7 +227,10 @@ export default function SubHubPrivacyPage() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">3. 사용자의 권리</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <UserCheck aria-hidden className="size-5 text-primary-text" />
+                    3. 사용자의 권리
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground leading-relaxed mb-4">
@@ -255,7 +259,7 @@ export default function SubHubPrivacyPage() {
               <Card className="border-border">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Mail className="w-5 h-5 text-primary-text" />
+                    <Mail aria-hidden className="size-5 text-primary-text" />
                     4. 문의
                   </CardTitle>
                 </CardHeader>
@@ -286,7 +290,8 @@ export default function SubHubPrivacyPage() {
             >
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">
+                  <CardTitle className="flex items-center gap-2 text-xl">
+                    <RefreshCw aria-hidden className="size-5 text-primary-text" />
                     5. 개인정보처리방침의 변경
                   </CardTitle>
                 </CardHeader>
