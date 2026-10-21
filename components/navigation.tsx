@@ -52,7 +52,7 @@ export function Navigation() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 border-b",
-        isScrolled
+        isScrolled || isMobileOpen
           ? "bg-background/90 backdrop-blur border-border"
           : "border-transparent",
       )}
