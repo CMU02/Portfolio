@@ -29,7 +29,8 @@ function ProsCons({
   positive?: boolean;
 }) {
   const Icon = positive ? Check : X;
-  const color = positive ? "text-primary-text" : "text-destructive";
+  // 강조는 accent 하나, 단점은 보조 글자색
+  const color = positive ? "text-primary-text" : "text-muted-foreground";
   return (
     <div>
       <p className={`text-xs font-medium mb-1.5 ${color}`}>{label}</p>
@@ -41,7 +42,7 @@ function ProsCons({
           >
             <Icon
               aria-hidden
-              className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${color}`}
+              className={`size-4 mt-0.5 shrink-0 ${color}`}
             />
             {item}
           </li>
