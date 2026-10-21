@@ -43,20 +43,20 @@ export function GalleryBlock({ items }: GalleryAttrs) {
               openerRef.current = e.currentTarget;
               setCurrent(i);
             }}
-            className={`rounded-lg border border-border overflow-hidden bg-muted/30 group text-left ${focusRing}`}
+            className={`group text-left ${focusRing}`}
           >
-            <div className="relative aspect-4/3 overflow-hidden">
+            <div className="relative aspect-4/3 overflow-hidden bg-muted">
               <CloudFrontImage
                 s3Key={it.s3Key}
                 alt=""
                 fill
                 unoptimized
-                className="transition-transform duration-300 group-hover:scale-105"
+                className="transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
               />
             </div>
-            <div className="p-2 space-y-1">
+            <div className="pt-2 space-y-1">
               {it.category && (
-                <span className="text-xs font-medium text-primary-text bg-primary/10 px-1.5 py-0.5 rounded">
+                <span className="text-xs font-medium text-primary-text">
                   {it.category}
                 </span>
               )}
@@ -73,7 +73,7 @@ export function GalleryBlock({ items }: GalleryAttrs) {
               openerRef.current = e.currentTarget;
               setCurrent(PREVIEW_COUNT);
             }}
-            className={`min-h-11 rounded-lg border border-border bg-muted/20 hover:bg-muted/40 transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground ${focusRing}`}
+            className={`min-h-11 border-t border-foreground hover:bg-muted/60 transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground ${focusRing}`}
           >
             <Images className="size-6" aria-hidden />
             <span className="text-xs font-medium">전체 보기</span>
@@ -136,7 +136,7 @@ export function GalleryBlock({ items }: GalleryAttrs) {
             <div className="p-4 space-y-1">
               <div className="flex items-center justify-between">
                 {item.category && (
-                  <span className="text-xs font-medium text-primary-text bg-primary/10 px-1.5 py-0.5 rounded">
+                  <span className="text-xs font-medium text-primary-text">
                     {item.category}
                   </span>
                 )}

@@ -37,7 +37,7 @@ export function VideoBlock({ webmKey, mp4Key, posterKey, caption }: VideoAttrs) 
         preload="metadata"
         poster={getCloudFrontImageUrl(posterKey)}
         aria-label={caption}
-        className="w-full aspect-video rounded-lg border border-border bg-muted/50"
+        className="w-full aspect-video bg-muted"
       >
         <source src={getCloudFrontImageUrl(webmKey)} type="video/webm" />
         <source src={getCloudFrontImageUrl(mp4Key)} type="video/mp4" />

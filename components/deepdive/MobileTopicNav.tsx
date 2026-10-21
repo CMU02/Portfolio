@@ -31,10 +31,10 @@ export function MobileTopicNav({
   const activeSection = sections.find((s) => s.id === activeSectionId);
 
   return (
-    // md 미만 헤더는 메뉴 버튼(44px) 때문에 77px이라 그 아래에 붙인다
+    // 고정 헤더(링크·토글 44px)가 모든 너비에서 77px이라 그 아래에 붙인다
     <div
       ref={containerRef}
-      className="lg:hidden sticky top-[77px] md:top-16 z-40 bg-background/95 backdrop-blur-sm border-b border-border -mx-6 px-6 py-1"
+      className="lg:hidden sticky top-[77px] z-40 bg-background/95 backdrop-blur-sm border-b border-border -mx-6 px-6 py-1"
     >
       {/* 현재 토픽 + 현재 섹션 표시 + 토글 */}
       <button
@@ -48,7 +48,7 @@ export function MobileTopicNav({
         aria-controls="mobile-topic-nav"
       >
         <span className="min-w-0 truncate text-left">
-          <span className="font-medium text-tech-cyan">
+          <span className="font-medium text-primary-text">
             {currentTopic?.title}
           </span>
           {activeSection && (
@@ -70,7 +70,7 @@ export function MobileTopicNav({
       {isOpen && (
         <div id="mobile-topic-nav" className="mt-2 space-y-3 pb-3">
           {/* 토픽 목록 */}
-          <nav aria-label="토픽 목록" className="flex flex-wrap gap-2">
+          <nav aria-label="토픽 목록" className="flex flex-wrap gap-x-4">
             {topics.map((topic) => {
               const isActive = topic.id === currentTopicId;
               return (
@@ -80,11 +80,11 @@ export function MobileTopicNav({
                   onClick={() => setIsOpen(false)}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "inline-flex items-center min-h-11 text-xs px-3 rounded-full border transition-colors",
+                    "inline-flex items-center min-h-11 text-sm transition-colors",
                     focusRing,
                     isActive
-                      ? "border-tech-cyan text-primary-text bg-tech-cyan/10"
-                      : "border-border text-muted-foreground hover:text-foreground",
+                      ? "text-primary-text font-medium underline decoration-2 underline-offset-4"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {topic.title}
@@ -94,7 +94,7 @@ export function MobileTopicNav({
           </nav>
 
           {/* 섹션 목록 */}
-          <nav aria-label="섹션 목록" className="flex flex-wrap gap-x-1">
+          <nav aria-label="섹션 목록" className="flex flex-wrap gap-x-4 border-t border-border pt-1">
             {sections.map(({ id, label }, index) => {
               const isActive = id === activeSectionId;
               return (
@@ -104,10 +104,10 @@ export function MobileTopicNav({
                   onClick={() => setIsOpen(false)}
                   aria-current={isActive ? "location" : undefined}
                   className={cn(
-                    "inline-flex items-center min-h-11 text-xs px-2.5 rounded-md transition-colors hover:bg-muted/50",
+                    "inline-flex items-center min-h-11 text-xs transition-colors",
                     focusRing,
                     isActive
-                      ? "text-primary font-medium"
+                      ? "text-primary-text font-medium"
                       : "text-muted-foreground hover:text-foreground",
                   )}
                 >

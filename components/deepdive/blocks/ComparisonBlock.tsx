@@ -1,21 +1,19 @@
-// 선택지 비교: 옵션별 장점/단점 카드 그리드
+// 선택지 비교: 옵션별 장점/단점, 카드 대신 위쪽 구분선으로 나눈다
 import { Check, X } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ComparisonAttrs } from "@/data/projects/types";
 
 export function ComparisonBlock({ options }: ComparisonAttrs) {
   return (
-    <div className="grid md:grid-cols-2 gap-4">
+    <div className="grid md:grid-cols-2 gap-x-8 gap-y-6">
       {options.map((option) => (
-        <Card key={option.name} className="bg-card">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">{option.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <ProsCons label="장점" items={option.pros} positive />
-            <ProsCons label="단점" items={option.cons} />
-          </CardContent>
-        </Card>
+        <div
+          key={option.name}
+          className="border-t border-foreground pt-3 space-y-3"
+        >
+          <p className="font-semibold">{option.name}</p>
+          <ProsCons label="장점" items={option.pros} positive />
+          <ProsCons label="단점" items={option.cons} />
+        </div>
       ))}
     </div>
   );

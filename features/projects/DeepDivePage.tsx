@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Navigation } from "@/components/navigation";
 import {
   TopicSidebar,
@@ -37,22 +35,17 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
 
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-6">
-          {/* 상단 헤더 */}
-          <div className="mb-8">
+          {/* 상단 헤더: 장식 없이 제목 → 설명 → 기술 → 지표의 글자 위계로 */}
+          <div className="mb-10">
             {/* 뒤로가기 + 링크: 375px에서 가로 스크롤이 생기지 않도록 줄바꿈 허용 */}
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
-              {/* 모바일 터치 영역 44px, 공용 Button 크기는 그대로 둔다 */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="max-md:min-h-11"
-                asChild
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-8">
+              <Link
+                href="/#work"
+                className="-ml-1 inline-flex min-h-11 items-center gap-2 px-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
-                <Link href="/#work">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  프로젝트 목록
-                </Link>
-              </Button>
+                <ArrowLeft aria-hidden className="size-4" />
+                프로젝트 목록
+              </Link>
               <div className="flex flex-wrap gap-2 max-md:[&>a]:min-h-11">
                 <ProjectLinks
                   githubUrl={project.githubUrl}
@@ -63,17 +56,15 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
             </div>
 
             {/* 프로젝트 제목 + 기술 스택 (페이지마다 다른 토픽 제목이 h1) */}
-            <p className="text-3xl md:text-4xl font-bold mb-2">
+            <p className="text-4xl md:text-6xl font-extrabold tracking-tight text-balance">
               {deepDive.title}
             </p>
-            <p className="text-muted-foreground mb-4">{deepDive.description}</p>
-            <div className="flex flex-wrap gap-2 mb-6">
-              {project.techStack.map((tech) => (
-                <Badge key={tech} variant="outline" className="text-xs">
-                  {tech}
-                </Badge>
-              ))}
-            </div>
+            <p className="mt-3 text-muted-foreground md:text-lg">
+              {deepDive.description}
+            </p>
+            <p className="mt-2 mb-8 text-sm text-muted-foreground">
+              {project.techStack.join(" · ")}
+            </p>
 
             {/* 핵심 지표 */}
             <HighlightCards items={deepDive.highlights} />
@@ -88,7 +79,7 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
           />
 
           {/* 3컬럼 레이아웃 */}
-          <div className="flex gap-8 mt-8">
+          <div className="flex gap-10 mt-10">
             <TopicSidebar
               topics={deepDive.topics}
               currentTopicId={topicId}
@@ -99,8 +90,8 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
             {/* 중앙: 토픽 헤더 + 본문 */}
             <div className="flex-1 min-w-0">
               <article className="max-w-[860px] mx-auto w-full">
-                <header className="mb-16">
-                  <h1 className="text-2xl md:text-3xl font-bold mb-2">
+                <header className="mb-12">
+                  <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-balance mb-2">
                     {topic.title}
                   </h1>
                   <p className="text-muted-foreground">{topic.subtitle}</p>

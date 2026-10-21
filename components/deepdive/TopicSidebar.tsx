@@ -13,6 +13,10 @@ interface TopicSidebarProps {
   sections: TocItem[];
 }
 
+// 세로 규선 위 텍스트 링크, 현재 위치는 accent 선과 글자로만 표시
+const linkBase =
+  "block -ml-px border-l-2 py-1.5 pl-3 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring focus-visible:outline-none";
+
 // 좌측 이중 목차: 토픽 목차 + 현재 토픽의 섹션 목차 (본문 h2에서 추출)
 export function TopicSidebar({
   topics,
@@ -34,7 +38,7 @@ export function TopicSidebar({
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
             Topics
           </p>
-          <ul className="space-y-1">
+          <ul className="border-l border-border">
             {topics.map((topic) => {
               const isActive = topic.id === currentTopicId;
               return (
@@ -42,10 +46,10 @@ export function TopicSidebar({
                   <Link
                     href={`/projects/${projectId}/${topic.id}`}
                     className={cn(
-                      "block text-sm py-1.5 px-3 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring focus-visible:outline-none",
+                      linkBase,
                       isActive
-                        ? "bg-tech-cyan/10 text-primary-text font-medium border-l-2 border-tech-cyan"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                        ? "border-primary text-primary-text font-medium"
+                        : "border-transparent text-muted-foreground hover:text-foreground",
                     )}
                     aria-current={isActive ? "page" : undefined}
                   >
@@ -62,7 +66,7 @@ export function TopicSidebar({
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
             Sections
           </p>
-          <ul className="space-y-1">
+          <ul className="border-l border-border">
             {sections.map(({ id, label }, index) => {
               const isActive = activeSectionId === id;
               return (
@@ -70,10 +74,10 @@ export function TopicSidebar({
                   <a
                     href={`#${id}`}
                     className={cn(
-                      "block text-sm py-1.5 px-3 rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring focus-visible:outline-none",
+                      linkBase,
                       isActive
-                        ? "text-primary-text font-medium border-l-2 border-tech-cyan bg-tech-cyan/5"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                        ? "border-primary text-primary-text font-medium"
+                        : "border-transparent text-muted-foreground hover:text-foreground",
                     )}
                     aria-current={isActive ? "location" : undefined}
                   >

@@ -24,23 +24,23 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
   heading: ({ node, children }) =>
     node.attrs.level === 2 ? (
       // space-y-4(1rem)와 합쳐 섹션 간격 4rem (기존 space-y-16)
-      // scroll-mt: 고정 헤더 + 모바일 sticky 목차(md 미만 130px, md 117px) 아래로 앵커가 오게 한다
+      // scroll-mt: 고정 헤더 + 모바일 sticky 목차(lg 미만 약 130px) 아래로 앵커가 오게 한다
       <h2
         id={node.attrs.id ?? undefined}
-        className="scroll-mt-36 md:scroll-mt-32 lg:scroll-mt-28 mt-12 first:mt-0 pb-2 border-b border-border text-lg font-semibold"
+        className="scroll-mt-36 lg:scroll-mt-28 mt-14 first:mt-0 pt-3 border-t border-foreground text-xl font-bold tracking-tight text-balance"
       >
         {children}
       </h2>
     ) : (
       <h3
         id={node.attrs.id ?? undefined}
-        className="pt-4 text-sm font-medium text-foreground"
+        className="pt-4 text-base font-semibold text-foreground text-balance"
       >
         {children}
       </h3>
     ),
   sectionSummary: ({ children }) => (
-    <p className="text-sm font-medium text-primary">→ {children}</p>
+    <p className="text-sm font-medium text-primary-text">→ {children}</p>
   ),
   // 목록/콜아웃 안 문단은 부모 글자 스타일을 그대로 물려받는다
   paragraph: ({ parent, children }) =>
@@ -61,7 +61,7 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
   orderedList: ({ node, children }) => (
     <ol
       start={node.attrs.start}
-      className="list-decimal pl-5 space-y-2 text-sm text-muted-foreground leading-relaxed marker:font-bold marker:text-primary"
+      className="list-decimal pl-5 space-y-2 text-sm text-muted-foreground leading-relaxed marker:font-bold marker:text-primary-text"
     >
       {children}
     </ol>
@@ -97,8 +97,8 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
     />
   ),
   decision: ({ node, children }) => (
-    <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-1 text-sm text-foreground/80">
-      <p className="font-medium text-primary">의사결정</p>
+    <div className="border-l-2 border-primary pl-4 space-y-1 text-sm text-foreground/80">
+      <p className="font-medium text-primary-text">의사결정</p>
       {children}
       {node.attrs.tradeOff && (
         <p className="text-xs text-muted-foreground pt-1">
@@ -111,7 +111,7 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
   metricGrid: ({ node }) => <MetricGridBlock items={node.attrs.items} />,
   limitations: ({ node }) => <LimitationsBlock items={node.attrs.items} />,
   architectureImage: ({ node }) => (
-    <div className="rounded-lg border border-border bg-muted/50 overflow-hidden">
+    <div className="border border-border overflow-hidden">
       <CloudFrontImage
         s3Key={node.attrs.s3Key}
         alt={node.attrs.alt}
@@ -129,7 +129,7 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
 export function RichText({ doc }: { doc: JSONContent }) {
   return (
     // 링크는 StarterKit 기본 <a>(href 검증 포함)를 쓰고 스타일만 입힌다
-    <div className="space-y-4 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4">
+    <div className="space-y-4 [&_a]:text-primary-text [&_a]:underline [&_a]:underline-offset-4">
       {renderToReactElement({ extensions, content: doc, options: { nodeMapping } })}
     </div>
   );
