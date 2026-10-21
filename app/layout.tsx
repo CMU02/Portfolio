@@ -4,6 +4,7 @@ import "./globals.css";
 import { StructuredData } from "@/components/structured-data";
 import { SITE_CONFIG } from "@/lib/constants";
 import { MotionProvider } from "@/components/motion-provider";
+import { SiteFooter } from "@/components/site-footer";
 import { themeInitScript } from "@/lib/theme";
 
 const geistSans = Geist({
@@ -114,6 +115,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <MotionProvider>{children}</MotionProvider>
+        <SiteFooter />
       </body>
     </html>
   );

@@ -3,17 +3,15 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Logo } from "@/components/common/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 // 루트 기준 앵커라 홈이 아닌 페이지에서도 해당 섹션으로 이동한다
 const navItems = [
-  { label: "Projects", href: "/#work" },
-  { label: "Growth", href: "/#growth" },
-  { label: "Certifications", href: "/certifications" },
+  { label: "Work", href: "/#work" },
+  { label: "About", href: "/#about" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -23,8 +21,8 @@ export function Navigation() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -51,50 +49,49 @@ export function Navigation() {
     });
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
+    <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 border-b",
         isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border"
-          : "",
+          ? "bg-background/90 backdrop-blur border-border"
+          : "border-transparent",
       )}
     >
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* 로고 */}
-          <Link href="/" className="hover:opacity-80 transition-opacity">
-            <Logo />
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center font-semibold"
+          >
+            최현준
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            {renderLinks("text-sm")}
-          </div>
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
+              {renderLinks("inline-flex min-h-11 items-center px-3 text-sm")}
+            </div>
+            <ThemeToggle />
 
-          {/* 모바일 메뉴 버튼 */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden size-11"
-            aria-label={isMobileOpen ? "메뉴 닫기" : "메뉴 열기"}
-            aria-expanded={isMobileOpen}
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-          >
-            {isMobileOpen ? <X /> : <Menu />}
-          </Button>
+            {/* 모바일 메뉴 버튼 */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden size-11"
+              aria-label={isMobileOpen ? "메뉴 닫기" : "메뉴 열기"}
+              aria-expanded={isMobileOpen}
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+            >
+              {isMobileOpen ? <X /> : <Menu />}
+            </Button>
+          </div>
         </div>
 
         {isMobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            className="md:hidden pt-4 pb-2"
-          >
-            {renderLinks("block py-3")}
-          </motion.div>
+          <div className="md:hidden pt-2 pb-2">
+            {renderLinks("flex min-h-11 items-center")}
+          </div>
         )}
       </nav>
-    </motion.header>
+    </header>
   );
 }

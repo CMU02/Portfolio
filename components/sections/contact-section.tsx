@@ -2,7 +2,6 @@
 
 import * as motion from "motion/react-client";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Mail, Github } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
 
@@ -74,19 +73,6 @@ export function ContactSection() {
               </motion.div>
             ))}
           </div>
-        </motion.div>
-
-        <Separator className="my-16" />
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center text-sm text-muted-foreground space-y-2"
-        >
-          <p>© 2024 최현준. All rights reserved.</p>
-          <p className="text-xs">
-            Built with Next.js 16, Tailwind CSS v4, and Motion
-          </p>
         </motion.div>
       </div>
     </section>
