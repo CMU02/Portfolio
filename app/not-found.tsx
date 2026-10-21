@@ -36,7 +36,7 @@ export default function NotFound() {
           </Button>
 
           <Button variant="outline" size="lg" asChild>
-            <Link href="/projects">
+            <Link href="/#work">
               <ArrowLeft className="w-4 h-4 mr-2" />
               프로젝트 보기
             </Link>

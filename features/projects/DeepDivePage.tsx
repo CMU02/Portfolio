@@ -48,7 +48,7 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
                 className="max-md:min-h-11"
                 asChild
               >
-                <Link href="/projects">
+                <Link href="/#work">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   프로젝트 목록
                 </Link>

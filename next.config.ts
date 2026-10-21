@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
     // CloudFrontImage 컴포넌트에서 사용하는 quality 값 허용
     qualities: [75, 85],
   },
+  // 프로젝트 목록은 홈 Work 섹션으로 합쳤다. 기존 링크·검색 색인은 영구 리다이렉트로 넘긴다
+  async redirects() {
+    return [{ source: "/projects", destination: "/#work", permanent: true }];
+  },
 };
 
 export default nextConfig;
