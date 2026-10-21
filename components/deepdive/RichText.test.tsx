@@ -26,7 +26,7 @@ it("최상위 h2 앞에 목차 순서대로 01, 02 번호를 붙이고 h3에는 
     />,
   );
   const h2s = screen.getAllByRole("heading", { level: 2 });
-  expect(h2s.map((el) => el.textContent)).toEqual(["01문제", "02선택과 트레이드오프"]);
+  expect(h2s.map((el) => el.textContent)).toEqual(["01 문제", "02 선택과 트레이드오프"]);
   expect(h2s[0]).toHaveAttribute("id", "problem");
   expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(/^세부$/);
 });
@@ -42,6 +42,6 @@ it("표준 섹션 id에는 장식 아이콘을 붙이고 모르는 id에는 붙�
   );
   const [known, unknown] = screen.getAllByRole("heading", { level: 2 });
   expect(known.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
-  expect(known).toHaveTextContent(/^01Problem$/);
+  expect(known).toHaveTextContent(/^01 Problem$/);
   expect(unknown.querySelector("svg")).toBeNull();
 });

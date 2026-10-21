@@ -24,7 +24,7 @@ export function ReadingProgress() {
   return (
     // shortcut: 77px = Navigation 헤더 높이(모든 너비 동일), 헤더 높이가 바뀌면 함께 수정
     <div aria-hidden className="fixed inset-x-0 top-[77px] z-40 h-[3px] bg-border">
-      <div ref={fill} className="h-full origin-left scale-x-0 bg-primary" />
+      <div ref={fill} className="h-full origin-left bg-primary" style={{ transform: "scaleX(0)" }} />
     </div>
   );
 }

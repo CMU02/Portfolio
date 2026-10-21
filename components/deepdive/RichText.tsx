@@ -36,7 +36,7 @@ const heading =
           <span className="mr-3 text-primary-text tabular-nums">
             {sectionNo.get(node.attrs.id)}
           </span>
-        )}
+        )}{" "}
         {Icon && (
           <Icon
             aria-hidden
@@ -99,7 +99,7 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
         ) : (
           <CheckCircle2
             aria-hidden
-            className="size-4 mt-1 text-primary shrink-0"
+            className="size-4 mt-1 text-primary-text shrink-0"
           />
         )}
         <div className="min-w-0 space-y-2">{children}</div>

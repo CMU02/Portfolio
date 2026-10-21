@@ -104,7 +104,7 @@ export async function DeepDivePage({ projectId, topicId }: Props) {
                     rel="noopener noreferrer"
                     className="inline-flex min-h-11 items-center gap-1.5 text-foreground underline-offset-4 hover:text-primary-text hover:underline"
                   >
-                    <Icon aria-hidden className="size-4" />
+                    <Icon aria-hidden className="size-4 text-muted-foreground" />
                     {label}
                     <ArrowUpRight aria-hidden className="size-4 text-muted-foreground" />
                   </a>
