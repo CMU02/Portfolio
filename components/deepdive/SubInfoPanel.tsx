@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import type { SideInfoSection } from "@/data/projects/types";
@@ -15,9 +13,9 @@ export function SubInfoPanel({ sections }: SubInfoPanelProps) {
       <div className="sticky top-28 space-y-4 max-h-[calc(100vh-8rem)] overflow-y-auto pl-2">
         {sections.map((section) => (
           <div key={section.title} className="bg-card/20 rounded-lg p-3">
-            <h3 className="text-[11px] font-semibold text-muted-foreground/70 uppercase tracking-wider mb-3">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
               {section.title}
-            </h3>
+            </p>
             <ul className="space-y-2">
               {section.items.map((item) => (
                 <li key={item.label}>
@@ -38,7 +36,7 @@ export function SubInfoPanel({ sections }: SubInfoPanelProps) {
                       {item.label}
                     </Link>
                   ) : (
-                    <span className="text-xs text-muted-foreground/70">
+                    <span className="text-xs text-muted-foreground">
                       {item.label}
                     </span>
                   )}

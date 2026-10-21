@@ -1,6 +1,4 @@
-"use client";
-
-import { DollarSign, Zap, ShieldCheck, CheckCircle } from "lucide-react";
+import { DollarSign, Zap, ShieldCheck, CheckCircle, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { HighlightItem } from "@/data/projects/types";
 
@@ -9,6 +7,7 @@ const iconMap: Record<string, React.ElementType> = {
   Zap,
   ShieldCheck,
   CheckCircle,
+  Users,
 };
 
 interface HighlightCardsProps {

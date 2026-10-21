@@ -1,41 +1,55 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { SECTION_LABELS, type SectionKey } from "@/data/projects/types";
+import { useState, useEffect, type RefObject } from "react";
+import type { TocItem } from "@/data/projects/types";
 
-const sectionKeys = Object.keys(SECTION_LABELS) as SectionKey[];
+// 섹션 h2의 scroll-mt(모바일 최대 144px)보다 조금 아래까지를 "지나간" 것으로 본다
+const ACTIVE_OFFSET = 152;
 
-// 스크롤 위치에 따라 현재 활성 섹션을 감지하는 훅
-export function useActiveSection(): SectionKey | null {
-  const [activeSection, setActiveSection] = useState<SectionKey | null>(null);
+// 스크롤 위치에 따라 현재 활성 섹션 id를 감지하는 훅
+// 본문에 섹션 래퍼가 없고 h2만 앵커이므로, 마지막으로 상단을 지난 h2를 활성으로 본다
+// 사이드바/모바일 목차가 둘 다 마운트되므로 CSS로 숨겨진(display:none) 쪽은 계산을 건너뛴다
+export function useActiveSection(
+  sections: TocItem[],
+  containerRef: RefObject<HTMLElement | null>,
+): string | null {
+  const [activeId, setActiveId] = useState<string | null>(
+    sections[0]?.id ?? null,
+  );
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // 화면에 보이는 섹션 중 가장 위에 있는 것을 활성으로 설정
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    let frame = 0;
 
-        if (visible.length > 0) {
-          const id = visible[0].target.id.replace("section-", "") as SectionKey;
-          setActiveSection(id);
-        }
-      },
-      {
-        rootMargin: "-20% 0px -60% 0px",
-        threshold: 0,
-      },
-    );
+    const update = () => {
+      frame = 0;
+      if (!containerRef.current?.offsetParent) return;
+      let current = sections[0]?.id ?? null;
+      for (const { id } of sections) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= ACTIVE_OFFSET) current = id;
+      }
+      // 마지막 섹션은 짧아서 상단까지 못 올라오므로, 페이지 끝에 닿으면 마지막 섹션으로 본다
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2
+      ) {
+        current = sections.at(-1)?.id ?? current;
+      }
+      setActiveId(current);
+    };
 
-    // 각 섹션 요소를 관찰
-    sectionKeys.forEach((key) => {
-      const el = document.getElementById(`section-${key}`);
-      if (el) observer.observe(el);
-    });
+    // rAF로 스크롤 이벤트를 프레임당 1회로 제한
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
 
-    return () => observer.disconnect();
-  }, []);
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [sections, containerRef]);
 
-  return activeSection;
+  return activeId;
 }

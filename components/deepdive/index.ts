@@ -2,7 +2,6 @@
 export { TopicSidebar } from "./TopicSidebar";
 export { SubInfoPanel } from "./SubInfoPanel";
 export { HighlightCards } from "./HighlightCards";
-export { TopicContent } from "./TopicContent";
+export { RichText } from "./RichText";
 export { MobileTopicNav } from "./MobileTopicNav";
-export { MermaidDiagram } from "./MermaidDiagram";
 export { useActiveSection } from "./use-active-section";
