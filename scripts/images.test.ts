@@ -12,6 +12,12 @@ describe("collectImageKeys", () => {
       ]),
     ).toEqual(["a/b.png", "f/g.jpeg"]);
   });
+
+  it("posterKey 값은 변형 대상에서 뺀다 (JSON, TS 표기 모두)", () => {
+    expect(
+      collectImageKeys([`{ "posterKey": "v/p.png", "src": "v/i.png" }`, `{ posterKey: "v/q.png" }`]),
+    ).toEqual(["v/i.png"]);
+  });
 });
 
 describe("makeVariants", () => {

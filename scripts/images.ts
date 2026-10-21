@@ -15,7 +15,8 @@ const SOURCE_DIRS: [dir: string, ext: string][] = [
 export function collectImageKeys(sources: string[]): string[] {
   const keys = new Set<string>();
   for (const src of sources) {
-    for (const m of src.matchAll(/"([^"\s]+\.(?:png|jpe?g|webp))"/g)) {
+    // 포스터(posterKey)는 <video poster>로 원본을 바로 쓰고 로더를 거치지 않으므로 변형 대상이 아니다
+    for (const m of src.matchAll(/(?<!posterKey"?\s*:\s*)"([^"\s]+\.(?:png|jpe?g|webp))"/g)) {
       if (!m[1].startsWith("/") && !/\.w\d+\.webp$/.test(m[1])) keys.add(m[1]);
     }
   }
