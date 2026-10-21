@@ -98,6 +98,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         opacity: isRendered ? 1 : 0,
         transition: "opacity 0.2s",
       }}
+      role="img"
       aria-label="아키텍처 다이어그램"
     >
       <div ref={containerRef} className="h-full" />

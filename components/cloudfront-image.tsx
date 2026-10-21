@@ -14,6 +14,7 @@ interface CloudFrontImageProps {
   fill?: boolean;
   sizes?: string;
   quality?: number;
+  unoptimized?: boolean;
 }
 
 // Client Component — Client Component 내부에서 사용되므로 명시적으로 선언하여
@@ -28,6 +29,7 @@ export function CloudFrontImage({
   fill = false,
   sizes,
   quality = 85,
+  unoptimized,
 }: CloudFrontImageProps) {
   const imageUrl = getCloudFrontImageUrl(s3Key);
 
@@ -41,6 +43,7 @@ export function CloudFrontImage({
         className={cn("object-cover", className)}
         priority={priority}
         quality={quality}
+        unoptimized={unoptimized}
       />
     );
   }
