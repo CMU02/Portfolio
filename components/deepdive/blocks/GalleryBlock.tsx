@@ -14,8 +14,6 @@ import { CloudFrontImage } from "@/components/cloudfront-image";
 import type { GalleryAttrs } from "@/data/projects/types";
 
 const PREVIEW_COUNT = 7;
-// shortcut: CloudFront가 width 쿼리를 무시해 어차피 원본을 받으므로 unoptimized로 썸네일·라이트박스가 같은 URL(캐시)을 쓰게 한다,
-// S3에 썸네일/중간 크기 변형을 올리면 그 키로 바꾸고 sizes를 되살릴 것
 const focusRing =
   "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
 const navButton = `absolute top-1/2 -translate-y-1/2 size-11 flex items-center justify-center rounded-full bg-background/70 text-foreground hover:bg-background transition-colors ${focusRing}`;
@@ -50,7 +48,7 @@ export function GalleryBlock({ items }: GalleryAttrs) {
                 s3Key={it.s3Key}
                 alt=""
                 fill
-                unoptimized
+                sizes="(max-width: 768px) 50vw, 280px"
                 className="transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
               />
             </div>
@@ -107,7 +105,7 @@ export function GalleryBlock({ items }: GalleryAttrs) {
                 s3Key={item.s3Key}
                 alt={item.caption}
                 fill
-                unoptimized
+                sizes="(max-width: 768px) 100vw, 768px"
                 className="object-contain"
               />
               <button
