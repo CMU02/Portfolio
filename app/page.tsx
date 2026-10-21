@@ -1,8 +1,7 @@
 import { Navigation } from "@/components/navigation";
 import { HeroSection } from "@/components/sections/hero-section";
-import { ExpertiseSection } from "@/components/sections/expertise-section";
-import { ProjectsSection } from "@/components/sections/projects-section";
-import { GrowthSection } from "@/components/sections/growth-section";
+import { WorkSection } from "@/components/sections/work-section";
+import { AboutSection } from "@/components/sections/about-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { SITE_CONFIG } from "@/lib/constants";
 
@@ -22,7 +21,7 @@ export default function Home() {
   };
 
   return (
-    <main className="dark min-h-screen">
+    <main className="min-h-screen">
       {/* 홈페이지 전용 구조화된 데이터 */}
       <script
         type="application/ld+json"
@@ -33,9 +32,8 @@ export default function Home() {
 
       <Navigation />
       <HeroSection />
-      <ExpertiseSection />
-      <ProjectsSection />
-      <GrowthSection />
+      <WorkSection />
+      <AboutSection />
       <ContactSection />
     </main>
   );

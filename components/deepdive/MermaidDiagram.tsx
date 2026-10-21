@@ -3,31 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
 
-mermaid.initialize({
-  startOnLoad: false,
-  theme: "dark",
-  themeVariables: {
-    primaryColor: "#0d2a4f",
-    primaryTextColor: "#fffdf7",
-    primaryBorderColor: "#1e3f6e",
-    lineColor: "#2ca58d",
-    secondaryColor: "#122d52",
-    tertiaryColor: "#163660",
-    background: "#0a2342",
-    mainBkg: "#0d2a4f",
-    nodeBorder: "#1e3f6e",
-    clusterBkg: "#122d52",
-    titleColor: "#fffdf7",
-    edgeLabelBackground: "#0d2a4f",
-  },
-  flowchart: {
-    curve: "basis",
-    padding: 20,
-    nodeSpacing: 50,
-    rankSpacing: 60,
-  },
-  securityLevel: "loose",
-});
+// 다크 테마에서만 네이비 팔레트를 덮어쓴다
+const darkThemeVariables = {
+  primaryColor: "#0d2a4f",
+  primaryTextColor: "#fffdf7",
+  primaryBorderColor: "#1e3f6e",
+  lineColor: "#2ca58d",
+  secondaryColor: "#122d52",
+  tertiaryColor: "#163660",
+  background: "#0a2342",
+  mainBkg: "#0d2a4f",
+  nodeBorder: "#1e3f6e",
+  clusterBkg: "#122d52",
+  titleColor: "#fffdf7",
+  edgeLabelBackground: "#0d2a4f",
+};
 
 interface MermaidDiagramProps {
   chart: string;
@@ -41,6 +31,21 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    // shortcut: 렌더 시점의 <html> 테마만 반영하고 토글 후엔 다시 그리지 않음, 콘텐츠에 mermaid 노드가 생기면 html class를 관찰해 재렌더
+    const isDark = document.documentElement.classList.contains("dark");
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: isDark ? "dark" : "neutral",
+      ...(isDark && { themeVariables: darkThemeVariables }),
+      flowchart: {
+        curve: "basis",
+        padding: 20,
+        nodeSpacing: 50,
+        rankSpacing: 60,
+      },
+      securityLevel: "loose",
+    });
 
     const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
 
@@ -98,6 +103,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         opacity: isRendered ? 1 : 0,
         transition: "opacity 0.2s",
       }}
+      role="img"
       aria-label="아키텍처 다이어그램"
     >
       <div ref={containerRef} className="h-full" />

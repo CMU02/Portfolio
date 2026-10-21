@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { StructuredData } from "@/components/structured-data";
 import { SITE_CONFIG } from "@/lib/constants";
+import { MotionProvider } from "@/components/motion-provider";
+import { SiteFooter } from "@/components/site-footer";
+import { themeInitScript } from "@/lib/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+// Geist에는 한글 글리프가 없어 한글은 이 폰트로 대체된다
+const notoSansKr = Noto_Sans_KR({
+  variable: "--font-noto-kr",
+  preload: false,
 });
 
 const geistMono = Geist_Mono({
@@ -92,14 +101,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="dark">
+    // 폰트 변수는 html에 둬야 Tailwind의 html font-family(--font-sans)가 해석된다
+    // dark 클래스·colorScheme은 head 스크립트가 하이드레이션 전에 바꾸므로 경고를 끈다
+    <html
+      lang="ko"
+      className={`${geistSans.variable} ${notoSansKr.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
+        {/* 첫 페인트 전에 테마를 정해 깜빡임을 막는다 */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <StructuredData />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="antialiased">
+        <MotionProvider>{children}</MotionProvider>
+        <SiteFooter />
       </body>
     </html>
   );

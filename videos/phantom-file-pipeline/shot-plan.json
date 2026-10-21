@@ -1,0 +1,35 @@
+{
+  "category": "charts",
+  "duration_s": 9,
+  "fps": 30,
+  "canvas": { "w": 1280, "h": 720, "aspect": "16:9" },
+  "style": "clean architecture diagram on site navy; one teal event packet travels the pipeline; pink only on the failure branch; seamless loop (t=9 state == t=0 state)",
+  "palette": ["#0a2342", "#112d55", "#264a7a", "#2ca58d", "#84bc9c", "#f46197", "#fffdf7"],
+  "font": "Geist + Noto Sans KR",
+  "beats": [0.3, 1.5, 2.0, 3.1, 4.4, 5.2, 6.1, 6.6, 8.3],
+  "export": "mp4",
+  "asset_needs": [],
+  "block": null,
+  "customize": {
+    "note": "catalog search (pipeline/flowchart) returned only hand-drawn or sticky-note flowcharts that clash with the site identity; diagram is hand-authored."
+  },
+  "content": {
+    "type": "pipeline-flow",
+    "nodes": ["DynamoDB TTL", "DynamoDB Streams", "EventBridge Pipes", "SQS Main Queue", "Cleanup Lambda", "S3"],
+    "branch": ["Lambda 오류", "SQS 재시도", "DLQ 격리", "수동 재처리"],
+    "headline": "만료 파일 정리 파이프라인",
+    "metrics": [
+      { "label": "장애 주입 재처리 성공률", "value": "100%" },
+      { "label": "이벤트 유실", "value": "0건" }
+    ],
+    "scenes": [
+      { "id": "ttl", "start": 0, "end": 1.6, "text": "TTL 만료 → Streams (~수십 분 지연, 시간 압축 표시)" },
+      { "id": "filter", "start": 1.6, "end": 2.9, "text": "Pipes: eventName == REMOVE만 통과, 수동 삭제는 필터" },
+      { "id": "retry", "start": 2.9, "end": 4.3, "text": "Lambda 오류 → SQS 자동 재시도" },
+      { "id": "dlq", "start": 4.3, "end": 5.1, "text": "maxReceiveCount 도달 → DLQ 격리" },
+      { "id": "replay", "start": 5.1, "end": 6.5, "text": "수동 재처리 → Lambda 성공 → S3 DeleteObject" },
+      { "id": "metrics", "start": 6.5, "end": 8.4, "text": "100% / 0건 hold (poster at 8.0s)" },
+      { "id": "reset", "start": 8.4, "end": 9, "text": "fade back to the t=0 rest state for a seamless loop" }
+    ]
+  }
+}

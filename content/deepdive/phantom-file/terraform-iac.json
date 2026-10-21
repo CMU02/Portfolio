@@ -1,0 +1,518 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-background"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Problem"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "수동 콘솔 작업은 설정 추적이 안 되고 재현이 어려워 IaC 도입이 필요했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "수동으로 AWS 콘솔에서 리소스를 만들면 어떤 설정을 했는지 추적이 안 되고, 실수로 삭제하면 동일한 환경을 재현하기 어렵습니다. 특히 Lambda, DynamoDB, SQS, EventBridge, S3, API Gateway, IAM 등 다수의 서비스가 연동된 서버리스 아키텍처에서는 리소스 간 의존 관계를 코드로 명시하고 버전 관리하는 것이 필수적이었습니다."
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "pain"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "콘솔에서 수동 생성한 리소스의 설정값 추적 불가 — 어떤 설정을 했는지 기억에 의존"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "실수로 리소스 삭제 시 동일한 환경 재현이 어려움"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "다수의 AWS 서비스(Lambda, DynamoDB, SQS, EventBridge, S3, API Gateway, IAM) 간 의존 관계 관리 복잡"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "AI 도구로 생성한 인프라 코드의 보안 설정 검증 필요"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-comparison"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Trade-off"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "멀티 클라우드 지원과 선언형 구문의 직관성을 근거로 Terraform을 선택했습니다."
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "attrs": {
+        "options": [
+          {
+            "name": "AWS CDK",
+            "pros": [
+              "TypeScript 등 익숙한 프로그래밍 언어로 인프라 정의",
+              "AWS 서비스와 깊은 통합",
+              "반복문·조건문 등 프로그래밍 패턴 활용 가능"
+            ],
+            "cons": [
+              "AWS 전용 — 멀티 클라우드 확장 불가",
+              "CloudFormation으로 변환되는 과정에서 디버깅 어려움",
+              "추상화 레이어가 두꺼워 실제 리소스 설정 파악이 어려울 수 있음"
+            ]
+          },
+          {
+            "name": "AWS SAM",
+            "pros": [
+              "서버리스 애플리케이션에 특화된 간결한 문법",
+              "로컬 테스트(sam local) 지원",
+              "CloudFormation 기반으로 AWS 네이티브"
+            ],
+            "cons": [
+              "서버리스 외 리소스(VPC, CloudFront 등) 관리에 제한적",
+              "AWS 전용 — 멀티 클라우드 확장 불가",
+              "복잡한 인프라 구성에는 CloudFormation 직접 작성 필요"
+            ]
+          },
+          {
+            "name": "Terraform",
+            "pros": [
+              "선언형 HCL 구문으로 리소스 설정이 직관적",
+              "멀티 클라우드 지원 — AWS 외 다른 클라우드로 확장 가능",
+              "plan 명령으로 변경 사항 사전 확인 가능",
+              "커뮤니티와 모듈 생태계가 풍부",
+              "Kiro AWS Terraform MCP와 연동하여 초기 코드 생성 가능"
+            ],
+            "cons": [
+              "HCL 문법 학습 필요",
+              "상태 파일(tfstate) 관리 부담",
+              "AWS 신규 서비스 지원이 CDK/SAM 대비 느릴 수 있음"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "decision",
+      "attrs": {
+        "tradeOff": null
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "멀티 클라우드 확장 가능성, 선언형 HCL의 직관성, plan 명령을 통한 변경 사전 확인, 그리고 Kiro AWS Terraform MCP와의 연동을 근거로 Terraform을 선택했습니다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-implementation"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "7개 AWS 서비스를 Terraform으로 코드화하고, AI 생성 코드에서 발견한 보안 문제 2건을 수정했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Kiro AWS Terraform MCP로 초기 인프라 코드를 생성한 뒤, 보안 검증 과정에서 IAM 과도 권한과 S3 퍼블릭 접근 차단 누락 2건을 발견하여 수정했습니다. Lambda, DynamoDB, SQS(Main + DLQ), EventBridge Pipes, S3, API Gateway, IAM Role/Policy를 모두 Terraform으로 관리합니다."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3,
+        "id": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "구현 흐름"
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Kiro AWS Terraform MCP로 Lambda, DynamoDB, SQS, EventBridge, S3, API Gateway, IAM 초기 코드 생성"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "IAM 보안 수정: Cleanup Lambda에 s3:* 와일드카드 권한이 부여되어 있었음 → s3:DeleteObject + 해당 버킷 ARN으로 최소 권한 원칙 적용"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "S3 보안 수정: aws_s3_bucket_public_access_block 리소스가 누락되어 퍼블릭 ACL이 차단되지 않았음 → block_public_acls, block_public_policy, ignore_public_acls, restrict_public_buckets 전부 true로 설정"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "AI 생성 코드 보안 검증 체크리스트 적용: IAM 최소 권한 확인, S3 퍼블릭 접근 차단 확인, 환경 변수에 시크릿 노출 여부 확인, 리소스 간 의존 관계 정합성 확인"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "hcl",
+        "title": "IAM 최소 권한 원칙 적용 (수정 후)"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "# Cleanup Lambda IAM 정책 — 최소 권한 원칙 적용\nresource \"aws_iam_role_policy\" \"cleanup_lambda\" {\n  name = \"cleanup-lambda-s3-delete\"\n  role = aws_iam_role.cleanup_lambda.id\n\n  policy = jsonencode({\n    Version = \"2012-10-17\"\n    Statement = [\n      {\n        Effect   = \"Allow\"\n        Action   = [\"s3:DeleteObject\"]  # s3:* → s3:DeleteObject로 축소\n        Resource = \"${aws_s3_bucket.files.arn}/*\"\n      }\n    ]\n  })\n}"
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "hcl",
+        "title": "S3 퍼블릭 접근 차단 설정 (누락 → 추가)"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "# S3 퍼블릭 접근 전면 차단 — AI 생성 코드에서 누락된 리소스\nresource \"aws_s3_bucket_public_access_block\" \"files\" {\n  bucket = aws_s3_bucket.files.id\n\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-verification"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Verification"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "IAM 과도 권한 1건, S3 퍼블릭 접근 차단 누락 1건을 검출·수정하고, 보안 검증 체크리스트를 수립했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI 생성 코드의 보안 검증 과정에서 2건의 보안 문제를 발견하고 수정했습니다. 이 경험을 바탕으로 AI 생성 인프라 코드를 검증하는 체크리스트를 수립했습니다."
+        }
+      ]
+    },
+    {
+      "type": "metricGrid",
+      "attrs": {
+        "items": [
+          {
+            "label": "보안 문제 검출",
+            "value": "2건",
+            "description": "IAM 와일드카드 권한 1건 + S3 퍼블릭 접근 차단 누락 1건"
+          },
+          {
+            "label": "IaC 관리 리소스",
+            "value": "7개 서비스",
+            "description": "Lambda, DynamoDB, SQS, EventBridge, S3, API Gateway, IAM"
+          },
+          {
+            "label": "인프라 재현성",
+            "value": "terraform apply 1회",
+            "description": "전체 인프라를 코드에서 동일하게 재현 가능"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "check"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "AI 생성 코드 보안 검증 체크리스트"
+                }
+              ]
+            },
+            {
+              "type": "orderedList",
+              "attrs": {
+                "start": 1
+              },
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "IAM 정책에 와일드카드(*) 액션/리소스 없는지 확인"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "S3 퍼블릭 접근 차단 블록 존재 여부 확인"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "환경 변수에 시크릿(API 키, DB 비밀번호) 하드코딩 여부 확인"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "리소스 간 의존 관계(ARN 참조) 정합성 확인"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "terraform plan으로 의도하지 않은 리소스 변경 없는지 확인"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "terraform plan → apply 과정에서 의도하지 않은 리소스 변경 없이 정상 배포 확인"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-limitations"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Retrospective"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "tfstate 로컬 관리와 환경 분리 미적용은 다음 프로젝트에서 개선할 항목으로 기록합니다."
+        }
+      ]
+    },
+    {
+      "type": "limitations",
+      "attrs": {
+        "items": [
+          {
+            "limitation": "tfstate를 로컬에서 관리 중이라 팀 협업이나 CI/CD 연동 시 상태 파일 충돌 위험이 있습니다.",
+            "improvement": "S3 + DynamoDB 원격 백엔드를 적용하여 상태 파일을 중앙 관리하고, 상태 잠금(locking)으로 동시 수정 충돌을 방지할 수 있습니다. 다음 프로젝트에서 적용할 개선 항목으로 기록합니다."
+          }
+        ]
+      }
+    }
+  ]
+}

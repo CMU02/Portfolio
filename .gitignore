@@ -45,3 +45,8 @@ next-env.d.ts
 
 .omc/*
 .claude/settings.local.json
+.claude/worktrees/
+.superpowers/
+
+.image-cache/
+.image-variants/

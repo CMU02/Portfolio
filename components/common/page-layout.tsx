@@ -13,7 +13,7 @@ export function PageLayout({ children, maxWidth = "full" }: PageLayoutProps) {
   const maxWidthClass = maxWidth !== "full" ? `max-w-${maxWidth}` : "";
 
   return (
-    <main className="dark min-h-screen">
+    <main className="min-h-screen">
       <Navigation />
       <section className="py-24 pt-32">
         <div className={`container mx-auto px-6 ${maxWidthClass}`}>

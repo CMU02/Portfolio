@@ -1,0 +1,154 @@
+"use client";
+
+// 갤러리 블록: 대표 7장 썸네일 그리드 + Radix Dialog 라이트박스
+import { useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Images, X } from "lucide-react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { CloudFrontImage } from "@/components/cloudfront-image";
+import type { GalleryAttrs } from "@/data/projects/types";
+
+const PREVIEW_COUNT = 7;
+const focusRing =
+  "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
+const navButton = `absolute top-1/2 -translate-y-1/2 size-11 flex items-center justify-center rounded-full bg-background/70 text-foreground hover:bg-background transition-colors ${focusRing}`;
+
+export function GalleryBlock({ items }: GalleryAttrs) {
+  const [current, setCurrent] = useState<number | null>(null);
+  // DialogTrigger 없이 열기 때문에 닫힐 때 포커스를 돌려줄 버튼을 직접 기억한다
+  const openerRef = useRef<HTMLButtonElement | null>(null);
+  if (items.length === 0) return null;
+
+  const prev = () =>
+    setCurrent((c) => ((c ?? 0) - 1 + items.length) % items.length);
+  const next = () => setCurrent((c) => ((c ?? 0) + 1) % items.length);
+  const item = current === null ? null : items[current];
+
+  return (
+    <>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {items.slice(0, PREVIEW_COUNT).map((it, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-label={`${it.caption} 크게 보기`}
+            onClick={(e) => {
+              openerRef.current = e.currentTarget;
+              setCurrent(i);
+            }}
+            className={`group text-left ${focusRing}`}
+          >
+            <div className="relative aspect-4/3 overflow-hidden bg-muted">
+              <CloudFrontImage
+                s3Key={it.s3Key}
+                alt=""
+                fill
+                sizes="(max-width: 768px) 50vw, 280px"
+                className="transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+              />
+            </div>
+            <div className="pt-2 space-y-1">
+              {it.category && (
+                <span className="text-xs font-medium text-primary-text">
+                  {it.category}
+                </span>
+              )}
+              <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                {it.caption}
+              </p>
+            </div>
+          </button>
+        ))}
+        {items.length > PREVIEW_COUNT && (
+          <button
+            type="button"
+            onClick={(e) => {
+              openerRef.current = e.currentTarget;
+              setCurrent(PREVIEW_COUNT);
+            }}
+            className={`min-h-11 border-t border-foreground hover:bg-muted/60 transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground ${focusRing}`}
+          >
+            <Images className="size-6" aria-hidden />
+            <span className="text-xs font-medium">전체 보기</span>
+            <span className="text-xs">
+              +{items.length - PREVIEW_COUNT}장 더
+            </span>
+          </button>
+        )}
+      </div>
+
+      <Dialog
+        open={item !== null}
+        onOpenChange={(open) => !open && setCurrent(null)}
+      >
+        {item && (
+          <DialogContent
+            showCloseButton={false}
+            className="max-w-[calc(100%-2rem)] sm:max-w-3xl p-0 gap-0 overflow-hidden"
+            onCloseAutoFocus={(e) => {
+              e.preventDefault();
+              openerRef.current?.focus();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft") prev();
+              else if (e.key === "ArrowRight") next();
+            }}
+          >
+            {/* 짧은 화면(가로 모드)에서도 닫기 버튼이 화면 안에 남도록 높이 제한 */}
+            <div className="relative w-full aspect-4/3 max-h-[70dvh] bg-muted">
+              <CloudFrontImage
+                s3Key={item.s3Key}
+                alt={item.caption}
+                fill
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-contain"
+              />
+              <button
+                type="button"
+                aria-label="이전 이미지"
+                onClick={prev}
+                className={`${navButton} left-3`}
+              >
+                <ChevronLeft className="size-5" aria-hidden />
+              </button>
+              <button
+                type="button"
+                aria-label="다음 이미지"
+                onClick={next}
+                className={`${navButton} right-3`}
+              >
+                <ChevronRight className="size-5" aria-hidden />
+              </button>
+              <DialogClose
+                aria-label="닫기"
+                className={`absolute top-3 right-3 size-11 flex items-center justify-center rounded-full bg-background/70 text-foreground hover:bg-background transition-colors ${focusRing}`}
+              >
+                <X className="size-5" aria-hidden />
+              </DialogClose>
+            </div>
+            <div className="p-4 space-y-1">
+              <div className="flex items-center justify-between">
+                {item.category && (
+                  <span className="text-xs font-medium text-primary-text">
+                    {item.category}
+                  </span>
+                )}
+                <DialogDescription className="text-xs ml-auto">
+                  {current! + 1} / {items.length}
+                </DialogDescription>
+              </div>
+              <DialogTitle className="text-sm font-normal text-foreground/80 leading-relaxed">
+                {item.caption}
+              </DialogTitle>
+            </div>
+          </DialogContent>
+        )}
+      </Dialog>
+    </>
+  );
+}

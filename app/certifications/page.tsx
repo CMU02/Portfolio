@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ExternalLink } from "lucide-react";
+import { Award, ExternalLink } from "lucide-react";
 import * as motion from "motion/react-client";
 import { PageLayout } from "@/components/common/page-layout";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -22,17 +22,18 @@ export default function CertificationsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Certifications</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Certifications</h1>
         <p className="text-muted-foreground text-lg mb-12">
           전문성을 인증하는 자격증 및 배지
         </p>
 
         <div className="grid gap-6 max-w-3xl">
-          <Card className="p-6 hover:border-primary/50 transition-colors">
+          <Card className="p-6 hover:border-primary-text transition-colors">
             <div className="flex flex-col md:flex-row md:items-start gap-6">
               <div className="flex-1">
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-2xl font-semibold">
+                  <h3 className="flex items-start gap-2 text-2xl font-semibold">
+                    <Award aria-hidden className="mt-1.5 size-5 shrink-0 text-primary-text" />
                     AWS Certified Solutions Architect – Associate
                   </h3>
                   <Badge variant="secondary" className="ml-2">
@@ -48,9 +49,9 @@ export default function CertificationsPage() {
                   href="https://www.credly.com/users/hyeonjun-choi.37d5c75f/badges"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary hover:underline"
+                  className="inline-flex items-center gap-2 min-h-11 text-primary-text underline underline-offset-4 hover:no-underline"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink aria-hidden className="size-4" />
                   배지 확인하기
                 </a>
               </div>

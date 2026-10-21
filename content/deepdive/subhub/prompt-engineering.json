@@ -1,0 +1,489 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-background"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Problem"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "초기 프롬프트는 영수증 전체를 설명하는 범용 구조로, 한 번 호출에 25,861 토큰을 소비했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "초기 프롬프트는 '이 이미지에 있는 모든 정보를 설명해줘'라는 범용 이미지 설명 요청 구조였습니다. 영수증의 상호명, 주소, 전화번호, 각 항목 가격, 합계, 결제 수단 등 모든 텍스트를 추출하려 했기 때문에 한 번 호출에 최대 25,861개 토큰이 소비되었습니다. 토큰이 많으면 API 비용에 직결되고(GPT-4o 기준 입력 토큰당 과금), 응답 생성 시간도 토큰 수에 비례하여 길어져 모바일 UX에 부적합했습니다."
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "pain"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "범용 이미지 설명 요청 구조로 한 번 호출에 25,861 토큰 소비 → API 비용 과다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "토큰 수에 비례하여 응답 시간 증가 → 모바일 환경에서 사용자 대기 시간 과다"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "영수증 전체 텍스트를 추출하여 불필요한 정보(주소, 전화번호 등)까지 포함"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "출력 포맷이 자유 텍스트여서 파싱 실패 빈번 — JSON 구조가 아닌 문장형 응답"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-comparison"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Trade-off"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "4단계 최적화를 거쳐 범용 설명 → 필드 지정 → JSON 고정 → few-shot 제거로 97% 토큰을 절감했습니다."
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "attrs": {
+        "options": [
+          {
+            "name": "1단계: 범용 이미지 설명 요청 (초기 상태)",
+            "pros": [
+              "프롬프트 설계가 단순 — '모든 정보를 설명해줘'",
+              "영수증의 모든 텍스트를 포괄적으로 추출"
+            ],
+            "cons": [
+              "25,861 토큰 소비 — 비용·속도 모두 문제",
+              "불필요한 정보(주소, 전화번호 등)까지 추출",
+              "자유 텍스트 출력으로 파싱 불안정"
+            ]
+          },
+          {
+            "name": "2단계: 필요한 필드만 명시 + 나머지 제거",
+            "pros": [
+              "서비스명·가격·통화·카테고리·결제일 5개 필드만 추출 지시",
+              "불필요한 컨텍스트 제거로 토큰 대폭 감소"
+            ],
+            "cons": [
+              "출력 포맷이 여전히 불안정 — 문장형과 JSON이 혼재",
+              "few-shot 예시가 토큰을 추가 소비"
+            ]
+          },
+          {
+            "name": "3단계: 출력 형식을 JSON으로 고정",
+            "pros": [
+              "엄격한 JSON 스키마로 파싱 안정성 확보",
+              "불필요한 설명 텍스트 제거로 추가 토큰 절감",
+              "응답 구조가 일정하여 프론트엔드 파싱 로직 단순화"
+            ],
+            "cons": [
+              "few-shot 예시가 여전히 토큰을 소비"
+            ]
+          },
+          {
+            "name": "4단계: few-shot 예시 제거/최소화 (최종 상태)",
+            "pros": [
+              "영수증은 구조가 일정하여 예시 없이도 충분한 정확도 확인",
+              "최종 730~850 토큰으로 안정화 — 97% 절감 달성",
+              "비용 예측 가능한 범위로 수렴"
+            ],
+            "cons": [
+              "특수 레이아웃 영수증에서 예시가 없으면 정확도 소폭 하락 가능",
+              "새로운 필드 추가 시 프롬프트 재설계 필요"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "decision",
+      "attrs": {
+        "tradeOff": "프롬프트를 극단적으로 줄이면 특수 레이아웃(다단 구성, 소형 폰트)에서 정확도가 소폭 하락할 수 있습니다. 이 경우 수동 입력 폴백으로 대응하며, 정확도와 토큰 수 사이의 균형점을 유지합니다."
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "4단계에 걸쳐 범용 설명 → 필드 지정 → JSON 고정 → few-shot 제거를 순차 적용했습니다. 각 단계마다 24장 영수증으로 정확도를 재검증하여, 토큰을 줄여도 정확도가 유지되는 균형점을 찾았습니다. 영수증은 구조가 일정(상호명-항목-합계-결제일)하기 때문에 few-shot 예시 없이도 충분한 정확도를 확보할 수 있었습니다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-implementation"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "4단계 최적화로 25,861 → 730~850 토큰, 입력 필드 9개 → 4개로 축소했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "각 단계별로 프롬프트 구조를 변경하고, 동일한 24장 영수증으로 정확도와 토큰 수를 측정하여 최적 균형점을 도출했습니다. OCR 실패 또는 신뢰도 낮은 결과(값이 비어있거나 JSON 형식이 맞지 않을 때)는 프론트엔드에서 감지하여 사용자에게 수동 입력 폴백을 안내합니다."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3,
+        "id": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "구현 흐름"
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "1단계 → 2단계: '모든 정보 설명' → '서비스명·가격·통화·카테고리·결제일 5개 필드만 추출' 지시로 변경 → 토큰 약 60% 감소"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "2단계 → 3단계: 출력 형식을 엄격한 JSON 스키마로 고정 → 파싱 안정성 확보 + 추가 토큰 약 20% 절감"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "3단계 → 4단계: few-shot 예시 제거 — 영수증 구조가 일정하여 예시 없이도 정확도 유지 확인 → 최종 730~850 토큰 안정화"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "각 단계마다 24장 영수증으로 정확도 재검증 — 토큰 감소 시 정확도 하락 여부 확인"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "OCR 실패 감지: JSON 파싱 실패, 필수 필드 누락, 가격 형식 불일치 시 '인식 실패 — 직접 입력하기' 폴백 안내"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-verification"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Verification"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "토큰 97% 절감(25,861→730~850)을 달성하면서 인식 정확도 90%+를 유지했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "4단계 최적화 과정에서 각 단계별 토큰 수와 정확도를 측정하여, 토큰을 줄여도 정확도가 유지되는 균형점을 검증했습니다. 2단계에서 토큰이 가장 크게 감소했고, 3~4단계에서 파싱 안정성과 추가 절감을 확보했습니다."
+        }
+      ]
+    },
+    {
+      "type": "metricGrid",
+      "attrs": {
+        "items": [
+          {
+            "label": "1단계 (범용 설명)",
+            "value": "25,861 토큰",
+            "description": "정확도 측정 불가 — 자유 텍스트 출력으로 필드 매핑 어려움"
+          },
+          {
+            "label": "2단계 (필드 지정)",
+            "value": "약 10,000 토큰",
+            "description": "정확도 유지 — 불필요한 컨텍스트 제거로 약 60% 감소"
+          },
+          {
+            "label": "3단계 (JSON 고정)",
+            "value": "약 2,500 토큰",
+            "description": "파싱 안정성 확보 + 추가 약 75% 감소"
+          },
+          {
+            "label": "4단계 (few-shot 제거)",
+            "value": "730~850 토큰",
+            "description": "최종 안정화 — 97% 절감, 정확도 90%+ 유지"
+          },
+          {
+            "label": "입력 필드 축소",
+            "value": "9개 → 4개",
+            "description": "AI가 5개 필드를 자동 채움, 사용자는 확인/수정만 수행"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "check"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "각 단계별 동일 24장 영수증으로 정확도 재검증 — 2~4단계 모두 90%+ 유지 확인"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "2단계에서 토큰 가장 크게 감소(60%) — 필드 지정이 가장 효과적인 최적화"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "3단계 JSON 고정 후 파싱 실패율 대폭 감소 — 자유 텍스트 대비 안정적 구조"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "4단계 few-shot 제거 후에도 정확도 변화 없음 — 영수증 구조의 일정함 덕분"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "OCR 실패 시 수동 입력 폴백 정상 동작 확인 — JSON 파싱 실패·필수 필드 누락 감지"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-limitations"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Retrospective"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "이미지 품질 한계와 한국어 특화 프롬프트의 다국어 확장 제약이 있습니다."
+        }
+      ]
+    },
+    {
+      "type": "limitations",
+      "attrs": {
+        "items": [
+          {
+            "limitation": "영수증 이미지 품질이 낮으면(저해상도, 흐림, 감열지 변색) 프롬프트 최적화만으로는 인식 정확도를 보장할 수 없습니다. 이는 프롬프트가 아닌 입력 이미지 자체의 한계입니다.",
+            "improvement": "이미지 품질이 낮은 경우 OCR 결과의 신뢰도를 판단하여 수동 입력 폴백을 안내합니다. 향후 이미지 전처리(대비 보정, 샤프닝) 파이프라인 추가를 검토합니다."
+          },
+          {
+            "limitation": "현재 프롬프트가 한국어 영수증에 특화되어 있어, 해외 영수증(영문, 일문 등) 지원 시 별도 프롬프트 설계가 필요합니다.",
+            "improvement": "다국어 지원이 필요한 시점에 언어별 프롬프트 템플릿을 분리하거나, 언어 자동 감지 후 적절한 프롬프트를 선택하는 라우팅 로직을 추가할 수 있습니다."
+          }
+        ]
+      }
+    }
+  ]
+}

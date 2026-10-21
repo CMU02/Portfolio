@@ -1,91 +1,40 @@
 // 딥다이브 토픽 라우트: /projects/[id]/[topic]
-// 프로젝트별 딥다이브 페이지로 분기합니다.
+// 레지스트리(deepDives)에 있는 토픽만 정적 생성하고 공통 템플릿으로 렌더링합니다.
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import { phantomFileDeepDive } from "@/data/projects/phantomfile-data";
-import { subhubDeepDive } from "@/data/projects/subhub-data";
-import { cleanbreathDeepDive } from "@/data/projects/cleanbreath-data";
-import { PhantomFileDeepDivePage } from "@/features/projects/phantom-file/PhantomFileDeepDivePage";
-import { SubhubDeepDivePage } from "@/features/projects/subhub/SubhubDeepDivePage";
-import { CleanBreathDeepDivePage } from "@/features/projects/cleanbreath/CleanBreathDeepDivePage";
+import { deepDives, findTopic } from "@/lib/deepdive-content";
+import { DeepDivePage } from "@/features/projects/DeepDivePage";
+import type { ProjectId } from "@/features/projects/types";
 import type { Metadata } from "next";
 
 interface PageProps {
   params: Promise<{ id: string; topic: string }>;
 }
 
-// 딥다이브 데이터 매핑 (프로젝트 추가 시 여기에 추가)
-const deepDiveMap: Record<string, { topics: { id: string; title: string }[] }> =
-  {
-    "phantom-file": phantomFileDeepDive,
-    subhub: subhubDeepDive,
-    cleanbreath: cleanbreathDeepDive,
-  };
+// 빌드 시 생성된 경로 외에는 404 (런타임 fs 읽기 방지)
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const params: { id: string; topic: string }[] = [];
-
-  for (const [projectId, data] of Object.entries(deepDiveMap)) {
-    for (const topic of data.topics) {
-      params.push({ id: projectId, topic: topic.id });
-    }
-  }
-
-  return params;
+  return Object.entries(deepDives).flatMap(([id, d]) =>
+    d.topics.map((t) => ({ id, topic: t.id })),
+  );
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { id, topic: topicId } = await params;
-  const data = deepDiveMap[id];
-  if (!data) return {};
-
-  const topic = data.topics.find((t) => t.id === topicId);
-  if (!topic) return {};
+  const found = findTopic(id, topicId);
+  if (!found) return {};
 
   return {
-    title: `${topic.title} | Deep Dive`,
-    description: `${topic.title} - 기술적 의사결정과 구현 과정을 상세히 다룹니다.`,
+    title: `${found.topic.title} | Deep Dive`,
+    description: `${found.topic.title} - 기술적 의사결정과 구현 과정을 상세히 다룹니다.`,
   };
 }
 
 export default async function DeepDiveTopicPage({ params }: PageProps) {
-  const { id, topic: topicId } = await params;
+  const { id, topic } = await params;
+  if (!findTopic(id, topic)) notFound();
 
-  // 현재는 phantom-file, subhub 지원 (프로젝트 추가 시 switch 분기)
-  if (id === "phantom-file") {
-    const validTopicIds = phantomFileDeepDive.topics.map((t) => t.id);
-    if (!validTopicIds.includes(topicId)) notFound();
-
-    return (
-      <Suspense>
-        <PhantomFileDeepDivePage topicId={topicId} />
-      </Suspense>
-    );
-  }
-
-  if (id === "subhub") {
-    const validTopicIds = subhubDeepDive.topics.map((t) => t.id);
-    if (!validTopicIds.includes(topicId)) notFound();
-
-    return (
-      <Suspense>
-        <SubhubDeepDivePage topicId={topicId} />
-      </Suspense>
-    );
-  }
-
-  if (id === "cleanbreath") {
-    const validTopicIds = cleanbreathDeepDive.topics.map((t) => t.id);
-    if (!validTopicIds.includes(topicId)) notFound();
-
-    return (
-      <Suspense>
-        <CleanBreathDeepDivePage topicId={topicId} />
-      </Suspense>
-    );
-  }
-
-  notFound();
+  return <DeepDivePage projectId={id as ProjectId} topicId={topic} />;
 }

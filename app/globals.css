@@ -6,7 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans), var(--font-noto-kr), sans-serif;
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -44,10 +44,7 @@
   /* Deep Blue 커스텀 컬러 */
   --color-deep-blue: var(--deep-blue);
   --color-deep-blue-light: var(--deep-blue-light);
-  --color-tech-cyan: var(--tech-cyan);
-  --color-tech-green: var(--tech-green);
-  --color-tech-yellow: var(--tech-yellow);
-  --color-tech-purple: var(--tech-purple);
+  --color-primary-text: var(--primary-text);
 }
 
 /*
@@ -60,16 +57,42 @@
 */
 :root {
   --radius: 0.625rem;
+  /* 라이트(기본): 종이 톤 배경 + 먹색 글자 + 진한 teal 강조 하나 */
+  --background: #f6f4ef;
+  --foreground: #111111;
+  /* 카드: 종이보다 약간 밝게 */
+  --card: #fbfaf7;
+  --card-foreground: #111111;
+  --popover: #fbfaf7;
+  --popover-foreground: #111111;
+  /* primary: paper 위 4.98:1, 흰 글자 5.47:1 */
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  /* 작은 teal 글자: muted(#ece9e1) 위에서도 4.51:1 */
+  --primary-text: #0f766e;
+  --secondary: #ece9e1;
+  --secondary-foreground: #111111;
+  --muted: #ece9e1;
+  /* 보조 텍스트: paper 위 6.78:1 */
+  --muted-foreground: #555555;
+  --accent: #ece9e1;
+  --accent-foreground: #111111;
+  /* paper 위 5.89:1, 흰 글자 6.47:1 */
+  --destructive: #b91c1c;
+  --border: #d9d5cc;
+  --input: #d9d5cc;
+  --ring: #0f766e;
+  --chart-1: #0f766e;
+  --chart-2: #555555;
+  --chart-3: #b91c1c;
+  --chart-4: #111111;
+  --chart-5: #d9d5cc;
   /* 커스텀 브랜드 컬러 */
   --deep-blue: #0a2342;
   --deep-blue-light: #0f2e55;
-  --tech-cyan: #2ca58d;
-  --tech-green: #84bc9c;
-  --tech-yellow: #f5c842;
-  --tech-purple: #f46197;
 }
 
-/* 다크 모드 기본 적용 */
+/* 다크: <html>의 dark 클래스(lib/theme.ts의 인라인 스크립트·토글이 설정) */
 .dark {
   /* #0A2342 기반 배경 */
   --background: #0a2342;
@@ -82,7 +105,10 @@
   --popover-foreground: #fffdf7;
   /* primary: #2CA58D teal */
   --primary: #2ca58d;
-  --primary-foreground: #fffdf7;
+  /* 네이비 글자: teal 위 5.16:1 (흰 글자는 3.0:1로 AA 미달) */
+  --primary-foreground: #0a2342;
+  /* 작은 teal 글자용: card·옅은 teal 칩 위에서도 4.5:1 이상 (#2ca58d는 4.3~4.49:1) */
+  --primary-text: #34b89d;
   /* secondary: #84BC9C sage green */
   --secondary: #122d52;
   --secondary-foreground: #fffdf7;
@@ -92,7 +118,8 @@
   /* accent: #2CA58D 계열 */
   --accent: #163660;
   --accent-foreground: #fffdf7;
-  --destructive: oklch(0.6 0.2 25);
+  /* card(#112d55) 위 작은 글자 4.72:1 */
+  --destructive: oklch(0.7 0.19 25);
   /* 카드 경계를 더 명확하게 */
   --border: #264a7a;
   --input: #122d52;
@@ -107,13 +134,17 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
   body {
     @apply bg-background text-foreground;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
-  html {
-    scroll-behavior: smooth;
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 }
 
@@ -122,23 +153,13 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a2342;
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e3f6e;
+  background: var(--border);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2ca58d;
+  background: var(--primary);
 }
 
-/* 글로우 효과 */
-.glow-blue {
-  box-shadow: 0 0 20px rgba(44, 165, 141, 0.35);
-}
-.glow-cyan {
-  box-shadow: 0 0 20px rgba(132, 188, 156, 0.35);
-}
-.glow-pink {
-  box-shadow: 0 0 20px rgba(244, 97, 151, 0.35);
-}

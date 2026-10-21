@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { PageLayout } from "@/components/common/page-layout";
 
 export default function Loading() {
@@ -6,7 +7,7 @@ export default function Loading() {
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center">
           {/* 로딩 스피너 */}
-          <div className="w-12 h-12 border-4 border-tech-cyan/20 border-t-tech-cyan rounded-full animate-spin mx-auto mb-4"></div>
+          <Loader2 aria-hidden className="mx-auto mb-4 size-6 text-primary-text motion-safe:animate-spin" />
           <p className="text-muted-foreground">로딩 중...</p>
         </div>
       </div>
