@@ -1,0 +1,7 @@
+# 의존성·도구 캐시
+node_modules/
+.hyperframes/
+# 무거운 중간 산출물 (최종 renders/phantomfile-event-pipeline.* 만 추적)
+renders/master.mp4
+renders/.hf-segments/
+*.log

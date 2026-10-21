@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, height=720" />
+    <title>Phantom File 이벤트 파이프라인</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* 사이트(app/globals.css) 다크 팔레트와 동일한 값 */
+      :root {
+        --bg: #0a2342;
+        --card: #112d55;
+        --line: #264a7a;
+        --teal: #2ca58d;
+        --sage: #84bc9c;
+        --pink: #f46197;
+        --ink: #fffdf7;
+        --dim: #8fa6c4;
+        --teal-glow: rgba(44, 165, 141, 0.55);
+        --pink-glow: rgba(244, 97, 151, 0.55);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1280px;
+        height: 720px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        color: var(--ink);
+        font-family: "Geist", "Noto Sans KR", sans-serif;
+        word-break: keep-all;
+        background:
+          radial-gradient(900px 420px at 88% -10%, rgba(44, 165, 141, 0.16), transparent 70%),
+          radial-gradient(700px 380px at 0% 110%, rgba(132, 188, 156, 0.08), transparent 70%),
+          var(--bg);
+      }
+      #scene {
+        position: absolute;
+        inset: 0;
+      }
+      /* 배경 도트 그리드 — 정적이라 압축에 유리 */
+      #grid {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(132, 188, 156, 0.12) 1px, transparent 1.4px);
+        background-size: 32px 32px;
+      }
+
+      /* ── 헤더 ── */
+      #header {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 48px 64px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .eyebrow {
+        font-family: "Geist Mono", "Noto Sans KR", monospace;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        color: var(--sage);
+      }
+      .title {
+        margin-top: 10px;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .legend {
+        display: flex;
+        gap: 18px;
+        font-size: 14px;
+        color: var(--dim);
+      }
+      .legend span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .legend i {
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      /* ── 다이어그램 ── */
+      #wires,
+      #packets,
+      #nodes,
+      #labels {
+        position: absolute;
+        inset: 0;
+      }
+      #wires svg {
+        width: 1280px;
+        height: 720px;
+        display: block;
+      }
+      .node {
+        position: absolute;
+        width: 148px;
+        height: 104px;
+        padding: 14px 14px 0;
+        border-radius: 14px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+      }
+      .node .idx {
+        font-family: "Geist Mono", monospace;
+        font-size: 12px;
+        color: var(--dim);
+      }
+      .node .svc {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--sage);
+      }
+      .node .name {
+        margin-top: 2px;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .node .dot {
+        position: absolute;
+        right: 14px;
+        top: 16px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--line);
+      }
+      .node .ring {
+        position: absolute;
+        inset: -1px;
+        border-radius: 14px;
+        border: 2px solid var(--teal);
+        box-shadow: 0 0 24px var(--teal-glow);
+        opacity: 0;
+      }
+      .node .ring.err {
+        border-color: var(--pink);
+        box-shadow: 0 0 24px var(--pink-glow);
+      }
+      #n-dlq {
+        opacity: 0.55;
+        height: 90px;
+      }
+
+      .packet {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        opacity: 0;
+      }
+      #pk {
+        background: var(--teal);
+        box-shadow: 0 0 14px 3px var(--teal-glow);
+      }
+      #pk-manual {
+        background: var(--dim);
+      }
+
+      .chip {
+        position: absolute;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 13px;
+        white-space: nowrap;
+        border: 1px solid var(--line);
+        background: var(--bg);
+      }
+      #delay-chip {
+        left: 222px;
+        top: 222px;
+        width: 80px;
+        text-align: center;
+        color: var(--ink);
+        border-color: var(--sage);
+      }
+      #filter-chip {
+        left: 491px;
+        top: 328px;
+        width: 168px;
+        text-align: center;
+        font-family: "Geist Mono", monospace;
+        font-size: 12px;
+        color: var(--sage);
+      }
+      #file-chip,
+      #done-chip {
+        left: 1068px;
+        top: 328px;
+        width: 148px;
+        text-align: center;
+        font-size: 13px;
+      }
+      #file-chip {
+        color: var(--dim);
+      }
+      #done-chip {
+        color: var(--teal);
+        border-color: var(--teal);
+        opacity: 0;
+      }
+      .strike {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 50%;
+        height: 2px;
+        background: var(--pink);
+        transform-origin: left center;
+        transform: scaleX(0);
+      }
+
+      .lbl {
+        position: absolute;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      #lbl-manual {
+        left: 404px;
+        top: 186px;
+        width: 160px;
+        text-align: center;
+        color: var(--dim);
+      }
+      #lbl-retry {
+        left: 816px;
+        top: 382px;
+        width: 120px;
+        text-align: center;
+        color: var(--pink);
+      }
+      #lbl-isolate {
+        left: 852px;
+        top: 482px;
+        color: var(--pink);
+      }
+      #lbl-replay {
+        left: 548px;
+        top: 482px;
+        width: 126px;
+        text-align: right;
+        color: var(--sage);
+      }
+
+      /* ── 지표 카드 ── */
+      #metrics {
+        position: absolute;
+        left: 64px;
+        top: 462px;
+        display: flex;
+        gap: 16px;
+      }
+      .metric {
+        width: 224px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-top: 2px solid var(--teal);
+        opacity: 0;
+      }
+      .metric .v {
+        font-size: 44px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        line-height: 1.05;
+      }
+      .metric .k {
+        margin-top: 6px;
+        font-size: 14px;
+        color: var(--sage);
+      }
+
+      /* ── 하단 캡션 ── */
+      #captions {
+        position: absolute;
+        left: 64px;
+        top: 626px;
+        width: 720px;
+        height: 28px;
+      }
+      .cap {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 17px;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+      }
+      .cap b {
+        font-family: "Geist Mono", monospace;
+        font-weight: 500;
+        color: var(--teal);
+        margin-right: 12px;
+      }
+      #footnote {
+        position: absolute;
+        right: 64px;
+        top: 630px;
+        font-size: 13px;
+        color: var(--dim);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="9"
+      data-fps="30"
+      data-width="1280"
+      data-height="720"
+    >
+      <div id="scene">
+        <div id="grid"></div>
+
+        <header id="header">
+          <div>
+            <div class="eyebrow">PHANTOM FILE · EVENT-DRIVEN CLEANUP</div>
+            <div class="title">만료 파일, 유실 없이 정리하는 파이프라인</div>
+          </div>
+          <div class="legend">
+            <span><i style="background: var(--teal)"></i>정상 흐름</span>
+            <span><i style="background: var(--pink)"></i>실패 분기</span>
+            <span><i style="background: var(--sage)"></i>재처리</span>
+          </div>
+        </header>
+
+        <!-- 연결선: 정적 베이스 + 사용될 때 그려지는 하이라이트 -->
+        <div id="wires">
+          <svg viewBox="0 0 1280 720">
+            <defs>
+              <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M0,0 L8,4 L0,8 z" fill="#3d6a9e" />
+              </marker>
+            </defs>
+            <g stroke="#3d6a9e" stroke-width="2" fill="none">
+              <!-- TTL → Streams: 점선 + 끊김 표시 = 시간 압축 -->
+              <path d="M212,264 H310" stroke-dasharray="5 6" marker-end="url(#arrow)" />
+              <path d="M460,264 H499" marker-end="url(#arrow)" />
+              <path d="M649,264 H688" marker-end="url(#arrow)" />
+              <path d="M838,264 H877" marker-end="url(#arrow)" />
+              <path d="M1027,264 H1066" marker-end="url(#arrow)" />
+            </g>
+            <g stroke="#84bc9c" stroke-width="2.5">
+              <path d="M250,276 L258,252" />
+              <path d="M262,276 L270,252" />
+            </g>
+            <g stroke="#264a7a" stroke-width="2" fill="none" stroke-dasharray="3 5">
+              <path d="M953,316 V372 H800 V316" />
+              <path d="M764,316 V470" />
+              <path d="M728,470 V316" />
+            </g>
+            <g fill="none" stroke-width="2.5" stroke-linecap="round">
+              <path id="hl-retry" d="M953,316 V372 H800 V316" stroke="#f46197" stroke-dasharray="265" stroke-dashoffset="265" />
+              <path id="hl-isolate" d="M764,316 V470" stroke="#f46197" stroke-dasharray="154" stroke-dashoffset="154" />
+              <path id="hl-replay" d="M728,470 V316" stroke="#84bc9c" stroke-dasharray="154" stroke-dashoffset="154" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- 패킷은 노드 아래 레이어: 노드 안을 지날 때 자연스럽게 가려진다 -->
+        <div id="packets">
+          <div id="pk" class="packet"></div>
+          <div id="pk-manual" class="packet"></div>
+        </div>
+
+        <div id="nodes">
+          <div class="node" id="n-ttl" style="left: 64px; top: 212px">
+            <span class="idx">01</span><span class="svc">DynamoDB</span><span class="name">TTL 만료</span>
+            <i class="dot"></i><i class="ring"></i>
+          </div>
+          <div class="node" id="n-streams" style="left: 312px; top: 212px">
+            <span class="idx">02</span><span class="svc">DynamoDB</span><span class="name">Streams</span>
+            <i class="dot"></i><i class="ring"></i>
+          </div>
+          <div class="node" id="n-pipes" style="left: 501px; top: 212px">
+            <span class="idx">03</span><span class="svc">EventBridge</span><span class="name">Pipes 필터</span>
+            <i class="dot"></i><i class="ring"></i>
+          </div>
+          <div class="node" id="n-sqs" style="left: 690px; top: 212px">
+            <span class="idx">04</span><span class="svc">SQS</span><span class="name">Main Queue</span>
+            <i class="dot"></i><i class="ring"></i>
+          </div>
+          <div class="node" id="n-lambda" style="left: 879px; top: 212px">
+            <span class="idx">05</span><span class="svc">Lambda</span><span class="name">Cleanup</span>
+            <i class="dot"></i><i class="ring"></i><i class="ring err"></i>
+          </div>
+          <div class="node" id="n-s3" style="left: 1068px; top: 212px">
+            <span class="idx">06</span><span class="svc">Amazon S3</span><span class="name">DeleteObject</span>
+            <i class="dot"></i><i class="ring"></i>
+          </div>
+          <div class="node" id="n-dlq" style="left: 690px; top: 470px">
+            <span class="idx">SQS</span><span class="svc">격리 큐</span><span class="name">DLQ</span>
+            <i class="dot"></i><i class="ring err"></i>
+          </div>
+        </div>
+
+        <div id="labels">
+          <div class="chip" id="delay-chip">~수십 분</div>
+          <div class="chip" id="filter-chip">eventName == REMOVE</div>
+          <div class="chip" id="file-chip" data-layout-allow-overlap>만료 파일 객체<i class="strike"></i></div>
+          <div class="chip" id="done-chip" data-layout-allow-overlap>삭제 완료 ✓</div>
+          <div class="lbl" id="lbl-manual">수동 삭제 → 필터링 ✕</div>
+          <div class="lbl" id="lbl-retry">자동 재시도</div>
+          <div class="lbl" id="lbl-isolate">maxReceiveCount 도달 → 격리</div>
+          <div class="lbl" id="lbl-replay">수동 재처리</div>
+        </div>
+
+        <div id="metrics">
+          <div class="metric" id="m-replay">
+            <div class="v">100%</div>
+            <div class="k">장애 주입 재처리 성공률</div>
+          </div>
+          <div class="metric" id="m-loss">
+            <div class="v">0건</div>
+            <div class="k">이벤트 유실</div>
+          </div>
+        </div>
+
+        <div id="captions" data-layout-allow-overlap>
+          <div class="cap" id="cap1"><b>01</b>TTL 만료 → Streams가 삭제 이벤트 캡처</div>
+          <div class="cap" id="cap2"><b>02</b>Pipes: eventName == REMOVE만 통과, 수동 삭제는 걸러냄</div>
+          <div class="cap" id="cap3"><b>03</b>Lambda 오류 → 메시지는 SQS에 남아 자동 재시도</div>
+          <div class="cap" id="cap4"><b>04</b>maxReceiveCount 도달 → DLQ로 격리</div>
+          <div class="cap" id="cap5"><b>05</b>DLQ → Main Queue 수동 재처리 → Lambda 성공</div>
+          <div class="cap" id="cap6"><b>06</b>S3 DeleteObject — 만료 파일 삭제 완료</div>
+        </div>
+        <div id="footnote">* 시간 압축 표시 · TTL 만료 → Streams 실제 지연 최대 수십 분</div>
+      </div>
+    </div>
+
+    <script>
+      // 9초 무음 루프: t=9 상태가 t=0 상태와 같아야 한다 (8.4~8.9 리셋)
+      const C = { teal: "#2ca58d", pink: "#f46197", sage: "#84bc9c", line: "#264a7a" };
+      const Y = 264; // 메인 행 중심선
+      const X = { ttl: 138, streams: 386, pipes: 575, sqs: 764, lambda: 953, s3: 1142 };
+      const R = 7; // 패킷 반지름
+
+      // 여러 fromTo가 같은 요소를 다루므로 immediateRender를 끄고 초기 상태는 CSS가 맡는다
+      const tl = gsap.timeline({ paused: true, defaults: { immediateRender: false } });
+
+      const move = (sel, x1, y1, x2, y2, at, dur, ease) =>
+        tl.fromTo(sel, { x: x1 - R, y: y1 - R }, { x: x2 - R, y: y2 - R, duration: dur, ease }, at);
+      const show = (sel, at, dur = 0.3, ease = "power2.out") =>
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: dur, ease }, at);
+      const hide = (sel, at, dur = 0.3, ease = "power2.in") =>
+        tl.fromTo(sel, { opacity: 1 }, { opacity: 0, duration: dur, ease }, at);
+      const flash = (sel, at) => {
+        show(sel, at, 0.12, "power3.out");
+        hide(sel, at + 0.12, 0.5, "sine.out");
+      };
+      const dot = (sel, from, to, at) =>
+        tl.fromTo(`${sel} .dot`, { backgroundColor: from }, { backgroundColor: to, duration: 0.2 }, at);
+      // 길이 = 대시 길이(px), 오프셋을 줄여 경로를 그린다
+      const draw = (sel, len, at, dur) =>
+        tl.fromTo(sel, { attr: { "stroke-dashoffset": len } }, { attr: { "stroke-dashoffset": 0 }, duration: dur, ease: "none" }, at);
+
+      // 01 TTL 만료 → Streams (점선 구간을 느리게: 실제로는 최대 수십 분)
+      flash("#n-ttl .ring", 0.25);
+      dot("#n-ttl", C.line, C.teal, 0.25);
+      show("#cap1", 0.25, 0.35);
+      show("#pk", 0.35, 0.15, "none");
+      move("#pk", X.ttl, Y, X.streams, Y, 0.35, 1.1, "sine.inOut");
+      tl.fromTo("#delay-chip", { scale: 1 }, { scale: 1.12, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.5);
+      flash("#n-streams .ring", 1.42);
+      dot("#n-streams", C.line, C.teal, 1.42);
+
+      // 02 Pipes 필터 — TTL 삭제만 통과, 수동 삭제는 차단
+      move("#pk", X.streams, Y, X.pipes, Y, 1.5, 0.4, "power2.inOut");
+      hide("#cap1", 1.75, 0.2);
+      show("#cap2", 1.85, 0.3);
+      flash("#n-pipes .ring", 1.88);
+      dot("#n-pipes", C.line, C.teal, 1.88);
+      tl.fromTo("#filter-chip", { color: C.sage, borderColor: C.line }, { color: C.teal, borderColor: C.teal, duration: 0.2 }, 1.88);
+      show("#pk-manual", 1.95, 0.15, "none");
+      move("#pk-manual", X.streams, Y, 488, Y, 1.95, 0.35, "power3.out");
+      move("#pk-manual", 488, Y, 470, Y, 2.3, 0.25, "back.out(3)");
+      hide("#pk-manual", 2.4, 0.3);
+      show("#lbl-manual", 2.3, 0.25);
+      hide("#lbl-manual", 3.0, 0.3);
+
+      // 03 SQS → Lambda 오류 → 자동 재시도
+      move("#pk", X.pipes, Y, X.sqs, Y, 2.0, 0.4, "power2.inOut");
+      flash("#n-sqs .ring", 2.38);
+      dot("#n-sqs", C.line, C.teal, 2.38);
+      move("#pk", X.sqs, Y, X.lambda, Y, 2.45, 0.38, "power2.inOut");
+      flash("#n-lambda .ring.err", 2.83);
+      dot("#n-lambda", C.line, C.pink, 2.83);
+      tl.fromTo("#pk", { backgroundColor: C.teal, boxShadow: "0 0 14px 3px rgba(44,165,141,0.55)" }, { backgroundColor: C.pink, boxShadow: "0 0 14px 3px rgba(244,97,151,0.55)", duration: 0.2 }, 2.83);
+      hide("#cap2", 2.75, 0.2);
+      show("#cap3", 2.85, 0.3);
+      draw("#hl-retry", 265, 2.95, 0.6);
+      show("#lbl-retry", 3.1, 0.3);
+      move("#pk", X.lambda, Y, X.lambda, 372, 2.95, 0.15, "power1.in");
+      move("#pk", X.lambda, 372, 800, 372, 3.1, 0.3, "none");
+      move("#pk", 800, 372, 800, Y, 3.4, 0.15, "power1.out");
+      move("#pk", 800, Y, X.lambda, Y, 3.6, 0.3, "power2.inOut");
+      flash("#n-lambda .ring.err", 3.9);
+
+      // 04 maxReceiveCount 도달 → DLQ 격리
+      hide("#cap3", 3.95, 0.2);
+      show("#cap4", 4.05, 0.3);
+      move("#pk", X.lambda, Y, X.lambda, 372, 4.0, 0.1, "none");
+      move("#pk", X.lambda, 372, 800, 372, 4.1, 0.2, "none");
+      move("#pk", 800, 372, 800, Y, 4.3, 0.1, "none");
+      move("#pk", X.sqs, Y, X.sqs, 515, 4.45, 0.45, "power2.in");
+      draw("#hl-isolate", 154, 4.45, 0.45);
+      show("#lbl-isolate", 4.55, 0.3);
+      tl.fromTo("#n-dlq", { opacity: 0.55 }, { opacity: 1, duration: 0.25 }, 4.85);
+      flash("#n-dlq .ring", 4.88);
+      dot("#n-dlq", C.line, C.pink, 4.88);
+
+      // 05 수동 재처리 → Lambda 성공
+      hide("#cap4", 5.0, 0.2);
+      show("#cap5", 5.1, 0.3);
+      tl.fromTo("#pk", { backgroundColor: C.pink, boxShadow: "0 0 14px 3px rgba(244,97,151,0.55)" }, { backgroundColor: C.teal, boxShadow: "0 0 14px 3px rgba(44,165,141,0.55)", duration: 0.25, immediateRender: false }, 5.1);
+      move("#pk", 728, 515, 728, Y, 5.15, 0.45, "power3.out");
+      draw("#hl-replay", 154, 5.15, 0.45);
+      show("#lbl-replay", 5.25, 0.3);
+      flash("#n-sqs .ring", 5.58);
+      move("#pk", 728, Y, X.lambda, Y, 5.62, 0.4, "power2.inOut");
+      flash("#n-lambda .ring:not(.err)", 6.0);
+      dot("#n-lambda", C.pink, C.teal, 6.0);
+
+      // 06 S3 객체 삭제
+      move("#pk", X.lambda, Y, X.s3, Y, 6.05, 0.35, "expo.out");
+      hide("#pk", 6.35, 0.1, "none");
+      flash("#n-s3 .ring", 6.38);
+      dot("#n-s3", C.line, C.teal, 6.38);
+      tl.fromTo("#file-chip .strike", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power2.out" }, 6.4);
+      hide("#file-chip", 6.7, 0.2);
+      show("#done-chip", 6.75, 0.3);
+      hide("#cap5", 6.3, 0.2);
+      show("#cap6", 6.4, 0.3);
+
+      // 마무리 지표 (data/projects/phantomfile-data.ts verification.metrics 그대로)
+      tl.fromTo("#m-replay", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: "expo.out" }, 6.6);
+      tl.fromTo("#m-loss", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: "expo.out" }, 6.74);
+
+      // 리셋 (8.4~8.85): 모든 상태를 t=0으로 되돌린다
+      const T = 8.4;
+      hide("#m-replay, #m-loss, #cap6, #lbl-retry, #lbl-isolate, #lbl-replay, #done-chip", T, 0.3);
+      tl.fromTo("#hl-retry, #hl-isolate, #hl-replay", { opacity: 1 }, { opacity: 0, duration: 0.35, ease: "power1.in" }, T);
+      [["#hl-retry", 265], ["#hl-isolate", 154], ["#hl-replay", 154]].forEach(([sel, len]) => {
+        tl.fromTo(sel, { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": len }, duration: 0.01, immediateRender: false }, T + 0.4);
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.01, immediateRender: false }, T + 0.41);
+      });
+      tl.fromTo("#n-dlq", { opacity: 1 }, { opacity: 0.55, duration: 0.35, immediateRender: false }, T);
+      tl.fromTo("#filter-chip", { color: C.teal, borderColor: C.teal }, { color: C.sage, borderColor: C.line, duration: 0.35, immediateRender: false }, T);
+      tl.fromTo(
+        "#n-ttl .dot, #n-streams .dot, #n-pipes .dot, #n-sqs .dot, #n-lambda .dot, #n-s3 .dot",
+        { backgroundColor: C.teal },
+        { backgroundColor: C.line, duration: 0.35 },
+        T,
+      );
+      dot("#n-dlq", C.pink, C.line, T);
+      tl.fromTo("#file-chip .strike", { scaleX: 1 }, { scaleX: 0, duration: 0.01, immediateRender: false }, T + 0.2);
+      show("#file-chip", T + 0.2, 0.3, "sine.out");
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
