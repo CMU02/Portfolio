@@ -1,7 +1,7 @@
 "use client";
 
 // 갤러리 블록: 대표 7장 썸네일 그리드 + Radix Dialog 라이트박스
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Images, X } from "lucide-react";
 import {
   Dialog,
@@ -22,6 +22,8 @@ const navButton = `absolute top-1/2 -translate-y-1/2 size-11 flex items-center j
 
 export function GalleryBlock({ items }: GalleryAttrs) {
   const [current, setCurrent] = useState<number | null>(null);
+  // DialogTrigger 없이 열기 때문에 닫힐 때 포커스를 돌려줄 버튼을 직접 기억한다
+  const openerRef = useRef<HTMLButtonElement | null>(null);
   if (items.length === 0) return null;
 
   const prev = () =>
@@ -37,7 +39,10 @@ export function GalleryBlock({ items }: GalleryAttrs) {
             key={i}
             type="button"
             aria-label={`${it.caption} 크게 보기`}
-            onClick={() => setCurrent(i)}
+            onClick={(e) => {
+              openerRef.current = e.currentTarget;
+              setCurrent(i);
+            }}
             className={`rounded-lg border border-border overflow-hidden bg-muted/30 group text-left ${focusRing}`}
           >
             <div className="relative aspect-4/3 overflow-hidden">
@@ -64,7 +69,10 @@ export function GalleryBlock({ items }: GalleryAttrs) {
         {items.length > PREVIEW_COUNT && (
           <button
             type="button"
-            onClick={() => setCurrent(PREVIEW_COUNT)}
+            onClick={(e) => {
+              openerRef.current = e.currentTarget;
+              setCurrent(PREVIEW_COUNT);
+            }}
             className={`min-h-11 rounded-lg border border-border bg-muted/20 hover:bg-muted/40 transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground ${focusRing}`}
           >
             <Images className="size-6" aria-hidden />
@@ -84,6 +92,10 @@ export function GalleryBlock({ items }: GalleryAttrs) {
           <DialogContent
             showCloseButton={false}
             className="max-w-[calc(100%-2rem)] sm:max-w-3xl p-0 gap-0 overflow-hidden"
+            onCloseAutoFocus={(e) => {
+              e.preventDefault();
+              openerRef.current?.focus();
+            }}
             onKeyDown={(e) => {
               if (e.key === "ArrowLeft") prev();
               else if (e.key === "ArrowRight") next();
