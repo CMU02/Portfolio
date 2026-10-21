@@ -211,6 +211,15 @@
       }
     },
     {
+      "type": "video",
+      "attrs": {
+        "webmKey": "phantom-file/phantomfile-event-pipeline.webm",
+        "mp4Key": "phantom-file/phantomfile-event-pipeline.mp4",
+        "posterKey": "phantom-file/phantomfile-event-pipeline-poster.png",
+        "caption": "이벤트 기반 정리 파이프라인 (시간 압축 표시)"
+      }
+    },
+    {
       "type": "heading",
       "attrs": {
         "level": 3,
