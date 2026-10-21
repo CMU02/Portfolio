@@ -99,13 +99,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="dark">
+    // 폰트 변수는 html에 둬야 Tailwind의 html font-family(--font-sans)가 해석된다
+    <html
+      lang="ko"
+      className={`dark ${geistSans.variable} ${notoSansKr.variable} ${geistMono.variable}`}
+    >
       <head>
         <StructuredData />
       </head>
-      <body
-        className={`${geistSans.variable} ${notoSansKr.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
