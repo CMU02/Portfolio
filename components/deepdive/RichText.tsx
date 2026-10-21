@@ -4,7 +4,8 @@ import type { ReactNode } from "react";
 import type { JSONContent } from "@tiptap/core";
 import type { Node as PMNode } from "@tiptap/pm/model";
 import { renderToReactElement } from "@tiptap/static-renderer/pm/react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Quote } from "lucide-react";
+import { sectionIcons } from "./icons";
 import { extensions } from "@/lib/tiptap/extensions";
 import { CloudFrontImage } from "@/components/cloudfront-image";
 import type { VideoAttrs } from "@/data/projects/types";
@@ -19,39 +20,55 @@ import { MermaidBlock } from "./blocks/MermaidBlock";
 // node/parent는 ProseMirror 인스턴스라 클라이언트 블록에는 attrs 값만 넘긴다
 type NodeProps = { node: PMNode; parent?: PMNode; children?: ReactNode };
 
-const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
-  // JSON h2 = 섹션(목차/앵커), 페이지 h1(토픽 제목) 아래 그대로 h2/h3로 렌더링
-  heading: ({ node, children }) =>
-    node.attrs.level === 2 ? (
-      // space-y-4(1rem)와 합쳐 섹션 간격 4rem (기존 space-y-16)
-      // scroll-mt: 고정 헤더 + 모바일 sticky 목차(lg 미만 약 130px) 아래로 앵커가 오게 한다
+// JSON h2 = 섹션(목차/앵커), 페이지 h1(토픽 제목) 아래 그대로 h2/h3로 렌더링
+// sectionNo: 최상위 h2 id → "01", "02"… (목차 순서)
+const heading =
+  (sectionNo: Map<string, string>) =>
+  ({ node, children }: NodeProps) => {
+    const Icon = sectionIcons[node.attrs.id];
+    return node.attrs.level === 2 ? (
+      // space-y-4(1rem)와 합쳐 섹션 간격 4.5rem, scroll-mt: 고정 헤더 + 진행 바 아래로 앵커가 오게 한다
       <h2
         id={node.attrs.id ?? undefined}
-        className="scroll-mt-36 lg:scroll-mt-28 mt-14 first:mt-0 pt-3 border-t border-foreground text-xl font-bold tracking-tight text-balance"
+        className="scroll-mt-24 mt-14 first:mt-0 text-2xl font-extrabold tracking-tight text-balance md:text-[1.75rem]"
       >
+        {sectionNo.has(node.attrs.id) && (
+          <span className="mr-3 text-primary-text tabular-nums">
+            {sectionNo.get(node.attrs.id)}
+          </span>
+        )}
+        {Icon && (
+          <Icon
+            aria-hidden
+            className="mr-2 inline-block size-5 align-[-0.1em] text-muted-foreground"
+          />
+        )}
         {children}
       </h2>
     ) : (
       <h3
         id={node.attrs.id ?? undefined}
-        className="pt-4 text-base font-semibold text-foreground text-balance"
+        className="pt-4 text-lg font-bold text-foreground text-balance"
       >
         {children}
       </h3>
-    ),
+    );
+  };
+
+const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
   sectionSummary: ({ children }) => (
     <p className="text-sm font-medium text-primary-text">→ {children}</p>
   ),
   // 목록/콜아웃 안 문단은 부모 글자 스타일을 그대로 물려받는다
   paragraph: ({ parent, children }) =>
     parent?.type.name === "doc" ? (
-      <p className="text-foreground/80 leading-relaxed">{children}</p>
+      <p className="text-foreground/80 leading-[1.8] md:text-[1.0625rem]">{children}</p>
     ) : (
       <p>{children}</p>
     ),
   bulletList: ({ node, children }) => (
     <ul
-      className={`space-y-2 text-sm text-muted-foreground leading-relaxed ${
+      className={`space-y-2 text-foreground/80 leading-relaxed ${
         node.attrs.variant ? "" : "list-disc pl-5"
       }`}
     >
@@ -61,7 +78,7 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
   orderedList: ({ node, children }) => (
     <ol
       start={node.attrs.start}
-      className="list-decimal pl-5 space-y-2 text-sm text-muted-foreground leading-relaxed marker:font-bold marker:text-primary-text"
+      className="list-decimal pl-5 space-y-2 text-foreground/80 leading-relaxed marker:font-bold marker:text-primary-text"
     >
       {children}
     </ol>
@@ -82,7 +99,7 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
         ) : (
           <CheckCircle2
             aria-hidden
-            className="w-3.5 h-3.5 mt-1 text-primary shrink-0"
+            className="size-4 mt-1 text-primary shrink-0"
           />
         )}
         <div className="min-w-0 space-y-2">{children}</div>
@@ -97,11 +114,17 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
     />
   ),
   decision: ({ node, children }) => (
-    <div className="border-l-2 border-primary pl-4 space-y-1 text-sm text-foreground/80">
-      <p className="font-medium text-primary-text">의사결정</p>
-      {children}
+    // 풀 인용: 왼쪽 accent 세로선 + 큰 글자
+    <div className="my-10 border-l-[3px] border-primary pl-5 md:pl-6 space-y-3">
+      <p className="flex items-center gap-1.5 text-xs font-bold tracking-[0.08em] text-primary-text">
+        <Quote aria-hidden className="size-4" />
+        의사결정
+      </p>
+      <div className="text-lg font-bold leading-snug tracking-tight text-foreground md:text-xl">
+        {children}
+      </div>
       {node.attrs.tradeOff && (
-        <p className="text-xs text-muted-foreground pt-1">
+        <p className="text-sm text-muted-foreground">
           Trade-off: {node.attrs.tradeOff}
         </p>
       )}
@@ -127,10 +150,19 @@ const nodeMapping: Record<string, (props: NodeProps) => ReactNode> = {
 };
 
 export function RichText({ doc }: { doc: JSONContent }) {
+  const sectionNo = new Map(
+    (doc.content ?? [])
+      .filter((n) => n.type === "heading" && n.attrs?.level === 2 && n.attrs.id)
+      .map((n, i) => [n.attrs!.id as string, String(i + 1).padStart(2, "0")]),
+  );
   return (
     // 링크는 StarterKit 기본 <a>(href 검증 포함)를 쓰고 스타일만 입힌다
     <div className="space-y-4 [&_a]:text-primary-text [&_a]:underline [&_a]:underline-offset-4">
-      {renderToReactElement({ extensions, content: doc, options: { nodeMapping } })}
+      {renderToReactElement({
+        extensions,
+        content: doc,
+        options: { nodeMapping: { ...nodeMapping, heading: heading(sectionNo) } },
+      })}
     </div>
   );
 }
