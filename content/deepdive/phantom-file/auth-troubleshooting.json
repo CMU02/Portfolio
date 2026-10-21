@@ -1,0 +1,446 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-background"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Problem"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "Supabase Auth와 API Gateway JWT Authorizer를 연동하는 과정에서 모든 인증 요청이 실패했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Supabase Auth로 사용자 인증(회원가입·로그인)을 처리하고, API Gateway JWT Authorizer로 토큰을 검증하여 Lambda에 인증된 요청만 전달하는 구조를 설계했습니다. Supabase는 프론트엔드 인증 UI와 토큰 발급을 담당하고, API Gateway는 토큰 검증을 담당하는 역할 분리 구조입니다."
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "pain"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "API Gateway에서 모든 인증 요청이 403 에러로 실패"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "프론트엔드에서 Supabase 로그인은 정상 — 토큰 발급까지는 문제없음"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "토큰을 Authorization 헤더에 포함하여 API 호출 시 일관되게 실패"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "에러 메시지만으로는 원인 파악이 어려워 추적 과정이 필요했음"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-comparison"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Trade-off"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "CORS, 환경변수, API Gateway 설정을 순서대로 의심했지만, CloudWatch 로그에서 서명 알고리즘 불일치를 확인했습니다."
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "attrs": {
+        "options": [
+          {
+            "name": "의심 1: CORS 설정 문제",
+            "pros": [
+              "프론트엔드-백엔드 간 통신 실패의 가장 흔한 원인",
+              "브라우저 콘솔에서 즉시 확인 가능"
+            ],
+            "cons": [
+              "CORS 에러는 브라우저 콘솔에 별도 메시지가 표시됨 — 이번 케이스에서는 CORS 에러 없음",
+              "403 응답은 CORS가 아닌 인증 레이어 문제를 가리킴"
+            ]
+          },
+          {
+            "name": "의심 2: 환경변수 또는 API Gateway 설정 오류",
+            "pros": [
+              "Issuer URL, Audience 값 오타는 흔한 실수",
+              "설정값 비교로 빠르게 확인 가능"
+            ],
+            "cons": [
+              "Issuer, Audience 설정값을 확인했으나 정상 — 이 원인은 아니었음",
+              "설정값이 맞는데도 실패하면 더 깊은 원인 추적 필요"
+            ]
+          },
+          {
+            "name": "의심 3: JWT 서명 알고리즘 불일치 (실제 원인)",
+            "pros": [
+              "CloudWatch 로그에서 'signing method ES256 is invalid' 메시지로 명확히 확인",
+              "Supabase 기본 서명(ES256)과 API Gateway 지원(RS256)의 불일치가 근본 원인"
+            ],
+            "cons": [
+              "서명 알고리즘 차이는 설정 화면에서 바로 보이지 않아 로그 분석이 필수",
+              "ES256과 RS256의 차이를 이해해야 정확한 해결이 가능"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "decision",
+      "attrs": {
+        "tradeOff": "Supabase 설정에서 알고리즘을 RS256으로 변경하면 API Gateway JWT Authorizer를 그대로 활용할 수 있어 Lambda Authorizer 대비 비용과 지연 시간이 절감됩니다."
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "CloudWatch 로그에서 'signing method ES256 is invalid' 메시지를 확인하고, Supabase의 기본 JWT 서명 알고리즘(ES256)과 API Gateway JWT Authorizer가 지원하는 알고리즘(RS256)의 불일치가 원인임을 파악했습니다. RS256은 RSA 기반 공개키/개인키 방식이고, ES256은 타원곡선 기반 방식으로 서로 호환되지 않습니다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-implementation"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "Supabase 프로젝트 설정에서 JWT 서명 알고리즘을 ES256 → RS256으로 변경하여 즉시 해결했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "CloudWatch 로그 분석으로 서명 알고리즘 불일치를 확인한 뒤, Supabase 프로젝트 설정에서 JWT 서명 알고리즘을 API Gateway가 지원하는 RS256으로 변경했습니다. 변경 후 새로운 RS256 키로 토큰이 재발급되고, API Gateway JWT Authorizer가 정상적으로 토큰을 검증합니다."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3,
+        "id": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "구현 흐름"
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "증상 확인: API Gateway에서 모든 인증 요청 403 실패"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "1차 의심(CORS): 브라우저 콘솔 확인 → CORS 에러 없음 → 배제"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "2차 의심(설정 오류): API Gateway Issuer, Audience 설정값 확인 → 정상 → 배제"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "CloudWatch 로그 확인: 'signing method ES256 is invalid' 에러 메시지 발견 → 서명 알고리즘 불일치 확인"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Supabase 프로젝트 설정에서 JWT 서명 알고리즘을 ES256 → RS256으로 변경"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "변경 후 새 RS256 키로 토큰 재발급 → API Gateway 인증 정상 동작 확인"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "codeBlock",
+      "attrs": {
+        "language": "hcl",
+        "title": "API Gateway JWT Authorizer 설정 (Terraform)"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "# API Gateway JWT Authorizer — RS256 알고리즘 기반 검증\nresource \"aws_apigatewayv2_authorizer\" \"jwt\" {\n  api_id           = aws_apigatewayv2_api.main.id\n  authorizer_type  = \"JWT\"\n  identity_sources = [\"$request.header.Authorization\"]\n  name             = \"supabase-jwt-authorizer\"\n\n  jwt_configuration {\n    issuer   = \"https://<project-ref>.supabase.co/auth/v1\"\n    audience = [\"authenticated\"]\n  }\n}"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-verification"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Verification"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "알고리즘 변경 한 번으로 403 에러가 완전히 해소되고, 모든 인증 요청이 정상 처리되었습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "Supabase JWT 서명 알고리즘을 RS256으로 변경한 후 모든 인증 요청이 정상적으로 처리되었습니다. API Gateway JWT Authorizer를 유지하여 Lambda Authorizer 대비 비용과 지연 시간을 절감했습니다."
+        }
+      ]
+    },
+    {
+      "type": "metricGrid",
+      "attrs": {
+        "items": [
+          {
+            "label": "403 에러",
+            "value": "완전 해소",
+            "description": "알고리즘 변경 후 모든 인증 요청 정상 처리"
+          },
+          {
+            "label": "인증 방식",
+            "value": "API Gateway JWT Authorizer 유지",
+            "description": "Lambda Authorizer 대비 Cold Start 제거, 호출 비용 절감"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "check"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "CloudWatch 로그에서 'signing method ES256 is invalid' 에러 메시지 확인 — 원인 추적의 결정적 단서"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "RS256 변경 후 API Gateway 인증 정상 동작 확인"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-limitations"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Retrospective"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "외부 서비스 연동 시 토큰 서명 방식을 설계 단계에서 확인하고, 오류 발생 시 추측보다 로그를 먼저 확인해야 합니다."
+        }
+      ]
+    },
+    {
+      "type": "limitations",
+      "attrs": {
+        "items": [
+          {
+            "limitation": "외부 서비스(Supabase) 연동 시 토큰 서명 알고리즘 호환성을 설계 단계에서 확인하지 않아, 구현 후에야 문제를 발견했습니다.",
+            "improvement": "외부 인증 서비스 연동 시 설계 단계에서 토큰 서명 방식(RS256/ES256/HS256), JWKS 엔드포인트, Issuer/Audience 값을 사전에 확인하는 체크리스트를 적용합니다."
+          },
+          {
+            "limitation": "처음에 CORS, 환경변수 등을 추측으로 의심하며 시간을 소비했습니다. 로그를 먼저 확인했다면 더 빠르게 원인을 파악할 수 있었습니다.",
+            "improvement": "오류 발생 시 추측보다 CloudWatch 로그를 먼저 확인하는 습관을 정립했습니다. 인증 실패 시 로그에서 서명 알고리즘, 토큰 만료, Issuer 불일치 등 구체적인 에러 메시지를 우선 확인합니다."
+          }
+        ]
+      }
+    }
+  ]
+}

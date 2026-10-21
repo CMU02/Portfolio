@@ -1,0 +1,494 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-background"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Problem"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "구독 등록 시 9개 필드 수동 입력이 가장 큰 사용자 마찰이라 판단하여 OCR 자동 입력 기능을 기획했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "구독 서비스를 등록할 때 서비스명, 가격, 통화, 카테고리, 결제 주기, 결제일, 메모 등 9개 필드를 수동으로 입력해야 합니다. 직접 사용하면서 이 과정이 가장 큰 마찰이라 판단했고, 유사 구독 관리 앱 리뷰에서도 '입력이 번거롭다'는 피드백이 반복적으로 확인되었습니다. 영수증 사진 한 장으로 핵심 필드를 자동 채우면 이 마찰을 크게 줄일 수 있다고 판단하여 OCR 자동 입력 기능을 기획했습니다."
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "pain"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "9개 필드 수동 입력이 구독 등록의 가장 큰 진입 장벽"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "온디바이스 OCR(Tesseract, ML Kit)은 한국어 영수증의 복합 레이아웃·다양한 폰트 인식에 한계"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "API 기반 모델은 네트워크 의존성이 생기지만, 인식 정확도와 다국어 지원에서 온디바이스 대비 우위"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "개인 프로젝트 규모에서 지속 운영 가능한 비용 구조 필요"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-comparison"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Trade-off"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "온디바이스 OCR의 한국어 인식 한계를 확인하고, API 기반 5개 모델을 동일 조건으로 벤치마킹하여 GPT-4o를 최종 선택했습니다."
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "attrs": {
+        "options": [
+          {
+            "name": "온디바이스 OCR (Tesseract, ML Kit)",
+            "pros": [
+              "네트워크 불필요 — 완전 오프라인 동작",
+              "API 호출 비용 없음",
+              "응답 지연 없이 즉시 처리"
+            ],
+            "cons": [
+              "한국어 영수증의 복합 레이아웃(표, 다단 구성) 인식 정확도 낮음",
+              "다양한 폰트·배경·조명 조건에서 인식률 급격히 하락",
+              "서비스명·가격·결제일을 구조화된 데이터로 추출하는 능력 부족 — 단순 텍스트 추출에 그침",
+              "한국어 특화 학습 데이터 부족으로 오인식 빈번"
+            ]
+          },
+          {
+            "name": "Cloudflare AI 저사양 모델 (Llava-1.5, Uform)",
+            "pros": [
+              "비용 저렴",
+              "Cloudflare Workers와 통합 간편",
+              "빠른 응답 속도"
+            ],
+            "cons": [
+              "Llava-1.5: 24장 중 4장만 정인식 — 실사용 수준 미달",
+              "Uform: 24장 중 0장 정인식 — 한국어 영수증 인식 자체 실패",
+              "정확도가 너무 낮아 사용자 경험 훼손"
+            ]
+          },
+          {
+            "name": "Cloudflare AI 고성능 모델 (Llama-3.2-11B-Vision)",
+            "pros": [
+              "24장 중 18장 정인식 — 준수한 정확도",
+              "다양한 영수증 포맷 처리 가능"
+            ],
+            "cons": [
+              "응답 속도가 느려 모바일 UX에 부적합",
+              "건당 비용이 중간 수준이나 모바일 앱 호출 빈도 기준 부담",
+              "비용·속도 종합 판단 시 부적합"
+            ]
+          },
+          {
+            "name": "OpenAI GPT-4o-mini",
+            "pros": [
+              "24장 중 22장 정인식 — 높은 정확도",
+              "건당 비용 낮음",
+              "빠른 응답 속도"
+            ],
+            "cons": [
+              "실패 2건 중 가격 자릿수 오류($20 → $200) 포함 — 금액 오류는 사용자에게 직접적 영향",
+              "서비스명 오타(YouTube → Yoube) 발생"
+            ]
+          },
+          {
+            "name": "OpenAI GPT-4o (최종 선택)",
+            "pros": [
+              "24장 중 23장 정인식 — 최고 정확도",
+              "빠른 응답 속도",
+              "JSON 출력 포맷 안정적 지원",
+              "가격 자릿수 오류 케이스 해소"
+            ],
+            "cons": [
+              "건당 비용이 GPT-4o-mini 대비 높음",
+              "외부 API 의존성 — 네트워크 필수",
+              "1건 실패(특수 레이아웃 영수증) 잔존"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "decision",
+      "attrs": {
+        "tradeOff": "GPT-4o는 GPT-4o-mini 대비 건당 비용이 높지만, 가격 자릿수 오류라는 치명적 케이스를 해소하여 사용자 신뢰를 확보했습니다. 온디바이스 OCR은 한국어 영수증 인식 한계로 배제했으며, 네트워크 의존성은 오프라인 시 수동 입력 폴백으로 대응합니다."
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "GPT-4o-mini와 GPT-4o는 1건 차이(22장 vs 23장)이지만, 그 1건이 가격 자릿수 오류($20 → $200)였습니다. 금액이 10배 잘못 입력되면 월간 지출 합계가 크게 왜곡되어 사용자 신뢰를 훼손합니다. 비용 차이보다 금액 정확도가 구독 관리 앱에서 더 중요하다고 판단하여 GPT-4o를 최종 선택했습니다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-implementation"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "동일한 24장 영수증으로 5개 모델을 순차 테스트하고, 서비스명·가격·결제일 3개 필드 모두 정확한 경우만 성공으로 카운트했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "다양한 폰트·배경·조명 조건을 포함한 24장의 영수증을 테스트셋으로 선정했습니다. 평가 기준은 서비스명·가격·결제일 3개 필드를 모두 정확하게 추출한 경우만 성공으로 카운트하는 엄격한 기준을 적용했습니다. 부분 인식(2개만 맞음)은 실패로 처리하여 실사용 수준의 정확도를 검증했습니다."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3,
+        "id": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "구현 흐름"
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "테스트셋 구성: 다양한 폰트·배경·조명 조건을 포함한 24장 영수증 선정"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "평가 기준 정의: 서비스명·가격·결제일 3개 필드 모두 정확 → 성공, 부분 인식 → 실패"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "5개 모델 순차 테스트: Llava-1.5 → Uform → Llama-3.2-11B → GPT-4o-mini → GPT-4o"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "모델별 정확도·비용(건당)·응답 속도·실패 케이스 기록"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GPT-4o-mini vs GPT-4o 실패 케이스 비교 분석 → 가격 자릿수 오류 확인"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-verification"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Verification"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "GPT-4o가 23/24장으로 최고 정확도를 기록했으며, GPT-4o-mini의 가격 자릿수 오류를 해소했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "5개 모델의 벤치마킹 결과를 정확도·비용·응답 속도·탈락 이유로 정리했습니다. GPT-4o-mini에서 발생한 가격 자릿수 오류($20 → $200)가 GPT-4o에서는 해소되어, 비용 증가를 감수하고 GPT-4o를 최종 선택했습니다."
+        }
+      ]
+    },
+    {
+      "type": "metricGrid",
+      "attrs": {
+        "items": [
+          {
+            "label": "Llava-1.5",
+            "value": "4 / 24장",
+            "description": "비용 낮음 · 응답 빠름 · 탈락: 정확도 미달"
+          },
+          {
+            "label": "Uform",
+            "value": "0 / 24장",
+            "description": "비용 낮음 · 응답 빠름 · 탈락: 인식 자체 실패"
+          },
+          {
+            "label": "Llama-3.2-11B",
+            "value": "18 / 24장",
+            "description": "비용 중간 · 응답 느림 · 탈락: 비용·속도 부적합"
+          },
+          {
+            "label": "GPT-4o-mini",
+            "value": "22 / 24장",
+            "description": "비용 낮음 · 응답 빠름 · 탈락: 오타·자릿수 오류 (가격 $20→$200)"
+          },
+          {
+            "label": "GPT-4o (최종 선택)",
+            "value": "23 / 24장",
+            "description": "비용 높음 · 응답 빠름 · 가격 자릿수 오류 해소, 1건 실패(특수 레이아웃)"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "check"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GPT-4o-mini 실패 케이스: 가격 자릿수 오류($20 → $200) — 월간 지출 합계 왜곡으로 사용자 신뢰 훼손"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GPT-4o-mini 실패 케이스: 서비스명 오타(YouTube → Yoube) — 구독 목록에서 서비스 식별 어려움"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GPT-4o 전환 후 가격 자릿수 오류 해소 확인 — 동일 영수증에서 $20 정확 인식"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "GPT-4o 유일한 실패: 특수 레이아웃(다단 구성 + 소형 폰트) 영수증 1건"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-limitations"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Retrospective"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "24장 샘플 수의 한계와 특수 조건 실패는 수동 입력 폴백과 테스트셋 보완으로 대응합니다."
+        }
+      ]
+    },
+    {
+      "type": "limitations",
+      "attrs": {
+        "items": [
+          {
+            "limitation": "24장이라는 샘플 수가 통계적으로 충분하지 않을 수 있습니다. 실제 사용자의 영수증은 더 다양한 포맷·조건을 포함합니다.",
+            "improvement": "향후 실사용자 피드백으로 수집된 실패 케이스를 테스트셋에 추가하여 지속적으로 보완할 계획입니다. 특히 새로운 카드사·결제 서비스 영수증을 우선 수집합니다."
+          },
+          {
+            "limitation": "손글씨 영수증, 감열지 변색, 저해상도 촬영 조건에서 인식 실패가 발생합니다. 이러한 케이스는 OCR로 해결하기 어려운 근본적 한계입니다.",
+            "improvement": "OCR 인식 실패 시 수동 입력 폴백을 제공하여 사용자가 직접 입력할 수 있도록 처리합니다. OCR 결과 화면에서 '인식 실패 — 직접 입력하기' 버튼을 명확히 노출합니다."
+          }
+        ]
+      }
+    }
+  ]
+}

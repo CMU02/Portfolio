@@ -1,0 +1,434 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-background"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Problem"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "금연/흡연 구역 데이터는 정적에 가까운데, 매 방문마다 전체 데이터를 API로 요청하고 있었습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "금연/흡연 구역 데이터는 자주 바뀌지 않는 정적에 가까운 데이터입니다. 그런데 사용자가 지도를 열 때마다 전체 구역 데이터를 서버에서 불러오고 있어, 반복 방문 시 불필요한 API 호출이 발생하고 있었습니다."
+        }
+      ]
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "pain"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "매 방문마다 동일한 구역 데이터를 서버에서 전체 조회"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "정적 데이터임에도 캐싱 전략 부재로 불필요한 네트워크 요청"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "데이터 변경 시 캐시 무효화 기준이 없어 정합성 문제 가능"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "모바일 환경에서 반복 API 호출로 인한 데이터 사용량 증가"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-comparison"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Trade-off"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "IndexedDB(30일) + TanStack Query(1시간) 2중 캐싱 + 버전 기반 무효화를 선택했습니다."
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "attrs": {
+        "options": [
+          {
+            "name": "서버 사이드 캐싱 (Redis 등)",
+            "pros": [
+              "서버 부하 감소",
+              "캐시 무효화 제어가 용이"
+            ],
+            "cons": [
+              "클라이언트 네트워크 요청은 여전히 발생",
+              "Redis 인프라 추가 비용",
+              "개인 프로젝트 규모에서 과도한 인프라"
+            ]
+          },
+          {
+            "name": "클라이언트 2중 캐싱 (IndexedDB + TanStack Query)",
+            "pros": [
+              "재방문 시 네트워크 요청 없이 즉시 렌더링",
+              "IndexedDB 30일 보존으로 장기 캐싱",
+              "TanStack Query staleTime 1시간으로 세션 내 중복 요청 제거",
+              "버전 기반 캐시 무효화로 데이터 정합성 유지",
+              "추가 서버 인프라 불필요"
+            ],
+            "cons": [
+              "클라이언트 캐시 관리 로직 복잡도 증가",
+              "브라우저 저장소 용량 제한 존재",
+              "캐시 무효화 타이밍에 따라 일시적 데이터 불일치 가능"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "decision",
+      "attrs": {
+        "tradeOff": null
+      },
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "구역 데이터는 Key-Value 형태로 저장하기 적합한 정적 데이터입니다. Key-Value 저장소로 Redis를 검토했지만, 학생 신분으로 Redis 인프라를 지속 운영하기 어려웠습니다. 브라우저에 내장된 Key-Value 데이터베이스인 IndexedDB가 추가 인프라 없이 동일한 역할을 할 수 있다고 판단하여 선택했습니다. IndexedDB(30일 보존)와 TanStack Query(staleTime 1시간)를 조합한 2중 캐싱 구조로, 월말 배치 스케줄러로 변경분만 차분 업데이트하고 버전 정보 기준으로 캐시를 무효화합니다."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-implementation"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "IndexedDB 장기 캐싱 + TanStack Query 세션 캐싱 + 버전 기반 무효화 3계층 구조를 설계했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "클라이언트 측 IndexedDB에 구역 데이터를 30일간 보존하여 재방문 시 네트워크 요청 없이 지도를 렌더링합니다. TanStack Query의 staleTime 1시간 설정으로 같은 세션 내 반복 조회를 제거합니다. 월말 배치 스케줄러로 서버 측 변경분만 차분 업데이트하고, 버전 정보를 기준으로 캐시를 무효화합니다."
+        }
+      ]
+    },
+    {
+      "type": "mermaid",
+      "attrs": {
+        "chart": "graph TD\n  A[\"사용자 지도 접근\"] --> B{\"IndexedDB\n캐시 존재?\"}\n  B -->|\"Yes + 버전 일치\"| C[\"IndexedDB에서\n즉시 로드\"]\n  B -->|\"No / 버전 불일치\"| D[\"서버 API 호출\"]\n  D --> E[\"TanStack Query\n캐시 저장\"]\n  E --> F[\"IndexedDB\n30일 보존 저장\"]\n  C --> G[\"지도 폴리곤\n렌더링\"]\n  F --> G\n  H[\"월말 배치\n스케줄러\"] --> I[\"변경분\n차분 업데이트\"]\n  I --> J[\"버전 정보\n갱신\"]"
+      }
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 3,
+        "id": null
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "구현 흐름"
+        }
+      ]
+    },
+    {
+      "type": "orderedList",
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "IndexedDB에 구역 데이터 + 버전 정보를 30일간 보존"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "TanStack Query staleTime 1시간으로 세션 내 중복 API 호출 제거"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "사용자 접근 시 IndexedDB 캐시 확인 → 버전 일치하면 즉시 로드"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "버전 불일치 시에만 서버 API 호출 → 양쪽 캐시 갱신"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "월말 배치 스케줄러로 서버 측 변경분만 차분 업데이트 + 버전 갱신"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-verification"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Verification"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "반복 방문 시 API 호출량 95% 절감, 데이터 최신성도 버전 기반으로 유지했습니다."
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "text",
+          "text": "캐싱 전략 적용 전후의 API 호출 횟수와 데이터 정합성을 비교 검증했습니다."
+        }
+      ]
+    },
+    {
+      "type": "metricGrid",
+      "attrs": {
+        "items": [
+          {
+            "label": "API 호출 절감",
+            "value": "95%",
+            "description": "반복 방문 시 네트워크 요청 거의 제거"
+          },
+          {
+            "label": "IndexedDB 보존 기간",
+            "value": "30일",
+            "description": "장기 캐싱으로 재방문 즉시 로드"
+          },
+          {
+            "label": "TanStack Query staleTime",
+            "value": "1시간",
+            "description": "세션 내 중복 요청 제거"
+          }
+        ]
+      }
+    },
+    {
+      "type": "bulletList",
+      "attrs": {
+        "variant": "check"
+      },
+      "content": [
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "캐싱 적용 후 반복 방문 시 네트워크 탭에서 API 호출 미발생 확인"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "월말 배치 후 버전 변경 시 캐시 무효화 → 최신 데이터 반영 확인"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "listItem",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "IndexedDB 30일 만료 후 자동 재요청 정상 동작 확인"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "attrs": {
+        "level": 2,
+        "id": "section-limitations"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Retrospective"
+        }
+      ]
+    },
+    {
+      "type": "sectionSummary",
+      "content": [
+        {
+          "type": "text",
+          "text": "캐시 무효화 타이밍에 따른 일시적 데이터 불일치와 브라우저 저장소 용량 제한이 존재합니다."
+        }
+      ]
+    },
+    {
+      "type": "limitations",
+      "attrs": {
+        "items": [
+          {
+            "limitation": "월말 배치 기반 캐시 무효화이므로, 긴급한 구역 변경(예: 금연구역 신규 지정)이 발생하면 최대 한 달간 구 데이터가 표시될 수 있습니다.",
+            "improvement": "긴급 변경 시 서버에서 버전을 즉시 올리는 수동 트리거를 추가하거나, 클라이언트에서 주기적으로(예: 하루 1회) 버전 체크 API를 호출하는 경량 폴링을 도입할 수 있습니다."
+          }
+        ]
+      }
+    }
+  ]
+}
